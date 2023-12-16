@@ -24,7 +24,7 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private boolean verificato=false;
+    private boolean verified=false;
 
     @Column(nullable = false)
     private boolean admin=false;

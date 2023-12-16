@@ -20,5 +20,5 @@ public class Team {
     private String logo;
 
     @Column(nullable = false)
-    private boolean nationale=false;
+    private boolean national=false;
 }

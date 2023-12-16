@@ -21,5 +21,6 @@ public class Period {
 
     private int points;
 
-    private int period_number;
+    @Column(length = 6)
+    private String period_number;
 }

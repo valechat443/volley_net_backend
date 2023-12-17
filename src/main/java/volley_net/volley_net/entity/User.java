@@ -31,4 +31,12 @@ public class User {
 
     @Column(nullable = false)
     private int money=0;
+
+    public User(String mail, String username, String encryptedPassword, boolean admin) {
+        this.mail=mail;
+        this.username=username;
+        this.password=encryptedPassword;
+        this.admin=admin;
+
+    }
 }

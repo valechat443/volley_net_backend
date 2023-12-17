@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.User;
 import volley_net.volley_net.payload.request.SignupRequest;
+import volley_net.volley_net.payload.request.UserRequest;
 import volley_net.volley_net.repository.UserRepository;
 
 import java.time.LocalDate;
@@ -42,5 +43,13 @@ public class UserService {
         }
         return new ResponseEntity<>("utente già esistente",HttpStatus.BAD_REQUEST);
 
+    }
+
+    public ResponseEntity<?> getUser(UserRequest request){
+        UserToken id_utente=tokenService.getUserIdFromToken(request.getToken());
+        String encryptedPassword = new DigestUtils("SHA3-256").digestAsHex("pippo"); //algoritmo per la conversione della psw
+
+        User u=new User("bob.bobby@gmail.com","bob",encryptedPassword,false);
+        return new ResponseEntity<>(u,HttpStatus.OK);
     }
 }

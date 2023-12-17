@@ -37,6 +37,7 @@ public class User {
         this.username=username;
         this.password=encryptedPassword;
         this.admin=admin;
+        this.money=0;
 
     }
 }

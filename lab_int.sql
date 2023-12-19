@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 19, 2023 alle 09:32
+-- Creato il: Dic 19, 2023 alle 13:49
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -152,7 +152,9 @@ CREATE TABLE `standing` (
   `id_team_season` int(11) NOT NULL,
   `id_group` int(11) NOT NULL,
   `position` int(11) NOT NULL,
-  `points` int(11) NOT NULL
+  `points` int(11) NOT NULL,
+  `form` varchar(255) DEFAULT NULL,
+  `zona` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

@@ -28,4 +28,8 @@ public class Standing {
 
     @Column(nullable = false)
     private int points;
+
+    private String form;
+
+    private String zona;
 }

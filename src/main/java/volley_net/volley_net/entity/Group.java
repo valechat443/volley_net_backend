@@ -13,7 +13,7 @@ public class Group {
     @EqualsAndHashCode.Include
     private int id_group;
 
-  
+
     @Column(nullable = false)
     private String group_name;
 }

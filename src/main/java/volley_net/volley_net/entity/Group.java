@@ -13,14 +13,7 @@ public class Group {
     @EqualsAndHashCode.Include
     private int id_group;
 
-    @ManyToOne
-    @JoinColumn(name="id_season", nullable = false)
-    private Season id_season;
-
-    @ManyToOne
-    @JoinColumn(name="id_league", nullable = false)
-    private League id_league;
-
+  
     @Column(nullable = false)
     private String group_name;
 }

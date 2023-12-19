@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 16, 2023 alle 14:13
+-- Creato il: Dic 19, 2023 alle 09:32
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -72,8 +72,6 @@ CREATE TABLE `game` (
 
 CREATE TABLE `group` (
   `id_group` int(11) NOT NULL,
-  `id_season` int(11) NOT NULL,
-  `id_league` int(11) NOT NULL,
   `group_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -270,9 +268,7 @@ ALTER TABLE `game`
 -- Indici per le tabelle `group`
 --
 ALTER TABLE `group`
-  ADD PRIMARY KEY (`id_group`),
-  ADD KEY `id_season` (`id_season`,`id_league`),
-  ADD KEY `id_league` (`id_league`);
+  ADD PRIMARY KEY (`id_group`);
 
 --
 -- Indici per le tabelle `league`
@@ -469,13 +465,6 @@ ALTER TABLE `bet`
 --
 ALTER TABLE `game`
   ADD CONSTRAINT `game_ibfk_1` FOREIGN KEY (`id_league`) REFERENCES `league` (`id_league`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `group`
---
-ALTER TABLE `group`
-  ADD CONSTRAINT `group_ibfk_1` FOREIGN KEY (`id_season`) REFERENCES `season` (`id_season`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `group_ibfk_2` FOREIGN KEY (`id_league`) REFERENCES `league` (`id_league`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `league`

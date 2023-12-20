@@ -29,7 +29,9 @@ public class Standing {
     @Column(nullable = false)
     private int points;
 
+    @Column(length = 5,nullable = false)
     private String form;
+
 
     private String zona;
 }

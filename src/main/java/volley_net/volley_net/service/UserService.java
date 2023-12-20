@@ -52,4 +52,18 @@ public class UserService {
         User u=new User("bob.bobby@gmail.com","bob",encryptedPassword,false);
         return new ResponseEntity<>(u,HttpStatus.OK);
     }
+
+    public ResponseEntity<?> login(UserRequest request){
+        return null;
+    }
+
+    public ResponseEntity<?> update_money(UserRequest request){
+        return null;
+    }
+    public ResponseEntity<?> new_team_list(UserRequest request){
+        return null;
+    }
+    public ResponseEntity<?> get_money(UserRequest request){
+        return null;
+    }
 }

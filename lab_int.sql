@@ -153,7 +153,7 @@ CREATE TABLE `standing` (
   `id_group` int(11) NOT NULL,
   `position` int(11) NOT NULL,
   `points` int(11) NOT NULL,
-  `form` varchar(255) DEFAULT NULL,
+  `form` varchar(5) DEFAULT NULL,
   `zona` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

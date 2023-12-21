@@ -35,4 +35,7 @@ public class Game {
     private float home_odds;
 
     private float away_odds;
+
+    @Column(length = 11)
+    private int week;
 }

@@ -31,6 +31,8 @@ public class User {
 
     @Column(nullable = false)
     private int money=0;
+    @Column(length=11,nullable = false)
+    private int count_bet=0;
 
     public User(String mail, String username, String encryptedPassword, boolean admin) {
         this.mail=mail;
@@ -38,6 +40,6 @@ public class User {
         this.password=encryptedPassword;
         this.admin=admin;
         this.money=0;
-
+        this.count_bet=0;
     }
 }

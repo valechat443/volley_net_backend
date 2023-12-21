@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 19, 2023 alle 13:49
+-- Creato il: Dic 21, 2023 alle 17:05
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -61,7 +61,8 @@ CREATE TABLE `game` (
   `timezone` varchar(3) NOT NULL,
   `status` varchar(50) NOT NULL,
   `home_odds` double DEFAULT NULL,
-  `away_odds` double DEFAULT NULL
+  `away_odds` double DEFAULT NULL,
+  `week` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -127,7 +128,7 @@ CREATE TABLE `score` (
   `id_team` int(11) NOT NULL,
   `id_game` int(11) NOT NULL,
   `home` tinyint(1) NOT NULL DEFAULT 0,
-  `sets` int(1) NOT NULL
+  `sets` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -190,7 +191,7 @@ CREATE TABLE `team` (
   `id_team` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `logo` varchar(255) NOT NULL,
-  `national` tinyint(1) NOT NULL
+  `national` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -217,8 +218,8 @@ CREATE TABLE `team_season` (
   `id_league` int(11) NOT NULL,
   `id_season` int(11) NOT NULL,
   `id_team` int(11) NOT NULL,
-  `end_date` date DEFAULT NULL,
-  `start_date` date DEFAULT NULL
+  `end_date` date NOT NULL,
+  `start_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -234,7 +235,8 @@ CREATE TABLE `user` (
   `Password` varchar(255) NOT NULL,
   `admin` tinyint(1) NOT NULL DEFAULT 0,
   `money` int(11) NOT NULL DEFAULT 0,
-  `verified` bit(1) NOT NULL
+  `verified` bit(1) NOT NULL,
+  `count_bet` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -246,9 +248,9 @@ CREATE TABLE `user` (
 --
 ALTER TABLE `bet`
   ADD PRIMARY KEY (`id_bet`),
-  ADD KEY `id_user` (`id_user`,`id_game`),
   ADD KEY `id_game` (`id_game`),
-  ADD KEY `id_team` (`id_team`);
+  ADD KEY `id_team` (`id_team`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indici per le tabelle `country`
@@ -261,9 +263,6 @@ ALTER TABLE `country`
 --
 ALTER TABLE `game`
   ADD PRIMARY KEY (`id_game`),
-  ADD UNIQUE KEY `league_id_3` (`id_league`),
-  ADD KEY `league_id` (`id_league`),
-  ADD KEY `league_id_2` (`id_league`),
   ADD KEY `id_league` (`id_league`);
 
 --
@@ -277,7 +276,6 @@ ALTER TABLE `group`
 --
 ALTER TABLE `league`
   ADD PRIMARY KEY (`id_league`),
-  ADD KEY `country_id` (`id_country`),
   ADD KEY `id_country` (`id_country`);
 
 --
@@ -292,17 +290,16 @@ ALTER TABLE `period`
 --
 ALTER TABLE `prefered_team`
   ADD PRIMARY KEY (`id_prefered_team`),
-  ADD KEY `id_user` (`id_user`,`id_team`),
-  ADD KEY `id_team` (`id_team`);
+  ADD KEY `id_team` (`id_team`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indici per le tabelle `score`
 --
 ALTER TABLE `score`
   ADD PRIMARY KEY (`id_score`),
-  ADD KEY `team_id` (`id_team`,`id_game`),
-  ADD KEY `game_id` (`id_game`),
-  ADD KEY `id_team` (`id_team`,`id_game`);
+  ADD KEY `id_team` (`id_team`),
+  ADD KEY `id_game` (`id_game`);
 
 --
 -- Indici per le tabelle `season`
@@ -315,7 +312,6 @@ ALTER TABLE `season`
 --
 ALTER TABLE `standing`
   ADD PRIMARY KEY (`id_standing`),
-  ADD KEY `id_team` (`id_team_season`,`id_group`),
   ADD KEY `id_group` (`id_group`),
   ADD KEY `id_team_season` (`id_team_season`);
 
@@ -337,18 +333,18 @@ ALTER TABLE `team`
 --
 ALTER TABLE `team_list`
   ADD PRIMARY KEY (`id_team_list`),
-  ADD KEY `id_user` (`id_user`,`id_group`),
   ADD KEY `id_group` (`id_group`),
-  ADD KEY `id_team_season` (`id_team_season`);
+  ADD KEY `id_team_season` (`id_team_season`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indici per le tabelle `team_season`
 --
 ALTER TABLE `team_season`
   ADD PRIMARY KEY (`id_team_season`),
-  ADD KEY `id_league` (`id_league`,`id_season`,`id_team`),
-  ADD KEY `team_season_ibfk_2` (`id_season`),
-  ADD KEY `team_season_ibfk_3` (`id_team`);
+  ADD KEY `id_league` (`id_league`),
+  ADD KEY `id_season` (`id_season`),
+  ADD KEY `id_team` (`id_team`);
 
 --
 -- Indici per le tabelle `user`

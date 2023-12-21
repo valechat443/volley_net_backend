@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Size;
 
 public class BetFutureRequest {
     /**
+     *scommesse di una giornata di una lega di una stagione
      *
-     * richiesta per bet future
-     * */
+     */
     @NotBlank
     @Size(max = 2)
     private int week;

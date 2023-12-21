@@ -51,7 +51,7 @@ public class GameService {
      *ultimo game giocato di superlega
      *
      */
-    private ResponseEntity<?> get_default_game(GameGenericRequest request) {
+    private ResponseEntity<?> get_default_game() {
         return null;
     }
 

@@ -9,9 +9,10 @@ import lombok.Getter;
 @Getter
 public class GameSpecificRequest {
     /**
+     *get partita da id partita
      *
-     * richiesta per singolo game
-     * */
+     *
+     */
     @NotBlank
     private int id_game;
 }

@@ -5,9 +5,9 @@ import jakarta.validation.constraints.Size;
 
 public class GameGenericRequest {
     /**
+     *lista di partite di una giornata (week) di una lega di una stagione
      *
-     * richiesta ultimo game week superlega
-     * */
+     */
     @NotBlank
     @Size(max = 2)
     private int week;

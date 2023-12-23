@@ -3,7 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 21, 2023 alle 16:14
+
+-- Creato il: Dic 21, 2023 alle 17:05
+
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -128,7 +130,7 @@ CREATE TABLE `score` (
   `id_team` int(11) NOT NULL,
   `id_game` int(11) NOT NULL,
   `home` tinyint(1) NOT NULL DEFAULT 0,
-  `sets` int(1) NOT NULL
+  `sets` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -191,7 +193,7 @@ CREATE TABLE `team` (
   `id_team` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `logo` varchar(255) NOT NULL,
-  `national` tinyint(1) NOT NULL
+  `national` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -218,8 +220,8 @@ CREATE TABLE `team_season` (
   `id_league` int(11) NOT NULL,
   `id_season` int(11) NOT NULL,
   `id_team` int(11) NOT NULL,
-  `end_date` date DEFAULT NULL,
-  `start_date` date DEFAULT NULL
+  `end_date` date NOT NULL,
+  `start_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

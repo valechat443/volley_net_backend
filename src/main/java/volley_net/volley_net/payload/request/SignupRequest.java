@@ -23,13 +23,5 @@ public class SignupRequest {
 
     @NotBlank
     private boolean admin;
-
-
-
-
-
-
-
-
 }
 

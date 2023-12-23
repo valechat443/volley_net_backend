@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import volley_net.volley_net.payload.request.GameGenericRequest;
+import volley_net.volley_net.payload.request.GameSpecificRequest;
+import volley_net.volley_net.payload.request.BetFutureRequest;
+import volley_net.volley_net.payload.request.WeekMaxRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -14,15 +18,16 @@ public class GameService {
     /**
      *get partita da id partita
      *
+     *
      */
-    private ResponseEntity<?> get_game_specific() {
+    private ResponseEntity<?> get_game_specific(GameSpecificRequest request) {
         return null;
     }
     /**
      *lista di partite di una giornata (week) di una lega di una stagione
      *
      */
-    private ResponseEntity<?> get_game_generic() {
+    private ResponseEntity<?> get_game_generic(GameGenericRequest request) {
         return null;
     }
 
@@ -38,7 +43,7 @@ public class GameService {
      *scommesse di una giornata di una lega di una stagione
      *
      */
-    private ResponseEntity<?> get_future_bets() {
+    private ResponseEntity<?> get_future_bets(BetFutureRequest request) {
         return null;
     }
 
@@ -54,7 +59,7 @@ public class GameService {
      *numero della giornata massima di uan lega di una stagione
      *
      */
-    private ResponseEntity<?> get_week_max() {
+    private ResponseEntity<?> get_week_max(WeekMaxRequest request) {
         return null;
     }
 

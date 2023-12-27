@@ -13,6 +13,6 @@ public class GameSpecificRequest {
      *
      *
      */
-    @NotBlank
+
     private int id_game;
 }

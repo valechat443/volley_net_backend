@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
 import volley_net.volley_net.payload.request.WeekMaxRequest;
 import volley_net.volley_net.service.GameService;
@@ -23,5 +24,10 @@ public class GameController {
     @PostMapping("/maxWeek")
     public ResponseEntity<?> max_week(@RequestBody @Valid WeekMaxRequest request){
         return gameService.get_week_max(request);
+    }
+
+    @PostMapping("/getGeneric")
+    public ResponseEntity<?> get_generic(@RequestBody @Valid GameGenericRequest request){
+        return gameService.get_game_generic(request);
     }
 }

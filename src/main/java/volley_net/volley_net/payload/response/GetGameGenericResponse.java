@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
@@ -15,8 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class GetGameGenericResponse {
     private int id_game;
-    private Date date;
-    private Time time;
+    private LocalDate data;
+    private LocalTime ora;
     private String status;
     private int week;
     private List<TeamsGameGenerics> teams;

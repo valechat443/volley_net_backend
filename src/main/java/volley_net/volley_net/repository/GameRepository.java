@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import volley_net.volley_net.entity.Game;
 import volley_net.volley_net.entity.Score;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface GameRepository extends JpaRepository<Game, Integer> {
@@ -34,4 +35,15 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
             "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season")
     List<Game> GetListOfGame(@Param("season") int season, @Param("id_league") int id_league);
+
+    @Query(value = "SELECT DISTINCT new volley_net.volley_net.entity.Game (g) " +
+            "FROM Game g " +
+            "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
+            "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season and g.week=:week")
+    List<Game> GetListOfGameByWeek(@Param("week") int week,@Param("season") int season, @Param("id_league") int id_league);
+
+    @Query(value = "SELECT DISTINCT new volley_net.volley_net.entity.Game (g)" +
+            "FROM Game g " +
+            "WHERE g.date>=:data")
+    List<Game> GetGameAfterDate(@Param("data")LocalDate data);
 }

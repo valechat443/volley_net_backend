@@ -27,7 +27,7 @@ public class Score {
     private boolean home;
 
     @Column(nullable = true)
-    private int sets;
+    private Integer sets;
 
     public Score(Score s) {
         this.id_score = s.getId_score();

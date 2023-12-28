@@ -15,6 +15,7 @@ import volley_net.volley_net.service.UserService;
 public class UserController {
 
     private final UserService userService;
+
     @PostMapping("/signup") //chiamata al servizio di registrazione
     public ResponseEntity<?> save(@RequestBody @Valid SignupRequest request) { return userService.save(request);}
 

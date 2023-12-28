@@ -120,7 +120,7 @@ public class GameService {
            }
            return new ResponseEntity<>(response, HttpStatus.OK);
        }catch (Exception e){
-           return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+           return new ResponseEntity<>("non ho trovato niente", HttpStatus.BAD_REQUEST);
        }
     }
 

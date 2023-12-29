@@ -6,16 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.Game;
+import volley_net.volley_net.entity.Period;
 import volley_net.volley_net.entity.Score;
 import volley_net.volley_net.entity.Team;
 import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
 import volley_net.volley_net.payload.request.BetFutureRequest;
 import volley_net.volley_net.payload.request.WeekMaxRequest;
-import volley_net.volley_net.payload.response.BetPageResponse;
-import volley_net.volley_net.payload.response.GetGameGenericResponse;
-import volley_net.volley_net.payload.response.TeamsBetPage;
-import volley_net.volley_net.payload.response.TeamsGameGenerics;
+import volley_net.volley_net.payload.response.*;
 import volley_net.volley_net.repository.GameRepository;
 import volley_net.volley_net.repository.TeamRepository;
 
@@ -30,18 +28,37 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
+
     /**
-     *get partita da id partita
      *
-     *
+     * @param request
+     * @return get partita da id partita
      */
-    private ResponseEntity<?> get_game_specific(GameSpecificRequest request) {
-        return null;
+    public ResponseEntity<?> get_game_specific(GameSpecificRequest request) {
+        try {
+            Game g = gameRepository.GetGameByIdGame(request.getId_game());
+            List<Score> punti= gameRepository.GetScoreFromIdGame(g.getId_game());
+            List<TeamsGameSpecific> teams = new ArrayList<>();
+            for(Score punto:punti){
+                Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
+
+                List<Period> tempi= gameRepository.GetPeriodFromScore(punto.getId_score());
+                PeriodsTeamsGameSpecific dati_tempo= new PeriodsTeamsGameSpecific(tempi.get(0).getPoints(),tempi.get(1).getPoints(),tempi.get(2).getPoints(),tempi.get(3).getPoints(),tempi.get(4).getPoints());
+
+                TeamsGameSpecific dati_squadra = new TeamsGameSpecific(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets(), dati_tempo);
+                teams.add(dati_squadra);
+            }
+            GetGameSpecificResponse response= new GetGameSpecificResponse(g.getId_game(),g.getDate(),g.getTime(),g.getStatus(), g.getWeek(), teams);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
-     *lista di partite di una giornata (week) di una lega di una stagione
      *
+     * @param request
+     * @return lista di partite di una giornata (week) di una lega di una stagione
      */
     public ResponseEntity<?> get_game_generic(GameGenericRequest request) {
 
@@ -70,21 +87,21 @@ public class GameService {
                     teams.add(dati);
                 }
 
-                response.add(new GetGameGenericResponse(partita.getId_game(),partita.getDate(),partita.getTime(),partita.getStatus(),partita.getWeek(),teams));
+                response.add(new GetGameGenericResponse(partita.getId_game(),partita.getDate(),partita.getTime(),partita.getStatus(),partita.getWeek(),partita.getId_league().getName(),teams));
 
             }
             return new ResponseEntity<>(response, HttpStatus.OK);
 
 
-            //return new ResponseEntity<>("ok", HttpStatus.BAD_REQUEST);
+
         }catch (Exception e){
             return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
     }
 
     /**
-     *get scommesse per i due giorni successivi a oggi
      *
+     * @return get scommesse per i due giorni successivi a oggi
      */
     public ResponseEntity<?> bets_page() {
        try{
@@ -124,47 +141,56 @@ public class GameService {
        }
     }
 
+
+
     /**
-     *scommesse di una giornata di una lega di una stagione
      *
+     * @return ultimo game giocato di superlega
      */
-    private ResponseEntity<?> get_future_bets(BetFutureRequest request) {
-        return null;
+    public ResponseEntity<?> get_default_game() {
+        try {
+            Game g = gameRepository.GetGameRecente(97);
+            List<TeamsGameGenerics> teams = new ArrayList<>();
+                List<Score> punti = gameRepository.GetScoreFromIdGame(g.getId_game());
+
+                for (Score punto : punti) {
+                    Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
+                    TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
+                    teams.add(dati);
+                }
+
+
+           GetGameGenericResponse response=new GetGameGenericResponse(g.getId_game(),g.getDate(),g.getTime(),g.getStatus(),g.getWeek(),g.getId_league().getName(),teams);
+
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
-     *ultimo game giocato di superlega
      *
-     */
-    private ResponseEntity<?> get_default_game() {
-        return null;
-    }
-
-    /**
-     *numero della giornata massima di uan lega di una stagione
-     *
+     * @param request
+     * @return numero della giornata massima di uan lega di una stagione
      */
     public ResponseEntity<?> get_week_max(WeekMaxRequest request) {
 
         try{
            int week= gameRepository.MaxWeek(request.getSeason(),request.getId_league());
 
-           return new ResponseEntity<>(week, HttpStatus.OK);
+           return new ResponseEntity<>(new GetWeekMaxResponse(week), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
     }
 
+
+
     /**
-     *creo una bet di un certo utente che scommette su una certa squadra di una partita
      *
-     */
-    private ResponseEntity<?> create_bet() {
-        return null;
-    }
-    /**
-     *restituisco una partita dall'id_game
-     *
+     * @param request
+     * @return restituisco una partita dall'id_game
      */
     public ResponseEntity<?> getGameById(GameSpecificRequest request){
         try{
@@ -177,9 +203,11 @@ public class GameService {
             return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
     }
+
     /**
-     *restituisco uno score dall'id_game
      *
+     * @param id_game
+     * @return restituisco uno score dall'id_game
      */
     private List<Score> get_score(int id_game){
         try{

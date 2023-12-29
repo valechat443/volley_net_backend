@@ -42,4 +42,15 @@ public class User {
         this.money=0;
         this.count_bet=0;
     }
+
+    public User(User u) {
+        this.id_user = u.getId_user();
+        this.mail = u.getMail();
+        this.username = u.getUsername();
+        this.password = u.getPassword();
+        this.verified = u.isVerified();
+        this.admin = u.isAdmin();
+        this.money = u.getMoney();
+        this.count_bet = u.getCount_bet();
+    }
 }

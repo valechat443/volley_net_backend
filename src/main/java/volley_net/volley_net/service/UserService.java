@@ -2,6 +2,7 @@ package volley_net.volley_net.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.antlr.v4.runtime.Token;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.User;
 import volley_net.volley_net.payload.request.SignupRequest;
 import volley_net.volley_net.payload.request.UserRequest;
+import volley_net.volley_net.payload.response.NewUserLoginResponse;
 import volley_net.volley_net.repository.UserRepository;
 
 @Service
@@ -37,7 +39,9 @@ public class UserService {
         User newuser=fromRequestToEntity(request);
         User olduser=userRepository.findByUsername(request.getUsername());
         if(olduser== null || !newuser.getUsername().equals(olduser.getUsername())  ) { //se il nome utente non esiste già creo l'utente
-            return new ResponseEntity<>(userRepository.save(newuser), HttpStatus.CREATED);
+            userRepository.save(newuser);
+            NewUserLoginResponse response = new NewUserLoginResponse(tokenService.createToken(newuser.getId_user()));
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
         return new ResponseEntity<>("utente già esistente",HttpStatus.BAD_REQUEST);
 

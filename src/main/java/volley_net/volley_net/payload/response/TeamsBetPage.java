@@ -16,6 +16,6 @@ public class TeamsBetPage {
     private String logo;
     private boolean national;
     private boolean home;
-    private int set;
-    private float odd;
+    private Integer set;
+    private Float odd;
 }

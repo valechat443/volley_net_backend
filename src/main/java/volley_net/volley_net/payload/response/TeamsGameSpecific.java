@@ -18,5 +18,5 @@ public class TeamsGameSpecific {
     private boolean national;
     private boolean home;
     private int set;
-    private List<PeriodsTeamsGameSpecific> periods;
+    private PeriodsTeamsGameSpecific periods;
 }

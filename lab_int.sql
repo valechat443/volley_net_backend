@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 27, 2023 alle 12:04
+-- Creato il: Dic 29, 2023 alle 12:36
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -33,6 +33,15 @@ CREATE TABLE `bet` (
   `id_game` int(11) NOT NULL,
   `id_team` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `bet`
+--
+
+INSERT INTO `bet` (`id_bet`, `id_user`, `id_game`, `id_team`) VALUES
+(2, 3, 148524, 737),
+(3, 3, 148463, 741),
+(4, 3, 148464, 747);
 
 -- --------------------------------------------------------
 
@@ -263,6 +272,22 @@ CREATE TABLE `period` (
   `points` int(2) DEFAULT NULL,
   `period_number` varchar(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `period`
+--
+
+INSERT INTO `period` (`id_period`, `id_score`, `points`, `period_number`) VALUES
+(3, 1, 25, '1'),
+(4, 1, 12, '2'),
+(5, 1, 21, '3'),
+(6, 1, 26, '4'),
+(7, 1, 15, '5'),
+(8, 2, 19, '1'),
+(9, 2, 25, '2'),
+(10, 2, 25, '3'),
+(11, 2, 24, '4'),
+(12, 2, 12, '5');
 
 -- --------------------------------------------------------
 
@@ -696,6 +721,13 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
+-- Dump dei dati per la tabella `user`
+--
+
+INSERT INTO `user` (`id_user`, `mail`, `Username`, `Password`, `admin`, `money`, `verified`, `count_bet`) VALUES
+(3, 'vale@mail.com', 'vale', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 0, b'0', 0);
+
+--
 -- Indici per le tabelle scaricate
 --
 
@@ -816,7 +848,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT per la tabella `bet`
 --
 ALTER TABLE `bet`
-  MODIFY `id_bet` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_bet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT per la tabella `country`
@@ -846,7 +878,7 @@ ALTER TABLE `league`
 -- AUTO_INCREMENT per la tabella `period`
 --
 ALTER TABLE `period`
-  MODIFY `id_period` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_period` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT per la tabella `prefered_team`
@@ -900,7 +932,7 @@ ALTER TABLE `team_season`
 -- AUTO_INCREMENT per la tabella `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Limiti per le tabelle scaricate

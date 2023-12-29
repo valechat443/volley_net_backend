@@ -30,4 +30,18 @@ public class GameController {
     public ResponseEntity<?> get_generic(@RequestBody @Valid GameGenericRequest request){
         return gameService.get_game_generic(request);
     }
+
+    @GetMapping("/betPage")
+    public ResponseEntity<?> get_bet_page(){
+
+        return gameService.bets_page();
+    }
+    @GetMapping("/default")
+    public ResponseEntity<?> default_game(){
+        return gameService.get_default_game();
+    }
+    @PostMapping("/getSpecific")
+    public ResponseEntity<?> get_game_specific(@RequestBody @Valid GameSpecificRequest request){
+        return gameService.get_game_specific(request);
+    }
 }

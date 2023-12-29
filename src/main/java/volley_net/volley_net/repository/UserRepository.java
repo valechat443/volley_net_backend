@@ -10,10 +10,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     User findByUsername(String username);
 
-    @Query(value = "SELECT new volley_net.volley_net.entity.User(" +
-            "u.id_user," +
-            "u.password)" +
-
+    @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
             " FROM User u WHERE u.id_user=:id_user")
     User getUserById(@Param("id_user") int id_user);
 

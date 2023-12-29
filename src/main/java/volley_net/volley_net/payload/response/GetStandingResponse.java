@@ -15,4 +15,5 @@ public class GetStandingResponse {
     private int points;
     private String form;
     private String zona;
+    private String logo;
 }

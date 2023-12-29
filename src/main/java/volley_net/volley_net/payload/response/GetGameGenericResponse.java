@@ -21,6 +21,7 @@ public class GetGameGenericResponse {
     private LocalTime ora;
     private String status;
     private int week;
+    private String league_name;
     private List<TeamsGameGenerics> teams;
 
 }

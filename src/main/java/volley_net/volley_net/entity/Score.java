@@ -26,5 +26,6 @@ public class Score {
     @Column(nullable = false)
     private boolean home;
 
+    @Column(nullable = true)
     private int sets;
 }

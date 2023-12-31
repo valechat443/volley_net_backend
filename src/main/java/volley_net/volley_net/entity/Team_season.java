@@ -30,7 +30,8 @@ public class Team_season {
     @JoinColumn(name="id_team", nullable = false)
     private Team id_team;
 
+    @Column(nullable = false)
     private LocalDate start_date;
-
+    @Column(nullable = false)
     private LocalDate end_date;
 }

@@ -27,5 +27,13 @@ public class Score {
     private boolean home;
 
     @Column(nullable = true)
-    private int sets;
+    private Integer sets;
+
+    public Score(Score s) {
+        this.id_score = s.getId_score();
+        this.id_game = s.getId_game();
+        this.id_team = s.getId_team();
+        this.home = s.isHome();
+        this.sets = s.getSets();
+    }
 }

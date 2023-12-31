@@ -23,4 +23,11 @@ public class Period {
 
     @Column(length = 6,nullable = false)
     private String period_number;
+
+    public Period(Period p) {
+        this.id_period = p.getId_period();
+        this.id_score = p.getId_score();
+        this.points = p.getPoints();
+        this.period_number = p.getPeriod_number();
+    }
 }

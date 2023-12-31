@@ -26,4 +26,17 @@ public class Bet {
     @ManyToOne
     @JoinColumn(name="id_team", nullable = false)
     private Team id_team;
+
+    public Bet(Game id_game, User id_user, Team id_team) {
+        this.id_game = id_game;
+        this.id_user = id_user;
+        this.id_team = id_team;
+    }
+
+    public Bet(Bet b) {
+        this.id_bet = getId_bet();
+        this.id_game = b.getId_game();
+        this.id_user = b.getId_user();
+        this.id_team = b.getId_team();
+    }
 }

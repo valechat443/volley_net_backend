@@ -8,7 +8,7 @@ public class NewTeamListRequest {
 
     /**
      *
-     * richiesta per un determinato utente
+     * new team list
      * */
     @NotBlank
     private String token;

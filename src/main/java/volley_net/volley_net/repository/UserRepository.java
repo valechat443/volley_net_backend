@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<User,Integer> {
             " FROM User u WHERE u.id_user=:id_user")
     User getUserById(@Param("id_user") int id_user);
 
+    @Query(value = "SELECT u.money " +
+            " FROM User u WHERE u.id_user=:id_user")
+    int getMoneyById(@Param("id_user") int id_user);
 
     @Modifying
     @Transactional
@@ -24,4 +27,6 @@ public interface UserRepository extends JpaRepository<User,Integer> {
             "SET u.money=u.money+:num " +
             "WHERE u.id_user=:id_user", nativeQuery = true)
     void updateMoney(@Param("num") int num, @Param("id_user") int id_user);
+
+
 }

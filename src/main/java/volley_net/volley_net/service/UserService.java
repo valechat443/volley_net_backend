@@ -8,11 +8,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import volley_net.volley_net.entity.User;
-import volley_net.volley_net.payload.request.SignupRequest;
-import volley_net.volley_net.payload.request.UpdateMoneyRequest;
-import volley_net.volley_net.payload.request.UserRequest;
+import volley_net.volley_net.entity.*;
+import volley_net.volley_net.payload.request.*;
+import volley_net.volley_net.payload.response.GetRankResponse;
+import volley_net.volley_net.payload.response.GetUserResponse;
 import volley_net.volley_net.payload.response.NewUserLoginResponse;
+import volley_net.volley_net.payload.response.UpdateMoneyResponse;
+import volley_net.volley_net.repository.TeamRepository;
 import volley_net.volley_net.repository.UserRepository;
 
 @Service
@@ -50,11 +52,18 @@ public class UserService {
 
 
     public ResponseEntity<?> getUser(UserRequest request){
-        UserToken id_utente=tokenService.getUserIdFromToken(request.getToken());
-        String encryptedPassword = new DigestUtils("SHA3-256").digestAsHex("pippo"); //algoritmo per la conversione della psw
-
-        User u=new User("bob.bobby@gmail.com","bob",encryptedPassword,false);
-        return new ResponseEntity<>(u,HttpStatus.OK);
+        try{
+            UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+            User u = userRepository.getUserById(id_utente.getId_token());
+            if(id_utente!=null && u!=null) {
+                GetUserResponse response = new GetUserResponse(u.getId_user(),u.getMail(),u.getUsername(),u.isVerified(),u.isAdmin(),u.getMoney(),u.getCount_bet());
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Id_user errato", HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<?> login(UserRequest request){
@@ -62,18 +71,41 @@ public class UserService {
     }
 
 
+    /**
+     * metodo per aggiungere o togliere un determinato num di money
+     * @param request che passa
+     */
     public ResponseEntity<?> update_money(UpdateMoneyRequest request){
-        UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
-        userRepository.updateMoney(request.getNum(),id_utente.getId_token());
-        return new ResponseEntity<>("Fine operazione",HttpStatus.OK);
+        try{
+            UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+            if(id_utente!=null && userRepository.getUserById(id_utente.getId_token())!=null){
+                userRepository.updateMoney(request.getNum(),id_utente.getId_token());
+                UpdateMoneyResponse response = new UpdateMoneyResponse(userRepository.getMoneyById(id_utente.getId_token()));
+                return new ResponseEntity<>(response,HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Id_user errato", HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
     }
+
     public ResponseEntity<?> new_team_list(UserRequest request){
         return null;
     }
-    public ResponseEntity<?> get_money(UserRequest request){
-        return null;
-    }
-    public ResponseEntity<?> get_rank(UserRequest request){
-        return null;
+
+    public ResponseEntity<?> get_rank(GetRankRequest request){
+        try{
+            UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+            User u = userRepository.getUserById(id_utente.getId_token());
+            if(id_utente!=null && u!=null) {
+                GetRankResponse response = new GetRankResponse(u.getId_user(), u.getUsername(), u.getCount_bet());
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Id_user errato", HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
     }
 }

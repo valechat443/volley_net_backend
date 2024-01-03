@@ -37,6 +37,9 @@ public class GameService {
     public ResponseEntity<?> get_game_specific(GameSpecificRequest request) {
         try {
             Game g = gameRepository.GetGameByIdGame(request.getId_game());
+            if(g==null){
+                return new ResponseEntity<>("nessuna partita trovata", HttpStatus.NOT_FOUND);
+            }
             List<Score> punti= gameRepository.GetScoreFromIdGame(g.getId_game());
             List<TeamsGameSpecific> teams = new ArrayList<>();
             for(Score punto:punti){
@@ -64,7 +67,9 @@ public class GameService {
 
         try{
             List<Game> partite = gameRepository.GetListOfGameByWeek(request.getWeek(), request.getSeason(), request.getId_league());
-            //log.info(partite.toString());
+            if(partite.isEmpty()){
+                return new ResponseEntity<>("nessuna partita trovata", HttpStatus.NOT_FOUND);
+            }
 
             List<GetGameGenericResponse> response = new ArrayList<>();
 
@@ -107,6 +112,9 @@ public class GameService {
        try{
            LocalDate data=LocalDate.now().plusDays(2);
            List<Game> partite= gameRepository.GetGameAfterDate(data);
+           if(partite.isEmpty()){
+               return new ResponseEntity<>("nessuna partita futura trovata", HttpStatus.NOT_FOUND);
+           }
            log.info(partite.toString());
            List<BetPageResponse> response = new ArrayList<>();
            for(Game partita:partite){
@@ -150,6 +158,9 @@ public class GameService {
     public ResponseEntity<?> get_default_game() {
         try {
             Game g = gameRepository.GetGameRecente(97);
+            if(g==null){
+                return new ResponseEntity<>("partita di default non trovato", HttpStatus.NOT_FOUND);
+            }
             List<TeamsGameGenerics> teams = new ArrayList<>();
                 List<Score> punti = gameRepository.GetScoreFromIdGame(g.getId_game());
 
@@ -177,8 +188,10 @@ public class GameService {
     public ResponseEntity<?> get_week_max(WeekMaxRequest request) {
 
         try{
-           int week= gameRepository.MaxWeek(request.getSeason(),request.getId_league());
-
+           Integer week= gameRepository.MaxWeek(request.getSeason(),request.getId_league());
+            if(week==null){
+                return new ResponseEntity<>("nessuna giornata trovata", HttpStatus.NOT_FOUND);
+            }
            return new ResponseEntity<>(new GetWeekMaxResponse(week), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
@@ -212,7 +225,7 @@ public class GameService {
     private List<Score> get_score(int id_game){
         try{
            List<Score> elenco= gameRepository.GetScoreFromIdGame(id_game);
-            if(elenco==null){
+            if(elenco.isEmpty()){
                 return null;
             }
             return elenco;

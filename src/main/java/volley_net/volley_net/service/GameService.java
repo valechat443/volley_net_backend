@@ -73,22 +73,29 @@ public class GameService {
 
             List<GetGameGenericResponse> response = new ArrayList<>();
 
-            for(Game partita:partite){
+            for(Game partita:partite) {
 
                 log.info(String.valueOf(partita.getStatus()));
                 List<TeamsGameGenerics> teams = new ArrayList<>();
-                if(!partita.getStatus().equals("Not Started")){
+                if (!partita.getStatus().equals("Not Started")) {
+
                     List<Score> punti = gameRepository.GetScoreFromIdGame(partita.getId_game());
-
-
-
-                    for (Score punto : punti) {
-                        Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
-                        TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
+                    if(punti.isEmpty()){
+                        TeamsGameGenerics dati = new TeamsGameGenerics(0,"","",false,false,0);
                         teams.add(dati);
+                        teams.add(dati);
+                    }else {
+
+                        for (Score punto : punti) {
+                            Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
+                            TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
+                            teams.add(dati);
+                        }
                     }
-                }else{
+
+            }else{
                     TeamsGameGenerics dati = new TeamsGameGenerics(0,"","",false,false,0);
+                    teams.add(dati);
                     teams.add(dati);
                 }
 
@@ -162,13 +169,18 @@ public class GameService {
                 return new ResponseEntity<>("partita di default non trovato", HttpStatus.NOT_FOUND);
             }
             List<TeamsGameGenerics> teams = new ArrayList<>();
-                List<Score> punti = gameRepository.GetScoreFromIdGame(g.getId_game());
-
+            List<Score> punti = gameRepository.GetScoreFromIdGame(g.getId_game());
+            if(punti.isEmpty()){
+                TeamsGameGenerics dati = new TeamsGameGenerics(0,"","",false,false,0);
+                teams.add(dati);
+                teams.add(dati);
+            }else {
                 for (Score punto : punti) {
                     Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
                     TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
                     teams.add(dati);
                 }
+            }
 
 
            GetGameGenericResponse response=new GetGameGenericResponse(g.getId_game(),g.getDate(),g.getTime(),g.getStatus(),g.getWeek(),g.getId_league().getName(),teams);

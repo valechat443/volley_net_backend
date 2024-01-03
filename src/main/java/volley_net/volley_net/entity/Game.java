@@ -33,6 +33,7 @@ public class Game {
     @Column(length = 50,nullable = false)
     private String status;
     @Column(nullable = true)
+
     private Float home_odds;
     @Column(nullable = true)
     private Float away_odds;

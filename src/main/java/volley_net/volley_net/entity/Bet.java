@@ -16,12 +16,12 @@ public class Bet {
     private int id_bet;
 
     @ManyToOne
-    @JoinColumn(name="id_game", nullable = false)
-    private Game id_game;
-
-    @ManyToOne
     @JoinColumn(name="id_user", nullable = false)
     private User id_user;
+
+    @ManyToOne
+    @JoinColumn(name="id_game", nullable = false)
+    private Game id_game;
 
     @ManyToOne
     @JoinColumn(name="id_team", nullable = false)

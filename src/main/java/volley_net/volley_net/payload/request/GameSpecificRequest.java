@@ -13,6 +13,5 @@ public class GameSpecificRequest {
      *
      *
      */
-
     private int id_game;
 }

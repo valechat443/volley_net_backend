@@ -34,7 +34,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query(value = "SELECT MAX(g.week) from Game g " +
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
             "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season")
-    int MaxWeek(@Param("season") int season, @Param("id_league") int id_league);
+    Integer MaxWeek(@Param("season") int season, @Param("id_league") int id_league);
 
     /**
      *

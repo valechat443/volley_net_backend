@@ -80,28 +80,26 @@ public class GameService {
                 if (!partita.getStatus().equals("Not Started")) {
 
                     List<Score> punti = gameRepository.GetScoreFromIdGame(partita.getId_game());
-                    if(punti.isEmpty()){
-                        TeamsGameGenerics dati = new TeamsGameGenerics(0,"","",false,false,0);
-                        teams.add(dati);
-                        teams.add(dati);
-                    }else {
+                    if(!punti.isEmpty()){
+
 
                         for (Score punto : punti) {
                             Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
                             TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
                             teams.add(dati);
                         }
+                        response.add(new GetGameGenericResponse(partita.getId_game(),partita.getDate(),partita.getTime(),partita.getStatus(),partita.getWeek(),partita.getId_league().getName(),teams));
+
                     }
 
-            }else{
+                }else{
                     TeamsGameGenerics dati = new TeamsGameGenerics(0,"","",false,false,0);
                     teams.add(dati);
                     teams.add(dati);
                 }
 
-                response.add(new GetGameGenericResponse(partita.getId_game(),partita.getDate(),partita.getTime(),partita.getStatus(),partita.getWeek(),partita.getId_league().getName(),teams));
 
-            }
+                }
             return new ResponseEntity<>(response, HttpStatus.OK);
 
 
@@ -164,29 +162,33 @@ public class GameService {
      */
     public ResponseEntity<?> get_default_game() {
         try {
-            Game g = gameRepository.GetGameRecente(97);
-            if(g==null){
-                return new ResponseEntity<>("partita di default non trovato", HttpStatus.NOT_FOUND);
-            }
-            List<TeamsGameGenerics> teams = new ArrayList<>();
-            List<Score> punti = gameRepository.GetScoreFromIdGame(g.getId_game());
-            if(punti.isEmpty()){
-                TeamsGameGenerics dati = new TeamsGameGenerics(0,"","",false,false,0);
-                teams.add(dati);
-                teams.add(dati);
-            }else {
-                for (Score punto : punti) {
-                    Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
-                    TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
-                    teams.add(dati);
+            List<Game> elenco = gameRepository.GetListGameRecenti(97);
+            int count=0;
+            GetGameGenericResponse response=new GetGameGenericResponse();
+            //Game g = gameRepository.GetGameRecente(97);
+            for (Game g:elenco) {
+                List<Score> punti = gameRepository.GetScoreFromIdGame(g.getId_game());
+                if(g==null || punti.isEmpty()){
+                    if(count>=5){
+                        return  new ResponseEntity<>("nessun game recente disponibile", HttpStatus.NOT_FOUND);
+                    }
+                   count++;
+                   continue;
                 }
+                List<TeamsGameGenerics> teams = new ArrayList<>();
+
+
+                    for (Score punto : punti) {
+                        Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
+                        TeamsGameGenerics dati = new TeamsGameGenerics(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets());
+                        teams.add(dati);
+                    }
+
+                response=new GetGameGenericResponse(g.getId_game(),g.getDate(),g.getTime(),g.getStatus(),g.getWeek(),g.getId_league().getName(),teams);
+                return new ResponseEntity<>(response, HttpStatus.OK);
             }
-
-
-           GetGameGenericResponse response=new GetGameGenericResponse(g.getId_game(),g.getDate(),g.getTime(),g.getStatus(),g.getWeek(),g.getId_league().getName(),teams);
-
-
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         }catch (Exception e){
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }

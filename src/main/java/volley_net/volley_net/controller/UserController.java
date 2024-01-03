@@ -34,8 +34,8 @@ public class UserController {
         return userService.new_team_list(request);
     }
 
-    @PostMapping("/getRank")
-    public ResponseEntity<?> get_rank(@RequestBody @Valid GetRankRequest request){
-        return userService.get_rank(request);
+    @GetMapping("/getRank")
+    public ResponseEntity<?> get_rank(){
+        return userService.get_rank();
     }
 }

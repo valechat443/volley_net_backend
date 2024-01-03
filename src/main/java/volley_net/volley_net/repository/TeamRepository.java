@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import volley_net.volley_net.entity.Team;
+import volley_net.volley_net.entity.Team_season;
 
 import java.util.List;
 
@@ -25,4 +26,11 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
             "WHERE ts.id_season.year = :season AND ts.id_league.id_league = :id_league"
     )
     List<Team> GetListOfTeam(@Param("season") int season, @Param("id_league") int id_league );
+
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Team_season(" +
+            "ts) " +
+            "from team_season ts " +
+            "WHERE ts.id_team=:id_team AND ts.id_season=:id_season", nativeQuery = true
+    )
+    Team_season GetTeamSeasonByIdTeamIdSeason(@Param("id_team") int id_team, @Param("id_season") int id_season);
 }

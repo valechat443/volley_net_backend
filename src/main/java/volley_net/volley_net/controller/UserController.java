@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import volley_net.volley_net.payload.request.GetRankRequest;
-import volley_net.volley_net.payload.request.SignupRequest;
-import volley_net.volley_net.payload.request.UpdateMoneyRequest;
-import volley_net.volley_net.payload.request.UserRequest;
+import volley_net.volley_net.payload.request.*;
 import volley_net.volley_net.service.UserService;
 
 @RestController
@@ -21,12 +18,20 @@ public class UserController {
     @PostMapping("/signup") //chiamata al servizio di registrazione
     public ResponseEntity<?> save(@RequestBody @Valid SignupRequest request) { return userService.save(request);}
 
+    @PostMapping("/login") //chiamata al servizio login
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) { return userService.login(request);}
+
     @PostMapping("/getUser")
     public ResponseEntity<?> getUser(@RequestBody @Valid UserRequest request) { return userService.getUser(request);}
 
     @PostMapping("/updateMoney")
     public ResponseEntity<?> update_money(@RequestBody @Valid UpdateMoneyRequest request){
         return userService.update_money(request);
+    }
+
+    @PostMapping("/newTeamList")
+    public ResponseEntity<?> new_team_list(@RequestBody @Valid NewTeamListRequest request){
+        return userService.new_team_list(request);
     }
 
     @PostMapping("/getRank")

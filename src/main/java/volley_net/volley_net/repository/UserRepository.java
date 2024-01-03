@@ -17,6 +17,10 @@ public interface UserRepository extends JpaRepository<User,Integer> {
             " FROM User u WHERE u.id_user=:id_user")
     User getUserById(@Param("id_user") int id_user);
 
+    @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
+            " FROM User u WHERE u.mail=:mail")
+    User getUserByMail(@Param("mail") String mail);
+
     @Query(value = "SELECT u.money " +
             " FROM User u WHERE u.id_user=:id_user")
     int getMoneyById(@Param("id_user") int id_user);

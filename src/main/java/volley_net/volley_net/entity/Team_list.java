@@ -26,4 +26,10 @@ public class Team_list {
     @ManyToOne
     @JoinColumn(name="id_group", nullable = false)
     private Group id_group;
+
+    public Team_list(User id_user, Team_season id_team_season, Group id_group) {
+        this.id_user = id_user;
+        this.id_team_season = id_team_season;
+        this.id_group = id_group;
+    }
 }

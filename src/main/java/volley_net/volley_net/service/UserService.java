@@ -10,10 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.*;
-import volley_net.volley_net.payload.response.GetRankResponse;
-import volley_net.volley_net.payload.response.GetUserResponse;
-import volley_net.volley_net.payload.response.NewUserLoginResponse;
-import volley_net.volley_net.payload.response.UpdateMoneyResponse;
+import volley_net.volley_net.payload.response.*;
+import volley_net.volley_net.repository.GroupRepository;
 import volley_net.volley_net.repository.TeamRepository;
 import volley_net.volley_net.repository.UserRepository;
 
@@ -23,6 +21,8 @@ import volley_net.volley_net.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
+    private final GroupRepository groupRepository;
     private final TokenService tokenService;
 
     /**
@@ -66,8 +66,21 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> login(UserRequest request){
-        return null;
+    public ResponseEntity<?> login(LoginRequest request){
+        try{
+            User u = userRepository.getUserByMail(request.getMail());
+            String encryptedPassword = new DigestUtils("SHA3-256").digestAsHex(request.getPassword()); //algoritmo per la conversione della psw
+            String password = u.getPassword();
+            if(u!=null && encryptedPassword.equals(u.getPassword())) {
+                LoginResponse response = new LoginResponse(true);
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                LoginResponse response = new LoginResponse(false);
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -90,8 +103,22 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> new_team_list(UserRequest request){
-        return null;
+    public ResponseEntity<?> new_team_list(NewTeamListRequest request){
+        try{
+            UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+
+            //creo team_list
+            User u = userRepository.getUserById(id_utente.getId_token());
+            Team_season ts = teamRepository.GetTeamSeasonByIdTeamIdSeason(request.getId_team(), request.getSeason());
+            Group g = groupRepository.GetGroupByIdGroup(groupRepository.GetIdGroupByIdTeamSeason(ts.getId_team_season()));
+
+            Team_list tl = new Team_list(u,ts,g);
+
+            NewTeamListResponse response = new NewTeamListResponse(tl);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
     }
 
     public ResponseEntity<?> get_rank(GetRankRequest request){

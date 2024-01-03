@@ -21,4 +21,11 @@ public class Team {
 
     @Column(nullable = false)
     private boolean national=false;
+
+    public Team(Team t) {
+        this.id_team = t.getId_team();
+        this.name = t.getName();
+        this.logo = t.getLogo();
+        this.national = t.isNational();
+    }
 }

@@ -33,10 +33,23 @@ public class Game {
     @Column(length = 50,nullable = false)
     private String status;
     @Column(nullable = true)
-    private float home_odds;
+
+    private Float home_odds;
     @Column(nullable = true)
-    private float away_odds;
+    private Float away_odds;
 
     @Column(length = 11,nullable = false)
-    private int week;
+    private Integer week;
+
+    public Game(Game g) {
+        this.id_game = g.getId_game();
+        this.id_league = g.getId_league();
+        this.date = g.getDate();
+        this.time = g.getTime();
+        this.timezone = g.getTimezone();
+        this.status = g.getStatus();
+        this.home_odds = g.getHome_odds();
+        this.away_odds = g.getAway_odds();
+        this.week = g.getWeek();
+    }
 }

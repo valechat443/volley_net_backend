@@ -17,5 +17,8 @@ public class Season {
 
     @Column(nullable = false)
     private int year;
-
+    public Season(int id_season, int year){
+        this.id_season = id_season;
+        this.year=year;
+    }
 }

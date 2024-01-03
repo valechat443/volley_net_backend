@@ -5,11 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import volley_net.volley_net.entity.Statistic;
 import volley_net.volley_net.entity.Team;
 import volley_net.volley_net.entity.User;
 import volley_net.volley_net.payload.request.GetTeamRequest;
 import volley_net.volley_net.payload.request.SeasonIdLeague;
 import volley_net.volley_net.payload.request.SignupRequest;
+import volley_net.volley_net.payload.request.StatisticRequest;
 import volley_net.volley_net.payload.response.GetTeamResponse;
 import volley_net.volley_net.repository.TeamRepository;
 
@@ -25,7 +27,9 @@ public class TeamService {
      *statistiche di un singolo team
      *
      */
-    private ResponseEntity<?> get_team_statistics() {return null;}
+    public List<Statistic> getStatistic(StatisticRequest request) {
+        return teamRepository.GetStatistic(request.getId_team());
+    }
 
     /**
     *lista di team di una determinata lega di una determinata stagione

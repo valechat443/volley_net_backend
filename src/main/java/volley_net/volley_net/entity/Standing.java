@@ -34,4 +34,5 @@ public class Standing {
 
     @Column(nullable = true)
     private String zona;
+
 }

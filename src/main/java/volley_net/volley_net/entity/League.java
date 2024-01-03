@@ -28,4 +28,5 @@ public class League {
     @ManyToOne
     @JoinColumn(name="id_country", nullable = false)
     private Country id_country;
+
 }

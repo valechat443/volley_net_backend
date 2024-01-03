@@ -14,6 +14,7 @@ public class Group {
     private int id_group;
 
 
-    @Column(nullable = false)
-    private String group_name;
+    @Column(nullable = false, name = "group_name")
+    private String groupName;
+
 }

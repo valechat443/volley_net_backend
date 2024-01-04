@@ -3,8 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-
--- Creato il: Dic 29, 2023 alle 12:36
+-- Creato il: Gen 04, 2024 alle 12:52
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -231,6 +230,15 @@ CREATE TABLE `group` (
   `group_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `group`
+--
+
+INSERT INTO `group` (`id_group`, `group_name`) VALUES
+(0, 'Regular Season'),
+(1, 'Group 1'),
+(2, 'Group 2');
+
 -- --------------------------------------------------------
 
 --
@@ -257,6 +265,7 @@ INSERT INTO `league` (`id_league`, `id_country`, `name`, `type`, `logo`, `start_
 (90, 25, 'Serie A2 Women', 'League', 'https://media-4.api-sports.io/volley/leagues/90.png', '2023-10-08', '2024-01-21'),
 (91, 25, 'Super Cup', 'Cup', 'https://media-4.api-sports.io/volley/leagues/91.png', '2023-10-31', '2023-11-01'),
 (92, 25, 'Coppa Italia A1 Women', 'Cup', 'https://media-4.api-sports.io/volley/leagues/92.png', '2023-01-24', '2023-01-29'),
+(93, 25, 'Coppa Italia A1', 'Cup', 'https://media.api-sports.io/volley/leagues/93.png', '2024-01-03', '2024-01-04'),
 (94, 25, 'Coppa Italia A2 Women', 'Cup', 'https://media-4.api-sports.io/volley/leagues/94.png', '2024-01-10', '2024-01-10'),
 (95, 25, 'Super Cup Women', 'Cup', 'https://media-4.api-sports.io/volley/leagues/95.png', '2023-10-28', '2023-10-28'),
 (97, 25, 'SuperLega', 'League', 'https://media-4.api-sports.io/volley/leagues/97.png', '2023-10-22', '2024-03-03');
@@ -557,6 +566,24 @@ CREATE TABLE `standing` (
   `zona` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `standing`
+--
+
+INSERT INTO `standing` (`id_standing`, `id_team_season`, `id_group`, `position`, `points`, `form`, `zona`) VALUES
+(15, 11, 0, 1, 31, 'WWWLW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(16, 8, 0, 3, 27, 'WWLWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(17, 2, 0, 4, 22, 'WLWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(18, 3, 0, 5, 21, 'WWWLW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(19, 5, 0, 6, 20, 'LLWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(20, 4, 0, 7, 17, 'LLWWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(21, 12, 0, 8, 17, 'WWWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(22, 6, 0, 9, 10, 'LLLWL', 'SuperLega (Losers stage: )'),
+(23, 1, 0, 10, 10, 'LWLLL', 'SuperLega (Losers stage: )'),
+(24, 10, 0, 11, 9, 'LWLLL', 'SuperLega (Losers stage: )'),
+(25, 13, 0, 2, 28, 'WLLWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(26, 14, 0, 12, 4, 'LLLLL', 'Relegation - Serie A2');
+
 -- --------------------------------------------------------
 
 --
@@ -639,6 +666,7 @@ INSERT INTO `team` (`id_team`, `name`, `logo`, `national`) VALUES
 (736, 'Talmassons W', 'https://media-4.api-sports.io/volley/teams/736.png', 0),
 (737, 'Lube Civitanova', 'https://media-4.api-sports.io/volley/teams/737.png', 0),
 (738, 'Modena', 'https://media-4.api-sports.io/volley/teams/738.png', 0),
+(739, 'Perugia', 'https://media.api-sports.io/volley/teams/739.png', 0),
 (740, 'Trentino', 'https://media-4.api-sports.io/volley/teams/740.png', 0),
 (741, 'Cisterna', 'https://media-4.api-sports.io/volley/teams/741.png', 0),
 (742, 'Milano', 'https://media-4.api-sports.io/volley/teams/742.png', 0),
@@ -658,7 +686,8 @@ INSERT INTO `team` (`id_team`, `name`, `logo`, `national`) VALUES
 (3520, 'Pallavolo Perugia W', 'https://media-4.api-sports.io/volley/teams/3520.png', 0),
 (3521, 'Picco Lecco W', 'https://media-4.api-sports.io/volley/teams/3521.png', 0),
 (3522, 'San Giovanni W', 'https://media-4.api-sports.io/volley/teams/3522.png', 0),
-(3604, 'Vero Volley W', 'https://media-4.api-sports.io/volley/teams/3604.png', 0);
+(3604, 'Vero Volley W', 'https://media-4.api-sports.io/volley/teams/3604.png', 0),
+(3815, 'Saturnia Acicastello', 'https://media.api-sports.io/volley/teams/3815.png', 0);
 
 -- --------------------------------------------------------
 
@@ -702,7 +731,9 @@ INSERT INTO `team_season` (`id_team_season`, `id_league`, `id_season`, `id_team`
 (8, 97, 2023, 745, '2024-03-03', '2023-10-22'),
 (10, 97, 2023, 751, '2024-03-03', '2023-10-22'),
 (11, 97, 2023, 740, '2024-03-03', '2023-10-22'),
-(12, 97, 2023, 747, '2024-03-03', '2023-10-22');
+(12, 97, 2023, 747, '2024-03-03', '2023-10-22'),
+(13, 97, 2023, 739, '2024-03-03', '2023-10-22'),
+(14, 97, 2023, 3815, '2024-03-03', '2023-10-22');
 
 -- --------------------------------------------------------
 
@@ -726,7 +757,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `mail`, `Username`, `Password`, `admin`, `money`, `verified`, `count_bet`) VALUES
-(3, 'vale@mail.com', 'vale', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 0, b'0', 0);
+(3, 'vale@mail.com', 'vale', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 0, b'0', 0),
+(4, 'marco@mail.com', 'marco', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 0, b'0', 0);
 
 --
 -- Indici per le tabelle scaricate
@@ -867,7 +899,7 @@ ALTER TABLE `game`
 -- AUTO_INCREMENT per la tabella `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT per la tabella `league`
@@ -903,7 +935,7 @@ ALTER TABLE `season`
 -- AUTO_INCREMENT per la tabella `standing`
 --
 ALTER TABLE `standing`
-  MODIFY `id_standing` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_standing` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT per la tabella `statistic`
@@ -915,7 +947,7 @@ ALTER TABLE `statistic`
 -- AUTO_INCREMENT per la tabella `team`
 --
 ALTER TABLE `team`
-  MODIFY `id_team` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3605;
+  MODIFY `id_team` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3816;
 
 --
 -- AUTO_INCREMENT per la tabella `team_list`
@@ -927,13 +959,13 @@ ALTER TABLE `team_list`
 -- AUTO_INCREMENT per la tabella `team_season`
 --
 ALTER TABLE `team_season`
-  MODIFY `id_team_season` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_team_season` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT per la tabella `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Limiti per le tabelle scaricate

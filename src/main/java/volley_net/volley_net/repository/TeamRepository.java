@@ -35,6 +35,10 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
     )
     Team_season GetTeamSeasonByIdTeamIdSeason(@Param("id_team") int id_team, @Param("id_season") int id_season);
 
-    @Query(value = "Select s.* From statistic s Join team_season ts ON ts.id_team_season=s.id_team_season Join team t On t.id_team=ts.id_team Where t.id_team=:id_team",nativeQuery = true)
+    @Query(value = "Select new volley_net.volley_net.entity.Statistic(s)" +
+            " From Statistic s " +
+            "Join Team_season ts ON ts.id_team_season=s.id_team_season.id_team_season " +
+            "Join Team t On t.id_team=ts.id_team.id_team " +
+            "Where t.id_team=:id_team")
     List<Statistic> GetStatistic(@Param("id_team") int id_team);
 }

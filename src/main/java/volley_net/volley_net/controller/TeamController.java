@@ -26,7 +26,7 @@ public class TeamController {
     public ResponseEntity<?> get_list_of_team(@RequestBody @Valid SeasonIdLeague request){
         return teamService.get_list_of_team(request);
     }
-    @GetMapping("/statistics")
+    @PostMapping("/statistics")
     public ResponseEntity<List<Statistic>> getStatistics(@RequestBody @Valid StatisticRequest request) {
         List<Statistic> statistics = teamService.getStatistic(request);
         return ResponseEntity.ok(statistics);

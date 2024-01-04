@@ -28,19 +28,19 @@ public class LeagueController {
         this.leagueService = leagueService;
     }
 
-    @GetMapping("/leagues")
+    @PostMapping("/leagues")
     public ResponseEntity<?> get_list_of_league(@RequestBody @Valid ListOfLeagueRequest request){
         List<League> leagues = leagueService.getLeaguesFromSeason(request.getSeason());
         return ResponseEntity.ok(leagues);
     }
-    @GetMapping("/standings")
+    @PostMapping ("/standings")
     public ResponseEntity<?> getTeamsOfLeagueAndSeason(@RequestBody @Valid StandingRequest request) {
         List<Standing> standings = leagueService.findStandingBySeasonLeagueAndGroup(request);
         return ResponseEntity.ok(standings);
     }
     @Autowired
     private GroupRepository groupRepository;
-    @GetMapping("/groups")
+    @PostMapping ("/groups")
     public ResponseEntity<?> getGroups(@RequestBody GroupRequest request) {
         try {
             List<Group> groups = groupRepository.findAllBySeasonAndLeague(request.getSeason(), request.getId_league());

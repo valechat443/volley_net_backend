@@ -53,7 +53,12 @@ public class LeagueService {
      *
      */
     public List<Standing> findStandingBySeasonLeagueAndGroup(StandingRequest request) {
+        try {
         return standingRepository.getStanding(request.getId_season(),request.getId_league(),request.getId_group());
+        } catch (Exception e) {
+            // Gestiamo eventuali eccezioni
+            return new ArrayList<>();
+        }
     }
 
 

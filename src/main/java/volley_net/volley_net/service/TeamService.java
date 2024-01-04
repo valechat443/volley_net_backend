@@ -15,6 +15,7 @@ import volley_net.volley_net.payload.request.StatisticRequest;
 import volley_net.volley_net.payload.response.GetTeamResponse;
 import volley_net.volley_net.repository.TeamRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,7 +29,11 @@ public class TeamService {
      *
      */
     public List<Statistic> getStatistic(StatisticRequest request) {
+        try{
         return teamRepository.GetStatistic(request.getId_team());
+        }catch (Exception e){
+            return new ArrayList<>();
+        }
     }
 
     /**

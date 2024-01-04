@@ -6,12 +6,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import volley_net.volley_net.entity.User;
+import volley_net.volley_net.payload.response.ListUserRankResponse;
 import volley_net.volley_net.service.UserToken;
+
+import java.util.List;
 
 public interface UserRepository extends JpaRepository<User,Integer> {
 
 
     User findByUsername(String username);
+
+    @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
+            "FROM User u " +
+            "Order By u.count_bet Desc")
+    List<User> getUserRank();
 
     @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
             " FROM User u WHERE u.id_user=:id_user")

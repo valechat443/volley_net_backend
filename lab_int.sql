@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 04, 2024 alle 12:52
+-- Creato il: Gen 04, 2024 alle 15:32
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -607,6 +607,24 @@ CREATE TABLE `statistic` (
   `against_goals_away` int(3) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `statistic`
+--
+
+INSERT INTO `statistic` (`id_statistic`, `id_team_season`, `played_home`, `played_away`, `wins_home`, `wins_away`, `losses_home`, `losses_away`, `draws_home`, `draws_away`, `for_goals_home`, `for_goals_away`, `against_goals_home`, `against_goals_away`) VALUES
+(1, 11, 6, 6, 6, 5, 0, 1, 0, 0, 18, 16, 5, 6),
+(2, 8, 5, 7, 4, 4, 1, 3, 0, 0, 14, 17, 4, 11),
+(3, 2, 6, 6, 3, 5, 3, 1, 0, 0, 11, 15, 13, 7),
+(4, 3, 6, 6, 4, 3, 2, 3, 0, 0, 13, 13, 8, 12),
+(5, 5, 6, 6, 3, 4, 3, 2, 0, 0, 10, 14, 11, 8),
+(6, 4, 6, 6, 3, 4, 3, 2, 0, 0, 9, 13, 13, 13),
+(7, 12, 7, 5, 3, 3, 4, 2, 0, 0, 12, 10, 15, 10),
+(8, 6, 6, 6, 3, 1, 3, 5, 0, 0, 10, 4, 13, 17),
+(9, 1, 6, 6, 3, 0, 3, 6, 0, 0, 13, 5, 12, 18),
+(10, 10, 6, 6, 1, 0, 5, 6, 0, 0, 10, 9, 16, 18),
+(11, 13, 6, 6, 5, 4, 1, 2, 0, 0, 17, 15, 7, 7),
+(13, 14, 6, 6, 1, 0, 5, 6, 0, 0, 8, 2, 16, 18);
+
 -- --------------------------------------------------------
 
 --
@@ -941,7 +959,7 @@ ALTER TABLE `standing`
 -- AUTO_INCREMENT per la tabella `statistic`
 --
 ALTER TABLE `statistic`
-  MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT per la tabella `team`

@@ -120,34 +120,38 @@ public class GameService {
            if(partite.isEmpty()){
                return new ResponseEntity<>("nessuna partita futura trovata", HttpStatus.NOT_FOUND);
            }
-           log.info(partite.toString());
+
            List<BetPageResponse> response = new ArrayList<>();
            for(Game partita:partite){
+
                List<Score> punti= gameRepository.GetScoreFromIdGame(partita.getId_game());
                List<TeamsBetPage> teams = new ArrayList<>();
-               for(Score punto:punti){
+               if(!punti.isEmpty()) {
+                   for (Score punto : punti) {
 
-                    Team t= teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
-                    float odd;
-                    if(punto.isHome()) {
-                        if(partita.getHome_odds()==null){
-                            odd=0.0f;
-                        }else{
-                            odd= partita.getHome_odds();
-                        }
+                       Team t = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
+                       float odd;
+                       if (punto.isHome()) {
+                           if (partita.getHome_odds() == null) {
+                               odd = 0.0f;
+                           } else {
+                               odd = partita.getHome_odds();
+                           }
 
-                    }else{
-                        if(partita.getAway_odds()==null){
-                            odd=0.0f;
-                        }else{
-                            odd= partita.getAway_odds();
-                        }
-                    }
-                   teams.add(new TeamsBetPage(t.getId_team(), t.getName(), t.getLogo(), t.isNational(), punto.isHome(), punto.getSets(),odd));
+                       } else {
+                           if (partita.getAway_odds() == null) {
+                               odd = 0.0f;
+                           } else {
+                               odd = partita.getAway_odds();
+                           }
+                       }
+                       teams.add(new TeamsBetPage(t.getId_team(), t.getName(), t.getLogo(), t.isNational(), punto.isHome(), punto.getSets(), odd));
 
+                   }
+
+                   response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(), teams));
                }
-               response.add(new BetPageResponse(partita.getId_game(),partita.getDate(),partita.getTime(), partita.getStatus(), partita.getWeek(),teams));
-           }
+               }
            return new ResponseEntity<>(response, HttpStatus.OK);
        }catch (Exception e){
            return new ResponseEntity<>("non ho trovato niente", HttpStatus.BAD_REQUEST);

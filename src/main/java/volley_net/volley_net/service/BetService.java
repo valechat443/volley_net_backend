@@ -43,7 +43,7 @@ public class BetService {
             betRepository.save(b);
             return new ResponseEntity<>("scommessa creata", HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>("errore nella creazione della scommessa", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("errore del server", HttpStatus.BAD_REQUEST);
         }
     }
 

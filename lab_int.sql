@@ -3,12 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
-
-
--- Creato il: Gen 04, 2024 alle 15:32
-
-
-
+-- Creato il: Gen 05, 2024 alle 12:41
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -46,7 +41,8 @@ CREATE TABLE `bet` (
 INSERT INTO `bet` (`id_bet`, `id_user`, `id_game`, `id_team`) VALUES
 (2, 3, 148524, 737),
 (3, 3, 148463, 741),
-(4, 3, 148464, 747);
+(4, 3, 148464, 747),
+(5, 3, 148464, 747);
 
 -- --------------------------------------------------------
 
@@ -240,9 +236,9 @@ CREATE TABLE `group` (
 --
 
 INSERT INTO `group` (`id_group`, `group_name`) VALUES
-(0, 'Regular Season'),
 (1, 'Group 1'),
-(2, 'Group 2');
+(2, 'Group 2'),
+(3, 'Regular Season');
 
 -- --------------------------------------------------------
 
@@ -576,18 +572,18 @@ CREATE TABLE `standing` (
 --
 
 INSERT INTO `standing` (`id_standing`, `id_team_season`, `id_group`, `position`, `points`, `form`, `zona`) VALUES
-(15, 11, 0, 1, 31, 'WWWLW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(16, 8, 0, 3, 27, 'WWLWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(17, 2, 0, 4, 22, 'WLWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(18, 3, 0, 5, 21, 'WWWLW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(19, 5, 0, 6, 20, 'LLWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(20, 4, 0, 7, 17, 'LLWWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(21, 12, 0, 8, 17, 'WWWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(22, 6, 0, 9, 10, 'LLLWL', 'SuperLega (Losers stage: )'),
-(23, 1, 0, 10, 10, 'LWLLL', 'SuperLega (Losers stage: )'),
-(24, 10, 0, 11, 9, 'LWLLL', 'SuperLega (Losers stage: )'),
-(25, 13, 0, 2, 28, 'WLLWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
-(26, 14, 0, 12, 4, 'LLLLL', 'Relegation - Serie A2');
+(15, 11, 3, 1, 31, 'WWWLW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(16, 8, 3, 3, 27, 'WWLWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(17, 2, 3, 4, 22, 'WLWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(18, 3, 3, 5, 21, 'WWWLW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(19, 5, 3, 6, 20, 'LLWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(20, 4, 3, 7, 17, 'LLWWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(21, 12, 3, 8, 17, 'WWWWL', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(22, 6, 3, 9, 10, 'LLLWL', 'SuperLega (Losers stage: )'),
+(23, 1, 3, 10, 10, 'LWLLL', 'SuperLega (Losers stage: )'),
+(24, 10, 3, 11, 9, 'LWLLL', 'SuperLega (Losers stage: )'),
+(25, 13, 3, 2, 28, 'WLLWW', 'Promotion - SuperLega (Play Offs: Quarter-finals)'),
+(26, 14, 3, 12, 4, 'LLLLL', 'Relegation - Serie A2');
 
 -- --------------------------------------------------------
 
@@ -725,6 +721,13 @@ CREATE TABLE `team_list` (
   `id_group` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `team_list`
+--
+
+INSERT INTO `team_list` (`id_team_list`, `id_user`, `id_team_season`, `id_group`) VALUES
+(3, 3, 1, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -780,7 +783,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `mail`, `Username`, `Password`, `admin`, `money`, `verified`, `count_bet`) VALUES
-(3, 'vale@mail.com', 'vale', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 0, b'0', 0),
+(3, 'vale@mail.com', 'vale', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 600, b'0', 0),
 (4, 'marco@mail.com', 'marco', '80424d5247f97d337c0538b7324c7acc2acd1bed2b2e59df466f9982ede23aef', 0, 0, b'0', 0);
 
 --
@@ -904,7 +907,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT per la tabella `bet`
 --
 ALTER TABLE `bet`
-  MODIFY `id_bet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_bet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT per la tabella `country`
@@ -922,7 +925,7 @@ ALTER TABLE `game`
 -- AUTO_INCREMENT per la tabella `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT per la tabella `league`
@@ -976,7 +979,7 @@ ALTER TABLE `team`
 -- AUTO_INCREMENT per la tabella `team_list`
 --
 ALTER TABLE `team_list`
-  MODIFY `id_team_list` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_team_list` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT per la tabella `team_season`

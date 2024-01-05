@@ -15,6 +15,9 @@ import volley_net.volley_net.repository.GroupRepository;
 import volley_net.volley_net.repository.TeamRepository;
 import volley_net.volley_net.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -121,16 +124,16 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> get_rank(GetRankRequest request){
+    public ResponseEntity<?> get_rank(){
         try{
-            UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
-            User u = userRepository.getUserById(id_utente.getId_token());
-            if(id_utente!=null && u!=null) {
-                GetRankResponse response = new GetRankResponse(u.getId_user(), u.getUsername(), u.getCount_bet());
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Id_user errato", HttpStatus.BAD_REQUEST);
+            List<User> us = userRepository.getUserRank();
+            List<ListUserRankResponse> response = new ArrayList<>();
+            for (User user : us) {
+                if(!user.isAdmin()){
+                    response.add(new ListUserRankResponse(user.getId_user(),user.getUsername(),user.getCount_bet()));
+                }
             }
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }catch (Exception e){
             return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
         }

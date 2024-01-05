@@ -6,23 +6,25 @@ import org.springframework.stereotype.Repository;
 import volley_net.volley_net.entity.Group;
 import volley_net.volley_net.entity.League;
 import volley_net.volley_net.entity.Season;
+import volley_net.volley_net.entity.Standing;
 
 import java.util.*;
 
 
 public interface GroupRepository extends JpaRepository<Group,Integer> {
-    @Query(value = "SELECT s.id_group " +
-            "from standing s " +
-            "WHERE s.id_team_season=:id_team_season", nativeQuery = true
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Standing(s.id_group) " +
+            "from Standing s " +
+            "WHERE s.id_team_season.id_team_season=:id_team_season"
     )
-    int GetIdGroupByIdTeamSeason(@Param("id_team_season") int id_team_season);
+    Standing GetIdGroupByIdTeamSeason(@Param("id_team_season") int id_team_season);
 
     @Query(value = "SELECT  new volley_net.volley_net.entity.Group(" +
             "g) " +
             "from Group g " +
-            "WHERE g.id_group=:id_group", nativeQuery = true
+            "WHERE g.id_group=:id_group"
     )
     Group GetGroupByIdGroup(@Param("id_group") int id_group);
+
     @Query("SELECT g FROM Group g WHERE g.group_name = :groupName")
     Optional<Group> findByGroupName(@Param("groupName") String groupName);
 

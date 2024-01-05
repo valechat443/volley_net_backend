@@ -34,4 +34,13 @@ public class Team_season {
     private LocalDate start_date;
     @Column(nullable = false)
     private LocalDate end_date;
+
+    public Team_season(Team_season ts) {
+        this.id_team_season = ts.id_team_season;
+        this.id_league = ts.getId_league();
+        this.id_season = ts.getId_season();
+        this.id_team = ts.getId_team();
+        this.start_date = ts.getStart_date();
+        this.end_date = ts.getEnd_date();
+    }
 }

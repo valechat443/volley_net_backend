@@ -30,8 +30,8 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
 
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team_season(" +
             "ts) " +
-            "from team_season ts " +
-            "WHERE ts.id_team=:id_team AND ts.id_season=:id_season", nativeQuery = true
+            "from Team_season ts " +
+            "WHERE ts.id_team.id_team=:id_team AND ts.id_season.id_season=:id_season"
     )
     Team_season GetTeamSeasonByIdTeamIdSeason(@Param("id_team") int id_team, @Param("id_season") int id_season);
 

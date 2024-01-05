@@ -44,4 +44,8 @@ public class Standing {
         this.form = s.getForm();
         this.zona = s.getZona();
     }
+
+    public Standing(Group id_group) {
+        this.id_group = id_group;
+    }
 }

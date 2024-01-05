@@ -12,6 +12,7 @@ import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.*;
 import volley_net.volley_net.payload.response.*;
 import volley_net.volley_net.repository.GroupRepository;
+import volley_net.volley_net.repository.TeamListRepository;
 import volley_net.volley_net.repository.TeamRepository;
 import volley_net.volley_net.repository.UserRepository;
 
@@ -27,6 +28,7 @@ public class UserService {
     private final TeamRepository teamRepository;
     private final GroupRepository groupRepository;
     private final TokenService tokenService;
+    private final TeamListRepository teamListRepository;
 
     /**
      *
@@ -113,14 +115,20 @@ public class UserService {
             //creo team_list
             User u = userRepository.getUserById(id_utente.getId_token());
             Team_season ts = teamRepository.GetTeamSeasonByIdTeamIdSeason(request.getId_team(), request.getSeason());
-            Group g = groupRepository.GetGroupByIdGroup(groupRepository.GetIdGroupByIdTeamSeason(ts.getId_team_season()));
+            Group g = groupRepository.GetGroupByIdGroup(groupRepository.GetIdGroupByIdTeamSeason(ts.getId_team_season()).getId_group().getId_group());
 
             Team_list tl = new Team_list(u,ts,g);
+            NewTeamListResponse response = new NewTeamListResponse(false);
+            if(tl!= null){
+                teamListRepository.save(tl);
+                response.setConferma(true);
+            }
 
-            NewTeamListResponse response = new NewTeamListResponse(tl);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }catch (Exception e){
-            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Errore nel Salvataggio", HttpStatus.BAD_REQUEST);
         }
     }
 

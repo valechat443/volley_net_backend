@@ -72,10 +72,10 @@ public class UserService {
             String encryptedPassword = new DigestUtils("SHA3-256").digestAsHex(request.getPassword()); //algoritmo per la conversione della psw
             String password = u.getPassword();
             if(u!=null && encryptedPassword.equals(u.getPassword())) {
-                LoginResponse response = new LoginResponse(true);
+                LoginResponse response = new LoginResponse(true,tokenService.createToken(u.getId_user()));
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {
-                LoginResponse response = new LoginResponse(false);
+                LoginResponse response = new LoginResponse(false,"");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         }catch (Exception e){

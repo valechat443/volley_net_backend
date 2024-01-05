@@ -34,4 +34,18 @@ public class Standing {
 
     @Column(nullable = true)
     private String zona;
+
+    public Standing(Standing s) {
+        this.id_standing = s.getId_standing();
+        this.id_team_season = s.getId_team_season();
+        this.id_group = s.getId_group();
+        this.position = s.getPosition();
+        this.points = s.getPoints();
+        this.form = s.getForm();
+        this.zona = s.getZona();
+    }
+
+    public Standing(Group id_group) {
+        this.id_group = id_group;
+    }
 }

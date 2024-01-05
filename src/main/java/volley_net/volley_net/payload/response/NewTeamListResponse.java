@@ -12,5 +12,5 @@ import volley_net.volley_net.entity.Team_list;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewTeamListResponse {
-    private Team_list team_list;
+    private boolean conferma;
 }

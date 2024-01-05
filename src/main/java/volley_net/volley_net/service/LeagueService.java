@@ -11,6 +11,9 @@ import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.GroupRequest;
 import volley_net.volley_net.payload.request.ListOfLeagueRequest;
 import volley_net.volley_net.payload.request.StandingRequest;
+import volley_net.volley_net.payload.response.GetListOfLeagueResponse;
+import volley_net.volley_net.payload.response.GetStandingResponse;
+import volley_net.volley_net.payload.response.GetWeekMaxResponse;
 import volley_net.volley_net.repository.*;
 
 import java.util.*;
@@ -30,21 +33,25 @@ public class LeagueService {
      *lista di tutte le leghe di una stagione
      *
      */
-    public List<League> getLeaguesFromSeason(int year) {
-        List<League> leagues = new ArrayList<>();
+    public ResponseEntity<?> getLeaguesFromSeason(int year) {
+        List<GetListOfLeagueResponse> leagues = new ArrayList<>();
         try {
             Optional<Season> desiredSeason = seasonRepository.findByYear(year);
             if (!desiredSeason.isPresent()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Season not found");
             }
             List<Team_season> teamSeasons = teamSeasonRepository.findBySeason(desiredSeason.get());
+            List<Integer> id_leagues= new ArrayList<>();
             for (Team_season teamSeason : teamSeasons) {
-                leagues.add(teamSeason.getId_league());
+                if(!id_leagues.contains(teamSeason.getId_league().getId_league())) {
+                    leagues.add(new GetListOfLeagueResponse(teamSeason.getId_league().getId_league(),teamSeason.getId_league().getName(),teamSeason.getId_league().getType(),teamSeason.getId_league().getLogo(),teamSeason.getStart_date(),teamSeason.getEnd_date()));
+                    id_leagues.add(teamSeason.getId_league().getId_league());
+                }
             }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred", e);
         }
-        return leagues;
+        return new ResponseEntity<>(leagues, HttpStatus.OK);
     }
 
 
@@ -52,12 +59,19 @@ public class LeagueService {
      *classifica di una lega di una stagione
      *
      */
-    public List<Standing> findStandingBySeasonLeagueAndGroup(StandingRequest request) {
+    public ResponseEntity<?> findStandingBySeasonLeagueAndGroup(StandingRequest request) {
         try {
-        return standingRepository.getStanding(request.getId_season(),request.getId_league(),request.getId_group());
+            List<Standing> elenco =standingRepository.getStanding(request.getId_season(),request.getId_league(),request.getId_group());
+            List<GetStandingResponse> response = new ArrayList<>();
+            for(Standing s:elenco){
+                response.add( new GetStandingResponse(s.getId_team_season().getId_team().getName(),s.getPosition(),s.getPoints(),s.getForm(),s.getZona(),s.getId_team_season().getId_team().getLogo()));
+
+            }
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             // Gestiamo eventuali eccezioni
-            return new ArrayList<>();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+
         }
     }
 
@@ -69,6 +83,24 @@ public class LeagueService {
      *
      */
     public ResponseEntity<?> getGroupsBySeasonAndLeague(GroupRequest request) {
+        try {
+            List<Group> groups = groupRepository.findAllBySeasonAndLeague(request.getSeason(), request.getId_league());
+            // Creiamo una nuova lista per contenere i nomi dei gruppi
+            List<String> groupNames = new ArrayList<>();
+            // Iteriamo attraverso la lista di gruppi
+            for (Group group : groups) {
+                // Aggiungiamo il nome del gruppo alla nuova lista
+                groupNames.add(group.getGroup_name());
+            }
+            // Restituiamo la lista di nomi di gruppi come risposta
+            return ResponseEntity.ok(groupNames);
+        } catch (Exception e) {
+            // Gestiamo eventuali eccezioni
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<?> getGroup(GroupRequest request){
         try {
             List<Group> groups = groupRepository.findAllBySeasonAndLeague(request.getSeason(), request.getId_league());
             // Creiamo una nuova lista per contenere i nomi dei gruppi

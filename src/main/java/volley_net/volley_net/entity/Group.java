@@ -16,4 +16,8 @@ public class Group {
 
     @Column(nullable = false)
     private String group_name;
+
+    public Group(String group_name) {
+        this.group_name = group_name;
+    }
 }

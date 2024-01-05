@@ -9,6 +9,6 @@ import java.util.*;
 
 @Repository
 public interface TeamSeasonRepository extends JpaRepository<Team_season, Integer> {
-    @Query("SELECT ts FROM Team_season ts WHERE ts.id_season = :season")
+    @Query("SELECT  ts FROM Team_season ts WHERE ts.id_season = :season")
     List<Team_season> findBySeason(Season season);
 }

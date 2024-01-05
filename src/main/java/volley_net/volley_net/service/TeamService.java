@@ -13,6 +13,7 @@ import volley_net.volley_net.payload.request.SeasonIdLeague;
 import volley_net.volley_net.payload.request.SignupRequest;
 import volley_net.volley_net.payload.request.StatisticRequest;
 import volley_net.volley_net.payload.response.GetTeamResponse;
+import volley_net.volley_net.payload.response.GetTeamStatisticResponse;
 import volley_net.volley_net.repository.TeamRepository;
 
 import java.util.ArrayList;
@@ -28,11 +29,18 @@ public class TeamService {
      *statistiche di un singolo team
      *
      */
-    public List<Statistic> getStatistic(StatisticRequest request) {
+    public ResponseEntity<?> getStatistic(StatisticRequest request) {
         try{
-        return teamRepository.GetStatistic(request.getId_team());
+            List<Statistic>elenco =teamRepository.GetStatistic(request.getId_team());
+            List<GetTeamStatisticResponse> response = new ArrayList<>();
+            for(Statistic s:elenco){
+                response.add(new GetTeamStatisticResponse(s.getId_team_season().getId_team().getId_team(),
+                        s.getId_team_season().getId_team().getName(),s.getId_team_season().getId_team().getLogo(),s.getId_team_season().getId_team().isNational(),
+                        s.getPlayed_home(),s.getPlayed_away(),s.getWins_home(),s.getWins_away(),s.getLosses_home(),s.getLosses_away(),s.getDraws_home(),s.getDraws_away(),s.getFor_goals_home(),s.getFor_goals_away(),s.getAgainst_goals_home(),s.getAgainst_goals_away()));
+            }
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
-            return new ArrayList<>();
+            return new ResponseEntity<>("ricerca senza risultati", HttpStatus.NOT_FOUND);
         }
     }
 

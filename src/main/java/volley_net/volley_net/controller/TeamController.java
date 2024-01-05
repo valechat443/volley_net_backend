@@ -27,9 +27,8 @@ public class TeamController {
         return teamService.get_list_of_team(request);
     }
     @PostMapping("/statistics")
-    public ResponseEntity<List<Statistic>> getStatistics(@RequestBody @Valid StatisticRequest request) {
-        List<Statistic> statistics = teamService.getStatistic(request);
-        return ResponseEntity.ok(statistics);
+    public ResponseEntity<?> getStatistics(@RequestBody @Valid StatisticRequest request) {
+        return teamService.getStatistic(request);
     }
 
 }

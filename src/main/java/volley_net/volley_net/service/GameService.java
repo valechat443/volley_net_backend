@@ -1,24 +1,31 @@
 package volley_net.volley_net.service;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import volley_net.volley_net.entity.Game;
 import volley_net.volley_net.entity.Period;
 import volley_net.volley_net.entity.Score;
 import volley_net.volley_net.entity.Team;
 import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
-import volley_net.volley_net.payload.request.BetFutureRequest;
+
 import volley_net.volley_net.payload.request.WeekMaxRequest;
 import volley_net.volley_net.payload.response.*;
 import volley_net.volley_net.repository.GameRepository;
 import volley_net.volley_net.repository.TeamRepository;
-
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -249,6 +256,39 @@ public class GameService {
             return elenco;
         }catch (Exception e){
             return null;
+        }
+    }
+
+
+    public ResponseEntity<?> salva_periods(WeekMaxRequest request){
+        try{
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("x-rapidapi-key", "a4d9f5a5e67beba13075382ca1379f3a");
+            headers.add("x-rapidapi-host", "v1.volleyball.api-sports.io");
+
+            HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+            ResponseEntity<String> cose = restTemplate.exchange(
+                    "https://v1.volleyball.api-sports.io/games?league="+String.valueOf(request.getId_league())+"&season="+String.valueOf(request.getSeason()),
+                    HttpMethod.GET,
+                    entity,
+                    String.class);
+
+            JSONObject j = new JSONObject(cose.getBody());
+            JSONArray  response = j.getJSONArray("response");
+
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject game = response.getJSONObject(i);
+                log.info(game.toString());
+            }
+
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
     }
 }

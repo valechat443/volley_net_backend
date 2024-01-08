@@ -10,20 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import volley_net.volley_net.entity.Game;
-import volley_net.volley_net.entity.Period;
-import volley_net.volley_net.entity.Score;
-import volley_net.volley_net.entity.Team;
+import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
 
 import volley_net.volley_net.payload.request.WeekMaxRequest;
 import volley_net.volley_net.payload.response.*;
 import volley_net.volley_net.repository.GameRepository;
+import volley_net.volley_net.repository.PeriodRepository;
+import volley_net.volley_net.repository.ScoreRepository;
 import volley_net.volley_net.repository.TeamRepository;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,7 +36,8 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
-
+    private final ScoreRepository scoreRepository;
+    private final PeriodRepository periodRepository;
     /**
      *
      * @param request
@@ -259,7 +261,23 @@ public class GameService {
         }
     }
 
-
+    private  Game salva_game(JSONObject game){
+        try{
+        DateTimeFormatter giorno = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter ora = DateTimeFormatter.ofPattern("HH:mm");
+        League l = new League( game.getJSONObject("league").getInt("id"));
+        Game g = new Game(game.getInt("id"),
+                l, LocalDate.parse(game.getString("date"), giorno),
+                LocalTime.parse(game.getString("time"),ora),
+                game.getString("timezone"),
+                game.getJSONObject("status").getString("long"),
+                null,null,game.getString("week"));
+        gameRepository.save(g);
+        return g;
+        }catch (Exception e){
+            return null;
+        }
+    }
     public ResponseEntity<?> salva_periods(WeekMaxRequest request){
         try{
 
@@ -278,12 +296,87 @@ public class GameService {
                     entity,
                     String.class);
 
-            JSONObject j = new JSONObject(cose.getBody());
-            JSONArray  response = j.getJSONArray("response");
+            JSONObject jason = new JSONObject(cose.getBody());
+            JSONArray  response = jason.getJSONArray("response");
 
             for (int i = 0; i < response.length(); i++) {
                 JSONObject game = response.getJSONObject(i);
-                log.info(game.toString());
+                Game g = salva_game(game);
+                if (g != null) {
+                    for (int j = 0; j < game.getJSONObject("scores").length(); j++) {
+                        Score score= new Score();
+                        if (j == 0) {
+                            Team t = new Team(game.getJSONObject("teams").getJSONObject("home").getInt("id"));
+                            score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
+                            Score s =scoreRepository.save(score);
+                            if(s!=null) {
+                                JSONObject periods = game.getJSONObject("periods");
+                                for (int k = 1; k < periods.length()+1; k++) {
+
+                                    Integer punti=null;
+                                    try{
+                                    if(k==1){
+                                        punti=periods.getJSONObject("first").getInt("home");
+                                    }else if(k==2){
+                                        punti=periods.getJSONObject("second").getInt("home");
+                                    }else if(k==3){
+                                        punti=periods.getJSONObject("third").getInt("home");
+                                    }else if(k==4){
+                                        punti=periods.getJSONObject("fourth").getInt("home");
+                                    }else if(k==5){
+                                        punti=periods.getJSONObject("fifth").getInt("home");
+                                    }
+                                }catch (Exception e){
+                                    punti=null;
+                                }
+                                    if(punti!=null) {
+                                        Period p = new Period(s, punti, String.valueOf(k));
+                                        periodRepository.save(p);
+                                    }
+                                }
+                            }
+
+
+
+                        } else {
+                            Team t = new Team(game.getJSONObject("teams").getJSONObject("away").getInt("id"));
+                            score = new Score(g, t, false, game.getJSONObject("scores").getInt("away"));
+                            Score s =scoreRepository.save(score);
+
+                            if(s!=null) {
+                                JSONObject periods = game.getJSONObject("periods");
+                                for (int k = 1; k < periods.length()+1; k++) {
+                                    Integer punti=null;
+                                    try {
+                                        if (k == 1) {
+                                            punti = periods.getJSONObject("first").getInt("away");
+                                        } else if (k == 2) {
+                                            punti = periods.getJSONObject("second").getInt("away");
+                                        } else if (k == 3) {
+                                            punti = periods.getJSONObject("third").getInt("away");
+                                        } else if (k == 4) {
+                                            punti = periods.getJSONObject("fourth").getInt("away");
+                                        } else if (k == 5) {
+                                            punti = periods.getJSONObject("fifth").getInt("away");
+                                        }
+                                    }catch (Exception e){
+                                        punti=null;
+                                    }
+                                    if(punti!=null) {
+                                        Period p = new Period(s, punti, String.valueOf(k));
+                                        periodRepository.save(p);
+                                    }
+
+                                }
+                            }
+
+                        }
+
+
+
+
+                    }
+                }
             }
 
             return new ResponseEntity<>("ok", HttpStatus.OK);

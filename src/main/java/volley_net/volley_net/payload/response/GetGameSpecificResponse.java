@@ -20,7 +20,7 @@ public class GetGameSpecificResponse {
     private LocalDate date;
     private LocalTime time;
     private String status;
-    private int week;
+    private String week;
     private List<TeamsGameSpecific> teams;
 
 }

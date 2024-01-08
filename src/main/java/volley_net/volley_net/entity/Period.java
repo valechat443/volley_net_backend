@@ -30,4 +30,10 @@ public class Period {
         this.points = p.getPoints();
         this.period_number = p.getPeriod_number();
     }
+
+    public Period(Score id_score, int points, String period_number) {
+        this.id_score = id_score;
+        this.points = points;
+        this.period_number = period_number;
+    }
 }

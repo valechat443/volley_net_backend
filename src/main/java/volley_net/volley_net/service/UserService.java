@@ -147,18 +147,4 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<?> get_rank(){
-        try{
-            List<User> us = userRepository.getUserRank();
-            List<ListUserRankResponse> response = new ArrayList<>();
-            for (User user : us) {
-                if(!user.isAdmin()){
-                    response.add(new ListUserRankResponse(user.getId_user(),user.getUsername(),user.getCount_bet()));
-                }
-            }
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
-            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
-        }
-    }
 }

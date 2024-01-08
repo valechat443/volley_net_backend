@@ -36,6 +36,12 @@ public class GameController {
 
         return gameService.bets_page();
     }
+
+    @PostMapping ("/period")
+    public ResponseEntity<?> salva_period(@RequestBody @Valid  WeekMaxRequest request){
+
+        return gameService.salva_periods(request);
+    }
     @GetMapping("/default")
     public ResponseEntity<?> default_game(){
         return gameService.get_default_game();

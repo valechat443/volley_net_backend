@@ -10,6 +10,5 @@ public class UserRequest {
      *
      * richiesta per un determinato utente
      * */
-    @NotBlank
     private String token;
 }

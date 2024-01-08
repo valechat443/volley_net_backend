@@ -16,4 +16,13 @@ public class Group {
 
     @Column(nullable = false)
     private String group_name;
+
+    public Group(String group_name) {
+        this.group_name = group_name;
+    }
+
+    public Group(Group g) {
+        this.id_group = g.getId_group();
+        this.group_name = g.group_name;
+    }
 }

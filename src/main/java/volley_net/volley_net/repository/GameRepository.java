@@ -93,6 +93,12 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
             "ORDER by g.date DESC " +
             "LIMIT 1")
     Game GetGameRecente(@Param("id_league") int id_league);
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Game (g) " +
+            "FROM Game g " +
+            "WHERE g.id_league.id_league=:id_league and g.status='Finished'" +
+            "ORDER by g.date DESC " +
+            "LIMIT 5")
+    List<Game> GetListGameRecenti(@Param("id_league") int id_league);
 
     /**
      *

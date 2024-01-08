@@ -11,9 +11,9 @@ public class UpdateMoneyRequest {
      *
      * somma o sottrazione "num"
      * */
-    @NotBlank
+
     private String token;
 
-    @NotNull
+
     private int num;
 }

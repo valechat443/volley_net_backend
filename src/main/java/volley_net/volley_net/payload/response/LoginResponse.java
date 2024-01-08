@@ -11,4 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class LoginResponse {
     private boolean conferma;
+    private String token;
 }

@@ -215,11 +215,29 @@ public class GameService {
     public ResponseEntity<?> get_week_max(WeekMaxRequest request) {
 
         try{
-           Integer week= gameRepository.MaxWeek(request.getSeason(),request.getId_league());
+           List<String> week= gameRepository.ListOfWeek(request.getSeason(),request.getId_league());
+           String response="";
             if(week==null){
                 return new ResponseEntity<>("nessuna giornata trovata", HttpStatus.NOT_FOUND);
             }
-           return new ResponseEntity<>(new GetWeekMaxResponse(week), HttpStatus.OK);
+            if(week.contains("Final"))
+            {
+                return new ResponseEntity<>(new GetWeekMaxResponse("Semi-finals"), HttpStatus.OK);
+            }
+            else if(week.contains("Semi-finals"))
+            {
+                return new ResponseEntity<>(new GetWeekMaxResponse("Final"), HttpStatus.OK);
+            }
+            List<Integer> nums= new ArrayList<>();
+            for (String s : week) {
+                try {
+                    nums.add(Integer.parseInt(s));
+                } catch (NumberFormatException e) {
+                 log.info(e.getMessage());
+                }
+            }
+
+           return new ResponseEntity<>(new GetWeekMaxResponse(String.valueOf(Collections.max(nums))), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
@@ -278,6 +296,7 @@ public class GameService {
             return null;
         }
     }
+//non mette league 94
     public ResponseEntity<?> salva_periods(WeekMaxRequest request){
         try{
 
@@ -298,18 +317,25 @@ public class GameService {
 
             JSONObject jason = new JSONObject(cose.getBody());
             JSONArray  response = jason.getJSONArray("response");
-
+            int count=0;
             for (int i = 0; i < response.length(); i++) {
                 JSONObject game = response.getJSONObject(i);
                 Game g = salva_game(game);
+                log.info( String.valueOf(count++));
                 if (g != null) {
                     for (int j = 0; j < game.getJSONObject("scores").length(); j++) {
                         Score score= new Score();
                         if (j == 0) {
                             Team t = new Team(game.getJSONObject("teams").getJSONObject("home").getInt("id"));
-                            score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
-                            Score s =scoreRepository.save(score);
-                            if(s!=null) {
+                            try {
+                                score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
+                            }catch(Exception e){
+                                score = new Score(g, t, true, null);
+                            }
+                            log.info(String.valueOf(score.getSets()));
+
+                            if(score.getSets()!=null) {
+                                Score s =scoreRepository.save(score);
                                 JSONObject periods = game.getJSONObject("periods");
                                 for (int k = 1; k < periods.length()+1; k++) {
 
@@ -340,10 +366,13 @@ public class GameService {
 
                         } else {
                             Team t = new Team(game.getJSONObject("teams").getJSONObject("away").getInt("id"));
-                            score = new Score(g, t, false, game.getJSONObject("scores").getInt("away"));
-                            Score s =scoreRepository.save(score);
-
-                            if(s!=null) {
+                            try {
+                                score = new Score(g, t, true, game.getJSONObject("scores").getInt("away"));
+                            }catch(Exception e){
+                                score = new Score(g, t, true, null);
+                            }
+                            if(score.getSets()!=null) {
+                                Score s =scoreRepository.save(score);
                                 JSONObject periods = game.getJSONObject("periods");
                                 for (int k = 1; k < periods.length()+1; k++) {
                                     Integer punti=null;
@@ -381,7 +410,7 @@ public class GameService {
 
             return new ResponseEntity<>("ok", HttpStatus.OK);
         }catch (Exception e){
-            return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

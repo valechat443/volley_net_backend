@@ -19,7 +19,7 @@ public class Period {
     @JoinColumn(name="id_score", nullable = false)
     private Score id_score;
     @Column(nullable = true)
-    private int points;
+    private Integer points;
 
     @Column(length = 6,nullable = false)
     private String period_number;

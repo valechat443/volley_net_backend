@@ -31,10 +31,10 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
      * @param id_league filtro per lega
      * @return giornata massima di una lega di uan stagione
      */
-    @Query(value = "SELECT MAX(g.week) from Game g " +
+    @Query(value = "SELECT DISTINCT g.week from Game g " +
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
             "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season")
-    Integer MaxWeek(@Param("season") int season, @Param("id_league") int id_league);
+    List<String> ListOfWeek(@Param("season") int season, @Param("id_league") int id_league);
 
     /**
      *
@@ -70,7 +70,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
             "FROM Game g " +
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
             "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season and g.week=:week")
-    List<Game> GetListOfGameByWeek(@Param("week") int week,@Param("season") int season, @Param("id_league") int id_league);
+    List<Game> GetListOfGameByWeek(@Param("week") String week,@Param("season") int season, @Param("id_league") int id_league);
 
     /**
      *

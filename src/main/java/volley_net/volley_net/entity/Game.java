@@ -39,7 +39,7 @@ public class Game {
     private Float away_odds;
 
     @Column(length = 11,nullable = false)
-    private Integer week;
+    private String week;
 
     public Game(Game g) {
         this.id_game = g.getId_game();

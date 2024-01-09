@@ -1,24 +1,32 @@
 package volley_net.volley_net.service;
 
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import volley_net.volley_net.entity.Game;
-import volley_net.volley_net.entity.Period;
-import volley_net.volley_net.entity.Score;
-import volley_net.volley_net.entity.Team;
+
+import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
-import volley_net.volley_net.payload.request.BetFutureRequest;
+
 import volley_net.volley_net.payload.request.WeekMaxRequest;
 import volley_net.volley_net.payload.response.*;
 import volley_net.volley_net.repository.GameRepository;
+import volley_net.volley_net.repository.PeriodRepository;
+import volley_net.volley_net.repository.ScoreRepository;
 import volley_net.volley_net.repository.TeamRepository;
-
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,7 +36,8 @@ public class GameService {
 
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
-
+    private final ScoreRepository scoreRepository;
+    private final PeriodRepository periodRepository;
     /**
      *
      * @param request
@@ -206,11 +215,29 @@ public class GameService {
     public ResponseEntity<?> get_week_max(WeekMaxRequest request) {
 
         try{
-           Integer week= gameRepository.MaxWeek(request.getSeason(),request.getId_league());
+           List<String> week= gameRepository.ListOfWeek(request.getSeason(),request.getId_league());
+           String response="";
             if(week==null){
                 return new ResponseEntity<>("nessuna giornata trovata", HttpStatus.NOT_FOUND);
             }
-           return new ResponseEntity<>(new GetWeekMaxResponse(week), HttpStatus.OK);
+            if(week.contains("Final"))
+            {
+                return new ResponseEntity<>(new GetWeekMaxResponse("Semi-finals"), HttpStatus.OK);
+            }
+            else if(week.contains("Semi-finals"))
+            {
+                return new ResponseEntity<>(new GetWeekMaxResponse("Final"), HttpStatus.OK);
+            }
+            List<Integer> nums= new ArrayList<>();
+            for (String s : week) {
+                try {
+                    nums.add(Integer.parseInt(s));
+                } catch (NumberFormatException e) {
+                 log.info(e.getMessage());
+                }
+            }
+
+           return new ResponseEntity<>(new GetWeekMaxResponse(String.valueOf(Collections.max(nums))), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
@@ -249,6 +276,141 @@ public class GameService {
             return elenco;
         }catch (Exception e){
             return null;
+        }
+    }
+
+    private  Game salva_game(JSONObject game){
+        try{
+        DateTimeFormatter giorno = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        DateTimeFormatter ora = DateTimeFormatter.ofPattern("HH:mm");
+        League l = new League( game.getJSONObject("league").getInt("id"));
+        Game g = new Game(game.getInt("id"),
+                l, LocalDate.parse(game.getString("date"), giorno),
+                LocalTime.parse(game.getString("time"),ora),
+                game.getString("timezone"),
+                game.getJSONObject("status").getString("long"),
+                null,null,game.getString("week"));
+        gameRepository.save(g);
+        return g;
+        }catch (Exception e){
+            return null;
+        }
+    }
+//non mette league 94
+    public ResponseEntity<?> salva_periods(WeekMaxRequest request){
+        try{
+
+            RestTemplate restTemplate = new RestTemplate();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+            headers.add("x-rapidapi-key", "a4d9f5a5e67beba13075382ca1379f3a");
+            headers.add("x-rapidapi-host", "v1.volleyball.api-sports.io");
+
+            HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+            ResponseEntity<String> cose = restTemplate.exchange(
+                    "https://v1.volleyball.api-sports.io/games?league="+String.valueOf(request.getId_league())+"&season="+String.valueOf(request.getSeason()),
+                    HttpMethod.GET,
+                    entity,
+                    String.class);
+
+            JSONObject jason = new JSONObject(cose.getBody());
+            JSONArray  response = jason.getJSONArray("response");
+            int count=0;
+            for (int i = 0; i < response.length(); i++) {
+                JSONObject game = response.getJSONObject(i);
+                Game g = salva_game(game);
+                log.info( String.valueOf(count++));
+                if (g != null) {
+                    for (int j = 0; j < game.getJSONObject("scores").length(); j++) {
+                        Score score= new Score();
+                        if (j == 0) {
+                            Team t = new Team(game.getJSONObject("teams").getJSONObject("home").getInt("id"));
+                            try {
+                                score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
+                            }catch(Exception e){
+                                score = new Score(g, t, true, null);
+                            }
+                            log.info(String.valueOf(score.getSets()));
+
+                            if(score.getSets()!=null) {
+                                Score s =scoreRepository.save(score);
+                                JSONObject periods = game.getJSONObject("periods");
+                                for (int k = 1; k < periods.length()+1; k++) {
+
+                                    Integer punti=null;
+                                    try{
+                                    if(k==1){
+                                        punti=periods.getJSONObject("first").getInt("home");
+                                    }else if(k==2){
+                                        punti=periods.getJSONObject("second").getInt("home");
+                                    }else if(k==3){
+                                        punti=periods.getJSONObject("third").getInt("home");
+                                    }else if(k==4){
+                                        punti=periods.getJSONObject("fourth").getInt("home");
+                                    }else if(k==5){
+                                        punti=periods.getJSONObject("fifth").getInt("home");
+                                    }
+                                }catch (Exception e){
+                                    punti=null;
+                                }
+                                    if(punti!=null) {
+                                        Period p = new Period(s, punti, String.valueOf(k));
+                                        periodRepository.save(p);
+                                    }
+                                }
+                            }
+
+
+
+                        } else {
+                            Team t = new Team(game.getJSONObject("teams").getJSONObject("away").getInt("id"));
+                            try {
+                                score = new Score(g, t, true, game.getJSONObject("scores").getInt("away"));
+                            }catch(Exception e){
+                                score = new Score(g, t, true, null);
+                            }
+                            if(score.getSets()!=null) {
+                                Score s =scoreRepository.save(score);
+                                JSONObject periods = game.getJSONObject("periods");
+                                for (int k = 1; k < periods.length()+1; k++) {
+                                    Integer punti=null;
+                                    try {
+                                        if (k == 1) {
+                                            punti = periods.getJSONObject("first").getInt("away");
+                                        } else if (k == 2) {
+                                            punti = periods.getJSONObject("second").getInt("away");
+                                        } else if (k == 3) {
+                                            punti = periods.getJSONObject("third").getInt("away");
+                                        } else if (k == 4) {
+                                            punti = periods.getJSONObject("fourth").getInt("away");
+                                        } else if (k == 5) {
+                                            punti = periods.getJSONObject("fifth").getInt("away");
+                                        }
+                                    }catch (Exception e){
+                                        punti=null;
+                                    }
+                                    if(punti!=null) {
+                                        Period p = new Period(s, punti, String.valueOf(k));
+                                        periodRepository.save(p);
+                                    }
+
+                                }
+                            }
+
+                        }
+
+
+
+
+                    }
+                }
+            }
+
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }

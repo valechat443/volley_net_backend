@@ -11,7 +11,7 @@ public class GameGenericRequest {
      *
      */
 
-    private int week;
+    private String week;
 
 
 
@@ -20,7 +20,7 @@ public class GameGenericRequest {
 
     private int id_league;
 
-    public GameGenericRequest(int week, int season, int id_league) {
+    public GameGenericRequest(String week, int season, int id_league) {
         this.week = week;
         this.season = season;
         this.id_league = id_league;

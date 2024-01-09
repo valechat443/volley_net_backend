@@ -36,4 +36,11 @@ public class Score {
         this.home = s.isHome();
         this.sets = s.getSets();
     }
+
+    public Score(Game id_game, Team id_team, boolean home, Integer sets) {
+        this.id_game = id_game;
+        this.id_team = id_team;
+        this.home = home;
+        this.sets = sets;
+    }
 }

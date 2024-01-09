@@ -28,4 +28,8 @@ public class Team {
         this.logo = t.getLogo();
         this.national = t.isNational();
     }
+
+    public Team(int id_team) {
+        this.id_team = id_team;
+    }
 }

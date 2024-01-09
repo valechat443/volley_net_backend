@@ -72,4 +72,20 @@ public class Statistic {
         this.against_goals_home = s.against_goals_home;
         this.against_goals_away = s.against_goals_away;
     }
+
+    public Statistic(Team_season id_team_season, int played_home, int played_away, int wins_home, int wins_away, int losses_home, int losses_away, int draws_home, int draws_away, int for_goals_home, int for_goals_away, int against_goals_home, int against_goals_away) {
+        this.id_team_season = id_team_season;
+        this.played_home = played_home;
+        this.played_away = played_away;
+        this.wins_home = wins_home;
+        this.wins_away = wins_away;
+        this.losses_home = losses_home;
+        this.losses_away = losses_away;
+        this.draws_home = draws_home;
+        this.draws_away = draws_away;
+        this.for_goals_home = for_goals_home;
+        this.for_goals_away = for_goals_away;
+        this.against_goals_home = against_goals_home;
+        this.against_goals_away = against_goals_away;
+    }
 }

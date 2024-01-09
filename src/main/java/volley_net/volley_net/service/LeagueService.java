@@ -8,12 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import volley_net.volley_net.entity.*;
-import volley_net.volley_net.payload.request.GroupRequest;
-import volley_net.volley_net.payload.request.ListOfLeagueRequest;
-import volley_net.volley_net.payload.request.StandingRequest;
-import volley_net.volley_net.payload.response.GetListOfLeagueResponse;
-import volley_net.volley_net.payload.response.GetStandingResponse;
-import volley_net.volley_net.payload.response.GetWeekMaxResponse;
+import volley_net.volley_net.payload.request.*;
+import volley_net.volley_net.payload.response.*;
 import volley_net.volley_net.repository.*;
 
 import java.util.*;

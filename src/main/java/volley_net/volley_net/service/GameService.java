@@ -4,24 +4,27 @@ package volley_net.volley_net.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import volley_net.volley_net.entity.*;
+import volley_net.volley_net.payload.response.BetPageResponse;
 import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
 
 import volley_net.volley_net.payload.request.WeekMaxRequest;
 import volley_net.volley_net.payload.response.*;
-import volley_net.volley_net.repository.GameRepository;
-import volley_net.volley_net.repository.PeriodRepository;
-import volley_net.volley_net.repository.ScoreRepository;
-import volley_net.volley_net.repository.TeamRepository;
+import volley_net.volley_net.repository.*;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -38,6 +41,7 @@ public class GameService {
     private final TeamRepository teamRepository;
     private final ScoreRepository scoreRepository;
     private final PeriodRepository periodRepository;
+
     /**
      *
      * @param request
@@ -55,9 +59,13 @@ public class GameService {
                 Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
 
                 List<Period> tempi= gameRepository.GetPeriodFromScore(punto.getId_score());
-                PeriodsTeamsGameSpecific dati_tempo= new PeriodsTeamsGameSpecific(tempi.get(0).getPoints(),tempi.get(1).getPoints(),tempi.get(2).getPoints(),tempi.get(3).getPoints(),tempi.get(4).getPoints());
+                List<Integer> points= new ArrayList<>();
+                for(Period t:tempi){
+                    points.add(t.getPoints());
+                }
 
-                TeamsGameSpecific dati_squadra = new TeamsGameSpecific(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets(), dati_tempo);
+
+                TeamsGameSpecific dati_squadra = new TeamsGameSpecific(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets(), points);
                 teams.add(dati_squadra);
             }
             GetGameSpecificResponse response= new GetGameSpecificResponse(g.getId_game(),g.getDate(),g.getTime(),g.getStatus(), g.getWeek(), teams);
@@ -300,6 +308,8 @@ public class GameService {
     public ResponseEntity<?> salva_periods(WeekMaxRequest request){
         try{
 
+
+
             RestTemplate restTemplate = new RestTemplate();
 
             HttpHeaders headers = new HttpHeaders();
@@ -317,6 +327,8 @@ public class GameService {
 
             JSONObject jason = new JSONObject(cose.getBody());
             JSONArray  response = jason.getJSONArray("response");
+
+
             int count=0;
             for (int i = 0; i < response.length(); i++) {
                 JSONObject game = response.getJSONObject(i);

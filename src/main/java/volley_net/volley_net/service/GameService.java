@@ -304,28 +304,47 @@ public class GameService {
             return null;
         }
     }
+
+    /**
+     *
+     * @param request
+     * @return oggetto jason con dentro una lista di game
+     */
+    private JSONObject chiamata(WeekMaxRequest request){
+
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        headers.add("x-rapidapi-key", "a4d9f5a5e67beba13075382ca1379f3a");
+        headers.add("x-rapidapi-host", "v1.volleyball.api-sports.io");
+
+        HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+        ResponseEntity<String> cose = restTemplate.exchange(
+                "https://v1.volleyball.api-sports.io/games?league="+String.valueOf(request.getId_league())+"&season="+String.valueOf(request.getSeason()),
+                HttpMethod.GET,
+                entity,
+                String.class);
+        try {
+            return new JSONObject(cose.getBody());
+        }catch(Exception e){
+            return null;
+        }
+    }
+
 //non mette league 94
-    public ResponseEntity<?> salva_periods(WeekMaxRequest request){
+    public ResponseEntity<?> salva_tutto(WeekMaxRequest request){
         try{
 
 
 
-            RestTemplate restTemplate = new RestTemplate();
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-            headers.add("x-rapidapi-key", "a4d9f5a5e67beba13075382ca1379f3a");
-            headers.add("x-rapidapi-host", "v1.volleyball.api-sports.io");
-
-            HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-            ResponseEntity<String> cose = restTemplate.exchange(
-                    "https://v1.volleyball.api-sports.io/games?league="+String.valueOf(request.getId_league())+"&season="+String.valueOf(request.getSeason()),
-                    HttpMethod.GET,
-                    entity,
-                    String.class);
-
-            JSONObject jason = new JSONObject(cose.getBody());
+            JSONObject jason = chiamata(request);
+            if(jason==null){
+                return new ResponseEntity<>("nessun oggetto trovato", HttpStatus.BAD_REQUEST);
+            }
             JSONArray  response = jason.getJSONArray("response");
 
 
@@ -425,4 +444,80 @@ public class GameService {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    public ResponseEntity<?> salva_solo_periods(WeekMaxRequest request){
+    try{
+        JSONObject jason= chiamata(request);
+        if(jason==null){
+            return new ResponseEntity<>("nessun oggetto trovato", HttpStatus.BAD_REQUEST);
+        }
+        JSONArray  response = jason.getJSONArray("response");
+
+        for (int i = 0; i < response.length(); i++) {
+            JSONObject game = response.getJSONObject(i);
+            if(gameRepository.existsById(game.getInt("id"))){
+                List<Score> scores=gameRepository.GetScoreFromIdGame(game.getInt("id"));
+                if(!scores.isEmpty() && scores.size()==2){
+                   for(Score score:scores){
+                       if(score.isHome()){
+                           JSONObject periods = game.getJSONObject("periods");
+                           for (int k = 1; k < periods.length()+1; k++) {
+                               Integer punti=0;
+                               try{
+                                   if(k==1){
+                                       punti=periods.getJSONObject("first").getInt("home");
+                                   }else if(k==2){
+                                       punti=periods.getJSONObject("second").getInt("home");
+                                   }else if(k==3){
+                                       punti=periods.getJSONObject("third").getInt("home");
+                                   }else if(k==4){
+                                       punti=periods.getJSONObject("fourth").getInt("home");
+                                   }else if(k==5){
+                                       punti=periods.getJSONObject("fifth").getInt("home");
+                                   }
+                               }catch (Exception e){
+                                   punti=null;
+                               }
+                               if(punti!=null) {
+                                   Period p = new Period(score, punti, String.valueOf(k));
+                                   periodRepository.save(p);
+                               }
+                           }
+                       }else{
+                           JSONObject periods = game.getJSONObject("periods");
+                           for (int k = 1; k < periods.length()+1; k++) {
+
+                               Integer punti=0;
+                               try{
+                                   if(k==1){
+                                       punti=periods.getJSONObject("first").getInt("away");
+                                   }else if(k==2){
+                                       punti=periods.getJSONObject("second").getInt("away");
+                                   }else if(k==3){
+                                       punti=periods.getJSONObject("third").getInt("away");
+                                   }else if(k==4){
+                                       punti=periods.getJSONObject("fourth").getInt("away");
+                                   }else if(k==5){
+                                       punti=periods.getJSONObject("fifth").getInt("away");
+                                   }
+                               }catch (Exception e){
+                                   punti=null;
+                               }
+                               if(punti!=null) {
+                                   Period p = new Period(score, punti, String.valueOf(k));
+                                   periodRepository.save(p);
+                               }
+                           }
+
+                       }
+                   }
+                }
+            }
+        }
+        return new ResponseEntity<>("ok", HttpStatus.OK);
+    }catch (Exception e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+    }
+
 }

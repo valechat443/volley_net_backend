@@ -40,7 +40,7 @@ public class GameController {
     @PostMapping ("/period")
     public ResponseEntity<?> salva_period(@RequestBody @Valid  WeekMaxRequest request){
 
-        return gameService.salva_periods(request);
+        return gameService.salva_solo_periods(request);
     }
     @GetMapping("/default")
     public ResponseEntity<?> default_game(){

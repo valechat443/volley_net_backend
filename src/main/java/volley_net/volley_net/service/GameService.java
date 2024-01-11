@@ -31,6 +31,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -300,6 +301,17 @@ public class GameService {
                 null,null,game.getString("week"));
         gameRepository.save(g);
         return g;
+        }catch (Exception e){
+            return null;
+        }
+    }
+
+    private List<Score> salva_score(JSONObject game){
+        try{
+           Game g = gameRepository.GetGameByIdGame(game.getInt("id")) ;
+            return null;
+
+
         }catch (Exception e){
             return null;
         }

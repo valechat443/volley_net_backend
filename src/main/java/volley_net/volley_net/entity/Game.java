@@ -52,4 +52,8 @@ public class Game {
         this.away_odds = g.getAway_odds();
         this.week = g.getWeek();
     }
+
+    public Game(int id_game) {
+        this.id_game = id_game;
+    }
 }

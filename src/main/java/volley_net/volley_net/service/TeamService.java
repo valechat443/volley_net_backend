@@ -81,22 +81,5 @@ public class TeamService {
     }
 
 
-    public Team salva_team(JSONObject game,int home){
-    try{
-        JSONObject team=new JSONObject();
-        Team t = new Team();
-        if(home==1){
-            team=game.getJSONObject("teams").getJSONObject("home");
-        }else{
-            team=game.getJSONObject("teams").getJSONObject("away");
-        }
-        if(teamRepository.GetTeamByIdTeam(team.getInt("id"))!=null){
-            t=new Team(team.getInt("id"),team.getString("name"),team.getString("logo"),false);
-            teamRepository.save(t);
-        }
-        return t;
-    }catch (Exception e){
-        return null;
-    }
-    }
+
 }

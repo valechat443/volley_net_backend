@@ -44,6 +44,7 @@ public class GameService {
     private final ScoreRepository scoreRepository;
     private final PeriodRepository periodRepository;
 
+
     /**
      * @param request
      * @return get partita da id partita
@@ -281,24 +282,26 @@ public class GameService {
                      scores= salva_score(g);
 
                }else{
-                   return new ResponseEntity<>("errore salvataggio score", HttpStatus.NOT_MODIFIED);
+                   return new ResponseEntity<>("errore salvataggio game", HttpStatus.NOT_MODIFIED);
                }
                log.info(String.valueOf(g.getInt("id")));
-               if(!scores.isEmpty()){
+               if(!scores.isEmpty() && scores.size()==2){
                     periods=salva_periods(scores,g);
                }
-               /*
+/*
                else{
-                   return new ResponseEntity<>("errore salvataggio period", HttpStatus.NOT_MODIFIED);
+                   return new ResponseEntity<>("errore salvataggio score", HttpStatus.NOT_MODIFIED);
                }
+               
+ */
 
-                */
+
 
 
             }
             return new ResponseEntity<>("ok", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("errore nel server", HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -322,6 +325,27 @@ public class GameService {
         }
     }
 
+    public Team salva_team(JSONObject game,int home){
+        try{
+            JSONObject team=new JSONObject();
+            Team t = new Team();
+            if(home==1){
+                team=game.getJSONObject("teams").getJSONObject("home");
+            }else{
+                team=game.getJSONObject("teams").getJSONObject("away");
+            }
+            Team ris=teamRepository.GetTeamByIdTeam(team.getInt("id"));
+            if(ris==null){
+                t=new Team(team.getInt("id"),team.getString("name"),team.getString("logo"),false);
+                teamRepository.save(t);
+            }else{
+                t=ris;
+            }
+            return t;
+        }catch (Exception e){
+            return null;
+        }
+    }
     private List<Score> salva_score(JSONObject game) {
         try {
             Game g = gameRepository.GetGameByIdGame(game.getInt("id"));
@@ -329,7 +353,7 @@ public class GameService {
             for (int j = 0; j < game.getJSONObject("scores").length(); j++) {
                 Score score = null;
                 if (j == 0) {
-                    Team t = new Team(game.getJSONObject("teams").getJSONObject("home").getInt("id"));
+                    Team t =salva_team(game,1);
                     if(teamRepository.GetTeamByIdTeam(t.getId_team())!=null) {
                         try {
                             score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
@@ -339,7 +363,7 @@ public class GameService {
                     }
 
                 } else {
-                    Team t = new Team(game.getJSONObject("teams").getJSONObject("away").getInt("id"));
+                    Team t =salva_team(game,0);
                     if(teamRepository.GetTeamByIdTeam(t.getId_team())!=null) {
                         try {
                             score = new Score(g, t, true, game.getJSONObject("scores").getInt("away"));

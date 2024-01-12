@@ -14,7 +14,7 @@ import java.time.LocalTime;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @EqualsAndHashCode.Include
     private int id_game;
 

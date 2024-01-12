@@ -43,6 +43,7 @@ public class GameService {
     private final TeamRepository teamRepository;
     private final ScoreRepository scoreRepository;
     private final PeriodRepository periodRepository;
+    private final TeamSeasonRepository teamSeasonRepository;
 
 
     /**
@@ -60,15 +61,25 @@ public class GameService {
             for (Score punto : punti) {
                 Team squadra = teamRepository.GetTeamByIdTeam(punto.getId_team().getId_team());
 
+
                 List<Period> tempi = gameRepository.GetPeriodFromScore(punto.getId_score());
-                List<Integer> points = new ArrayList<>();
-                for (Period t : tempi) {
-                    points.add(t.getPoints());
+                TeamsGameSpecific dati_squadra = new TeamsGameSpecific();
+                if(!tempi.isEmpty()){
+                    List<Integer> points = new ArrayList<>();
+                    for (Period t : tempi) {
+                        points.add(t.getPoints());
+                    }
+                   dati_squadra = new TeamsGameSpecific(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets(), points);
+
+                }else{
+                    dati_squadra = new TeamsGameSpecific(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets(), new ArrayList<>());
+
                 }
 
-
-                TeamsGameSpecific dati_squadra = new TeamsGameSpecific(squadra.getId_team(), squadra.getName(), squadra.getLogo(), squadra.isNational(), punto.isHome(), punto.getSets(), points);
                 teams.add(dati_squadra);
+
+
+
             }
             GetGameSpecificResponse response = new GetGameSpecificResponse(g.getId_game(), g.getDate(), g.getTime(), g.getStatus(), g.getWeek(), teams);
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -225,9 +236,11 @@ public class GameService {
                 return new ResponseEntity<>("nessuna giornata trovata", HttpStatus.NOT_FOUND);
             }
             if (week.contains("Final")) {
-                return new ResponseEntity<>(new GetWeekMaxResponse("Semi-finals"), HttpStatus.OK);
-            } else if (week.contains("Semi-finals")) {
                 return new ResponseEntity<>(new GetWeekMaxResponse("Final"), HttpStatus.OK);
+            } else if (week.contains("Semi-finals")) {
+                return new ResponseEntity<>(new GetWeekMaxResponse("Semi-finals"), HttpStatus.OK);
+            }else if (week.contains("Quarter-finals")) {
+                return new ResponseEntity<>(new GetWeekMaxResponse("Quarter-finals"), HttpStatus.OK);
             }
             List<Integer> nums = new ArrayList<>();
             for (String s : week) {
@@ -285,14 +298,14 @@ public class GameService {
                    return new ResponseEntity<>("errore salvataggio game", HttpStatus.NOT_MODIFIED);
                }
                log.info(String.valueOf(g.getInt("id")));
-               if(!scores.isEmpty() && scores.size()==2){
+               if(!scores.isEmpty() && scores.size()==2 && scores.get(0).getSets()!=null){
                     periods=salva_periods(scores,g);
                }
 /*
                else{
                    return new ResponseEntity<>("errore salvataggio score", HttpStatus.NOT_MODIFIED);
                }
-               
+
  */
 
 
@@ -329,6 +342,8 @@ public class GameService {
         try{
             JSONObject team=new JSONObject();
             Team t = new Team();
+            Team_season ts= new Team_season();
+            Season s=  new Season(game.getJSONObject("league").getInt("season"));
             if(home==1){
                 team=game.getJSONObject("teams").getJSONObject("home");
             }else{
@@ -338,9 +353,19 @@ public class GameService {
             if(ris==null){
                 t=new Team(team.getInt("id"),team.getString("name"),team.getString("logo"),false);
                 teamRepository.save(t);
+
+
             }else{
                 t=ris;
             }
+
+            if(teamSeasonRepository.get_ts_completo(game.getJSONObject("league").getInt("id"),s.getId_season(), t.getId_team())==null){
+                Team_season pezzo=  teamSeasonRepository.get_ts_date(game.getJSONObject("league").getInt("id"),s.getId_season());
+                ts= new Team_season(new League(game.getJSONObject("league").getInt("id")),
+                        s,t,pezzo.getStart_date(),pezzo.getEnd_date());
+                teamSeasonRepository.save(ts);
+            }
+
             return t;
         }catch (Exception e){
             return null;
@@ -366,14 +391,14 @@ public class GameService {
                     Team t =salva_team(game,0);
                     if(teamRepository.GetTeamByIdTeam(t.getId_team())!=null) {
                         try {
-                            score = new Score(g, t, true, game.getJSONObject("scores").getInt("away"));
+                            score = new Score(g, t, false, game.getJSONObject("scores").getInt("away"));
                         } catch (Exception e) {
-                            score = new Score(g, t, true, null);
+                            score = new Score(g, t, false, null);
                         }
                     }
 
                 }
-                if (score!=null && score.getSets() != null) {
+                if (score!=null ) {
                     Score s = scoreRepository.save(score);
                     lista.add(s);
                 }

@@ -17,6 +17,6 @@ public class TeamsGameSpecific {
     private String logo;
     private boolean national;
     private boolean home;
-    private int set;
+    private Integer set;
     private List<Integer> periods;
 }

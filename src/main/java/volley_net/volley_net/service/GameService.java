@@ -286,9 +286,13 @@ public class GameService {
                log.info(String.valueOf(g.getInt("id")));
                if(!scores.isEmpty()){
                     periods=salva_periods(scores,g);
-               }else{
+               }
+               /*
+               else{
                    return new ResponseEntity<>("errore salvataggio period", HttpStatus.NOT_MODIFIED);
                }
+
+                */
 
 
             }
@@ -323,25 +327,29 @@ public class GameService {
             Game g = gameRepository.GetGameByIdGame(game.getInt("id"));
             List<Score> lista = new ArrayList<>();
             for (int j = 0; j < game.getJSONObject("scores").length(); j++) {
-                Score score = new Score();
+                Score score = null;
                 if (j == 0) {
                     Team t = new Team(game.getJSONObject("teams").getJSONObject("home").getInt("id"));
-                    try {
-                        score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
-                    } catch (Exception e) {
-                        score = new Score(g, t, true, null);
+                    if(teamRepository.GetTeamByIdTeam(t.getId_team())!=null) {
+                        try {
+                            score = new Score(g, t, true, game.getJSONObject("scores").getInt("home"));
+                        } catch (Exception e) {
+                            score = new Score(g, t, true, null);
+                        }
                     }
 
                 } else {
                     Team t = new Team(game.getJSONObject("teams").getJSONObject("away").getInt("id"));
-                    try {
-                        score = new Score(g, t, true, game.getJSONObject("scores").getInt("away"));
-                    } catch (Exception e) {
-                        score = new Score(g, t, true, null);
+                    if(teamRepository.GetTeamByIdTeam(t.getId_team())!=null) {
+                        try {
+                            score = new Score(g, t, true, game.getJSONObject("scores").getInt("away"));
+                        } catch (Exception e) {
+                            score = new Score(g, t, true, null);
+                        }
                     }
 
                 }
-                if (score.getSets() != null) {
+                if (score!=null && score.getSets() != null) {
                     Score s = scoreRepository.save(score);
                     lista.add(s);
                 }

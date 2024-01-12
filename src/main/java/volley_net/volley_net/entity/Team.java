@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Entity @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 public class Team {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id_team;
 

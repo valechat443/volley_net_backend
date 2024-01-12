@@ -14,7 +14,6 @@ import java.time.LocalTime;
 public class Game {
 
     @Id
-
     @EqualsAndHashCode.Include
     private int id_game;
 

@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.*;
 import volley_net.volley_net.payload.response.*;
-import volley_net.volley_net.repository.GroupRepository;
-import volley_net.volley_net.repository.TeamListRepository;
-import volley_net.volley_net.repository.TeamRepository;
-import volley_net.volley_net.repository.UserRepository;
+import volley_net.volley_net.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +26,7 @@ public class UserService {
     private final GroupRepository groupRepository;
     private final TokenService tokenService;
     private final TeamListRepository teamListRepository;
+    private final OffertaUtenteRepository offertaUtenteRepository;
 
     /**
      *
@@ -145,5 +143,41 @@ public class UserService {
         }catch (Exception e){
             return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<?> getListOfferteUser(UserRequest request){
+        try{
+        UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+
+        List<Offerte_utente> elenco=offertaUtenteRepository.getListaOfferte(id_utente.getId_token());
+
+        List<String> nomi= new ArrayList<>();
+        for(Offerte_utente of:elenco){
+            nomi.add(of.getName_offerta());
+        }
+
+        if(!nomi.isEmpty()) {
+            return new ResponseEntity<>(nomi, HttpStatus.OK);
+        }
+            return new ResponseEntity<>("nessuna offerta trovata", HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<?> saveOffertaUtente(SaveOffertaRequest request){
+        try{
+            UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+            User u = userRepository.getUserById(id_utente.getId_token());
+            Offerte_utente of = new Offerte_utente(u,request.getNome_offerta());
+            Offerte_utente ris= offertaUtenteRepository.save(of);
+            if(ris!=null){
+                return new ResponseEntity<>("ok", HttpStatus.CREATED);
+            }
+            return new ResponseEntity<>("Errore nel salvataggio", HttpStatus.NOT_MODIFIED);
+        }catch (Exception e){
+            return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

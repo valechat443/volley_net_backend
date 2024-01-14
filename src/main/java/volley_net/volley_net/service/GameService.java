@@ -44,6 +44,7 @@ public class GameService {
     private final ScoreRepository scoreRepository;
     private final PeriodRepository periodRepository;
     private final TeamSeasonRepository teamSeasonRepository;
+    private final JsonService jsonService;
 
 
     /**
@@ -277,7 +278,7 @@ public class GameService {
     public ResponseEntity<?> salva_partita_completa(SaveGameRequest request) {
         try {
 
-            JSONObject jason = chiamata(request);
+            JSONObject jason = jsonService.chiamata("https://v1.volleyball.api-sports.io/games?league=" + String.valueOf(request.getId_league()) + "&season=" + String.valueOf(request.getSeason()));
             if (jason == null) {
                 return null;
             }
@@ -410,34 +411,6 @@ public class GameService {
 
         } catch (Exception e) {
             return new ArrayList<>();
-        }
-    }
-
-    /**
-     * @param request
-     * @return oggetto jason con dentro una lista di game
-     */
-    private JSONObject chiamata(SaveGameRequest request) {
-
-
-        RestTemplate restTemplate = new RestTemplate();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.add("x-rapidapi-key", "a4d9f5a5e67beba13075382ca1379f3a");
-        headers.add("x-rapidapi-host", "v1.volleyball.api-sports.io");
-
-        HttpEntity<String> entity = new HttpEntity<String>(headers);
-
-        ResponseEntity<String> cose = restTemplate.exchange(
-                "https://v1.volleyball.api-sports.io/games?league=" + String.valueOf(request.getId_league()) + "&season=" + String.valueOf(request.getSeason()),
-                HttpMethod.GET,
-                entity,
-                String.class);
-        try {
-            return new JSONObject(cose.getBody());
-        } catch (Exception e) {
-            return null;
         }
     }
 

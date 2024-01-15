@@ -48,8 +48,9 @@ public class GameService {
 
 
     /**
+     * metodo per avere i dati dettagliati di una partita specifica
      * @param request
-     * @return get partita da id partita
+     * @return GetGameSpecificResponse con i dati della partita
      */
     public ResponseEntity<?> get_game_specific(GameSpecificRequest request) {
         try {
@@ -90,8 +91,9 @@ public class GameService {
     }
 
     /**
+     * metodo epr avere una lista di partite di una giornata (week) di una lega di una stagione
      * @param request
-     * @return lista di partite di una giornata (week) di una lega di una stagione
+     * @return lista di GetGameGenericResponse contenete una serie di partite
      */
     public ResponseEntity<?> get_game_generic(GameGenericRequest request) {
 
@@ -139,6 +141,7 @@ public class GameService {
     }
 
     /**
+     * metodo per avere una lista di future partite (tra almeno 2 giorni) su cui scommettere
      * @return get scommesse per i due giorni successivi a oggi
      */
     public ResponseEntity<?> bets_page() {
@@ -188,6 +191,7 @@ public class GameService {
 
 
     /**
+     * metodo per restituire l'ultimo game disponibile della super lega
      * @return ultimo game giocato di superlega
      */
     public ResponseEntity<?> get_default_game() {
@@ -225,8 +229,9 @@ public class GameService {
     }
 
     /**
+     * metodo per restituire l'ultima giornata disponibile di una lega in una determinata stagione
      * @param request
-     * @return numero della giornata massima di uan lega di una stagione
+     * @return GetWeekMaxResponse contenente l'ultima giornata disponibile
      */
     public ResponseEntity<?> get_week_max(WeekMaxRequest request) {
 
@@ -242,6 +247,8 @@ public class GameService {
                 return new ResponseEntity<>(new GetWeekMaxResponse("Semi-finals"), HttpStatus.OK);
             }else if (week.contains("Quarter-finals")) {
                 return new ResponseEntity<>(new GetWeekMaxResponse("Quarter-finals"), HttpStatus.OK);
+            } else if (week.contains("3rd place")) {
+                return new ResponseEntity<>(new GetWeekMaxResponse("3rd place"), HttpStatus.OK);
             }
             List<Integer> nums = new ArrayList<>();
             for (String s : week) {
@@ -260,8 +267,9 @@ public class GameService {
 
 
     /**
+     * metodo per restituire una partita dall'id_game
      * @param request
-     * @return restituisco una partita dall'id_game
+     * @return un oggetto game
      */
     public ResponseEntity<?> getGameById(GameSpecificRequest request) {
         try {
@@ -275,6 +283,11 @@ public class GameService {
         }
     }
 
+    /**
+     * metodo salvare una partita, con i suoi score e i suoi periods
+     * @param request
+     * @return messaggio per indicare se il salvataggio è andato a buon fine
+     */
     public ResponseEntity<?> salva_partita_completa(SaveGameRequest request) {
         try {
 
@@ -320,6 +333,11 @@ public class GameService {
 
     }
 
+    /**
+     * metodo per salvare uan partita nel db
+     * @param game
+     * @return oggetto game salvato nel db o null
+     */
     private Game salva_game(JSONObject game) {
         try {
             DateTimeFormatter giorno = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -339,6 +357,12 @@ public class GameService {
         }
     }
 
+    /**
+     * metodo per salvare un team se non esiste nel db
+     * @param game
+     * @param home
+     * @return team salvato nel db o null
+     */
     public Team salva_team(JSONObject game,int home){
         try{
             JSONObject team=new JSONObject();
@@ -372,6 +396,12 @@ public class GameService {
             return null;
         }
     }
+
+    /**
+     * metodo per salvare gli score di un game che esiste già nel db
+     * @param game
+     * @return score salvato nel db o null
+     */
     private List<Score> salva_score(JSONObject game) {
         try {
             Game g = gameRepository.GetGameByIdGame(game.getInt("id"));
@@ -414,7 +444,12 @@ public class GameService {
         }
     }
 
-
+    /**
+     * metodo per salvare i periods degli scores che esistono già sul db, di un determinato game
+     * @param scores
+     * @param game
+     * @return lista di peridods salvati nel db o un array vuoto
+     */
     public List<Period> salva_periods(List<Score> scores, JSONObject game) {
         try {
             List<Period> lista = new ArrayList<>();

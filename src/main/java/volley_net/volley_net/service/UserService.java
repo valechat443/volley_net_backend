@@ -29,8 +29,9 @@ public class UserService {
     private final OffertaUtenteRepository offertaUtenteRepository;
 
     /**
-     *
      * metodo per la conversione di una SignupRequest in un entità User
+     * @param request
+     * @return un oggetto user
      */
     private User fromRequestToEntity(SignupRequest request) {
         User u = new User();
@@ -41,6 +42,7 @@ public class UserService {
     /**
      * metodo per salvare il nuovo utente creato da fromRequestToEntity sul db, metodo ereditato da JPA
      * @param request che passa
+     * @return una NewUserLoginResponse con l'utente salvato
      */
     public ResponseEntity<?> save (SignupRequest request){
         User newuser=fromRequestToEntity(request);
@@ -53,7 +55,11 @@ public class UserService {
         return new ResponseEntity<>("utente già esistente",HttpStatus.BAD_REQUEST);
     }
 
-
+    /**
+     * metodo per avere un user partendo da un token
+     * @param request
+     * @return GetUserResponse con l'user richiesto
+     */
     public ResponseEntity<?> getUser(UserRequest request){
         try{
             UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
@@ -69,6 +75,11 @@ public class UserService {
         }
     }
 
+    /**
+     * metodo per effettuare il login nell'applicativo
+     * @param request
+     * @return LoginResponse con l'esito del login
+     */
     public ResponseEntity<?> login(LoginRequest request){
         try{
             User u = userRepository.getUserByMail(request.getMail());
@@ -88,8 +99,9 @@ public class UserService {
 
 
     /**
-     * metodo per aggiungere o togliere un determinato num di money
+     * metodo per aggiungere o togliere un determinato num di money d un determinato user
      * @param request che passa
+     * @return UpdateMoneyResponse contenente il nuovo bilancio dell'utente
      */
     public ResponseEntity<?> update_money(UpdateMoneyRequest request){
         try{
@@ -106,6 +118,11 @@ public class UserService {
         }
     }
 
+    /**
+     * medodo per salvare una nuova associazione tra un user e un team su cui ha scommesso
+     * @param request
+     * @return  NewTeamListResponse con l'esito dell'operazione di salvataggio
+     */
     public ResponseEntity<?> new_team_list(NewTeamListRequest request){
         try{
             UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
@@ -130,6 +147,10 @@ public class UserService {
         }
     }
 
+    /**
+     * metodo per avere la lista degli utenti ordinati per quante scommesse hanno vinto
+     * @return lista di ListUserRankResponse contenente gli user in ordine di count_bet
+     */
     public ResponseEntity<?> get_rank(){
         try{
             List<User> us = userRepository.getUserRank();
@@ -145,6 +166,11 @@ public class UserService {
         }
     }
 
+    /**
+     * metodo per avere le offerte acquistate da un determinato user
+     * @param request
+     * @return Lista di Offerte_utente
+     */
     public ResponseEntity<?> getListOfferteUser(UserRequest request){
         try{
         UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
@@ -165,6 +191,11 @@ public class UserService {
         }
     }
 
+    /**
+     * metodo per salvare una nuova offerta acquistata da un utente
+     * @param request
+     * @return ResponseEntity con l'esito del'operazione di salvataggio
+     */
     public ResponseEntity<?> saveOffertaUtente(SaveOffertaRequest request){
         try{
             UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());

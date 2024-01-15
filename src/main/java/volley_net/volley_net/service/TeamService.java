@@ -29,9 +29,11 @@ public class TeamService {
     private final TeamSeasonRepository teamSeasonRepository;
     private final JsonService jsonService;
     private final StatisticRepository statisticRepository;
+
     /**
-     *statistiche di un singolo team
-     *
+     * metodo per restituire le statistiche di un team in una lega in una determinata stagione
+     * @param request
+     * @return Lista di GetTeamStatisticResponse con le statistiche di un team
      */
     public ResponseEntity<?> getStatistic(StatisticRequest request) {
         try{
@@ -48,16 +50,11 @@ public class TeamService {
         }
     }
 
+
     /**
-     *lista di team di una determinata lega di una determinata stagione
-     *
-     */
-    private ResponseEntity<?> get_team_list() {
-        return null;
-    }
-    /**
-     *get singolo team
-     *
+     * metodo per restituire un team partendo dall'id_team
+     * @param request
+     * @return dati relativi a un determinato team
      */
     public ResponseEntity<?> get_team(GetTeamRequest request) {
 
@@ -72,6 +69,11 @@ public class TeamService {
 
     }
 
+    /**
+     * metodo per restituire una lista di team di una lega di uan determinata stagione
+     * @param request
+     * @return lista di team di una lega in una determinata stagione
+     */
     public  ResponseEntity<?> get_list_of_team(SeasonIdLeague request){
 
         try{
@@ -82,6 +84,11 @@ public class TeamService {
         }
     }
 
+    /**
+     * metodo per salvare le statistiche di un team, di uan lega in una determinata stagione
+     * @param request
+     * @return messaggio sull'esito del salvataggio delle statistiche
+     */
     public ResponseEntity<?> salva_statistic(SaveStatisticRequest request){
         try{
             Team_season ts=teamSeasonRepository.get_ts_completo(request.getId_league(),  request.getId_season(), request.getId_team());

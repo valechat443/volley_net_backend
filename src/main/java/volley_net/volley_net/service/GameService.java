@@ -249,6 +249,8 @@ public class GameService {
                 return new ResponseEntity<>(new GetWeekMaxResponse("Quarter-finals"), HttpStatus.OK);
             } else if (week.contains("3rd place")) {
                 return new ResponseEntity<>(new GetWeekMaxResponse("3rd place"), HttpStatus.OK);
+            }else if (week.contains("5rd place")) {
+                return new ResponseEntity<>(new GetWeekMaxResponse("5rd place"), HttpStatus.OK);
             }
             List<Integer> nums = new ArrayList<>();
             for (String s : week) {

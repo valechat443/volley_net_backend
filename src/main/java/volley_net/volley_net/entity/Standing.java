@@ -8,33 +8,59 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * calssifica dei team in un gruppo, in una lega, in una stagione
+ */
 public class Standing {
 
+    /**
+     * identificatore di standing
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id_standing;
 
+    /**
+     * mix di stagione, lega e team, per identificare un periodo
+     */
     @ManyToOne
     @JoinColumn(name="id_team_season", nullable = false)
     private Team_season id_team_season;
 
+    /**
+     * gruppo della classifica
+     */
     @ManyToOne
     @JoinColumn(name="id_group", nullable = false)
     private Group id_group;
 
+    /**
+     * posizione in classifica del team
+     */
     @Column(nullable = false)
     private int position;
-
+    /**
+     * punti che il team ha guadagnato
+     */
     @Column(nullable = false)
     private int points;
-
+    /**
+     * stringa che rapresenta i game vinti e persi nella lega
+     */
     @Column(length = 5,nullable = true)
     private String form;
 
+    /**
+     * zona di elimination della lega in cui il team si trova
+     */
     @Column(nullable = true)
     private String zona;
 
+    /**
+     * costruttore che crea un oggetto standing partendo da uno esistente
+     * @param s
+     */
     public Standing(Standing s) {
         this.id_standing = s.getId_standing();
         this.id_team_season = s.getId_team_season();
@@ -45,6 +71,10 @@ public class Standing {
         this.zona = s.getZona();
     }
 
+    /**
+     * costruttore che crea un oggetto group con solo l'id_group
+     * @param id_group
+     */
     public Standing(Group id_group) {
         this.id_group = id_group;
     }

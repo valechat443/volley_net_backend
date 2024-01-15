@@ -53,4 +53,16 @@ public class League {
     public League(int id) {
         this.id_league=id;
     }
+
+    /**
+     * costruttore per creare oggetti League partendo dda un oggetto esistente
+     * @param l
+     */
+    public League(League l) {
+        this.id_league = l.getId_league();
+        this.name = l.getName();
+        this.type = l.getType();
+        this.logo = l.getLogo();
+        this.id_country = l.getId_country();
+    }
 }

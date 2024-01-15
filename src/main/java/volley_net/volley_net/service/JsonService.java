@@ -28,7 +28,7 @@ public class JsonService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        headers.add("x-rapidapi-key", "d6f6c982d794f76eb4036f26b8387da0");
+        headers.add("x-rapidapi-key", "a4d9f5a5e67beba13075382ca1379f3a");
         headers.add("x-rapidapi-host", "v1.volleyball.api-sports.io");
 
         HttpEntity<String> entity = new HttpEntity<String>(headers);

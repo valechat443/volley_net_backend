@@ -38,4 +38,5 @@ public class Group {
         this.id_group = g.getId_group();
         this.group_name = g.group_name;
     }
+
 }

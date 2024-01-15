@@ -48,7 +48,7 @@ public class User {
      * valuta usabile nell'applicativo che ha l'utente
      */
     @Column(nullable = false)
-    private int money=0;
+    private int money=500;
     @Column(length=11,nullable = false)
     private int count_bet=0;
 
@@ -64,7 +64,7 @@ public class User {
         this.username=username;
         this.password=encryptedPassword;
         this.admin=admin;
-        this.money=0;
+        this.money=500;
         this.count_bet=0;
     }
 

@@ -78,4 +78,22 @@ public class Standing {
     public Standing(Group id_group) {
         this.id_group = id_group;
     }
+
+    /**
+     * costruttore per creare oggetti standing senza un id pre creato
+     * @param id_team_season
+     * @param id_group
+     * @param position
+     * @param points
+     * @param form
+     * @param zona
+     */
+    public Standing(Team_season id_team_season, Group id_group, int position, int points, String form, String zona) {
+        this.id_team_season = id_team_season;
+        this.id_group = id_group;
+        this.position = position;
+        this.points = points;
+        this.form = form;
+        this.zona = zona;
+    }
 }

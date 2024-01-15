@@ -9,16 +9,15 @@ import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import volley_net.volley_net.entity.Game;
-import volley_net.volley_net.entity.League;
-import volley_net.volley_net.repository.GameRepository;
-import volley_net.volley_net.repository.LeagueRepository;
+import volley_net.volley_net.entity.*;
+import volley_net.volley_net.repository.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +26,10 @@ public class SheduleService {
 
     private final GameRepository gameRepository;
 
-    private final LeagueRepository leagueRepository;
-
     private final JsonService jsonService;
+    private final TeamSeasonRepository teamSeasonRepository;
+    private  final StandingRepository standingRepository;
+    private final GroupRepository groupRepository;
 
 
     /**
@@ -41,20 +41,49 @@ public class SheduleService {
     }
 
 
-    /**
-     *aggiorno le classifiche di tutte le leghe della stagione corrente
-     *
-     */
-    private ResponseEntity<?> update_standing_superlega() {
-        return new ResponseEntity<>("OK", HttpStatus.OK);
-    }
 
     /**
      *aggiorno le classifiche di tutte le leghe della stagione corrente
      *
      */
-    private ResponseEntity<?> update_standings() {
-        return null;
+    public ResponseEntity<?> update_standings() {
+
+        try{
+            List<Team_season> leghe=teamSeasonRepository.getTeamSeasonFiniti(LocalDate.now());
+            if(leghe.isEmpty()){
+                return new ResponseEntity<>("nessuna lega trovata",HttpStatus.OK);
+            }
+            for (Team_season lega:leghe){
+                if(standingRepository.getStandingFromTeamSeason(lega.getId_team_season()).isEmpty()){
+                    String url="https://v1.volleyball.api-sports.io/standings?league="+String.valueOf(lega.getId_league().getId_league())+"&season="+String.valueOf(lega.getId_season().getId_season());
+                    log.info(url);
+                    JSONObject j = jsonService.chiamata(url);
+                    JSONArray response = j.getJSONArray("response");
+                    Thread.sleep(10000);
+                    if(response.length()<1) {
+                        log.info("Lunghezza response minore 1");
+                    } else {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONArray gruppo=response.getJSONArray(i);
+
+                            for (int k = 0; k < gruppo.length(); k++) {
+                                JSONObject rank=gruppo.getJSONObject(k);
+                                Group g =groupRepository.findByGroupName(rank.getJSONObject("group").getString("name"));
+                                if(g==null){
+                                    groupRepository.save(new Group((rank.getJSONObject("group").getString("name"))));
+                                }
+                                Standing s = new Standing(lega, g, rank.getInt("position"), rank.getInt("points"),
+                                        rank.getString("form"), rank.getString("description"));
+                                standingRepository.save(s);
+                            }
+                        }
+                    }
+                }
+            }
+            return new ResponseEntity<>("ok",HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
     }
 
 

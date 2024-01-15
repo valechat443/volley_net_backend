@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import volley_net.volley_net.entity.Statistic;
 import volley_net.volley_net.payload.request.GetTeamRequest;
+import volley_net.volley_net.payload.request.SaveStatisticRequest;
 import volley_net.volley_net.payload.request.SeasonIdLeague;
 import volley_net.volley_net.payload.request.StatisticRequest;
+import volley_net.volley_net.service.SheduleService;
 import volley_net.volley_net.service.TeamService;
 import java.util.*;
 @RestController
@@ -16,6 +18,7 @@ import java.util.*;
 @CrossOrigin
 public class TeamController {
     private  final TeamService teamService;
+    private final SheduleService sheduleService;
 
     @PostMapping("/getTeam")
     public ResponseEntity<?> get_team(@RequestBody @Valid GetTeamRequest request){
@@ -29,6 +32,15 @@ public class TeamController {
     @PostMapping("/statistics")
     public ResponseEntity<?> getStatistics(@RequestBody @Valid StatisticRequest request) {
         return teamService.getStatistic(request);
+    }
+    @PostMapping("/saveStat")
+    public ResponseEntity<?> saveStatistics(@RequestBody @Valid SaveStatisticRequest request) {
+        return teamService.salva_statistic(request);
+    }
+
+    @GetMapping("/saveStanding")
+    public ResponseEntity<?> saveStanding() {
+        return sheduleService.update_standings();
     }
 
 }

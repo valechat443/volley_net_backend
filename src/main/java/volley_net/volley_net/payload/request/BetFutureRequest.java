@@ -11,7 +11,7 @@ public class BetFutureRequest {
      *
      */
 
-    private int week;
+    private String week;
 
 
     private int season;

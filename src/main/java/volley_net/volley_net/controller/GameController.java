@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import volley_net.volley_net.payload.request.GameGenericRequest;
 import volley_net.volley_net.payload.request.GameSpecificRequest;
+import volley_net.volley_net.payload.request.SaveGameRequest;
 import volley_net.volley_net.payload.request.WeekMaxRequest;
 import volley_net.volley_net.service.GameService;
 
@@ -35,6 +36,12 @@ public class GameController {
     public ResponseEntity<?> get_bet_page(){
 
         return gameService.bets_page();
+    }
+
+    @PostMapping ("/save")
+    public ResponseEntity<?> salva_game(@RequestBody @Valid SaveGameRequest request){
+
+        return gameService.salva_partita_completa(request);
     }
     @GetMapping("/default")
     public ResponseEntity<?> default_game(){

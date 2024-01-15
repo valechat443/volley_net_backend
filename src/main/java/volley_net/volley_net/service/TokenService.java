@@ -17,6 +17,11 @@ public class TokenService {
     public static  final String TOKEN_SECRET="Flows_tech";
     public static  final int EXPIRE_AFTER=3600; //tempo di scadenza in secondi
 
+    /**
+     * metodo per creare un token uetnet
+     * @param id_user
+     * @return il token utente
+     */
     public String createToken(int id_user){
         try {
             Algorithm algorithm=Algorithm.HMAC256(TOKEN_SECRET);
@@ -33,6 +38,11 @@ public class TokenService {
         return  null;
     }
 
+    /**
+     * metodo per estrare l'id_user dal token
+     * @param token
+     * @return un int che rappresenta l'id_user
+     */
     public UserToken getUserIdFromToken(String token){
         try{
             Algorithm algorithm=Algorithm.HMAC256(TOKEN_SECRET);

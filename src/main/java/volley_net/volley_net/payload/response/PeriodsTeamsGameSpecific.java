@@ -5,14 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PeriodsTeamsGameSpecific {
-    private int first;
-    private int second;
-    private int third;
-    private int fourth;
-    private int fifth;
+  private List<Integer> points;
 }

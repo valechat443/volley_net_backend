@@ -5,10 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -20,7 +18,7 @@ public class BetPageResponse {
     private LocalDate date;
     private LocalTime time;
     private String status;
-    private int week;
+    private String week;
     private List<TeamsBetPage> teams;
 
 }

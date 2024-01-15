@@ -11,36 +11,64 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+/**
+ * partita giocata o da giocare
+ */
 public class Game {
 
+    /**
+     * identificativo di game
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id_game;
-
+    /**
+     * lega in cui la partita è stata giocata
+     */
     @ManyToOne
     @JoinColumn(name="id_league", nullable = false)
     private League id_league;
 
+    /**
+     * data in cui è stata giocata la partita
+     */
     @Column(nullable = false)
     private LocalDate date;
     @Column(nullable = false)
     private LocalTime time;
 
+    /**
+     * timezone in cui la partita è stata giocata
+     */
     @Column(length = 3,nullable = false)
     private String timezone;
 
+    /**
+     * status della partita (non iniziata, finita, ecc...)
+     */
     @Column(length = 50,nullable = false)
     private String status;
+    /**
+     * possibilità di vittoria della squadra di casa
+     */
     @Column(nullable = true)
-
     private Float home_odds;
+    /**
+     * possibilità di vittoria della squadra ospite
+     */
     @Column(nullable = true)
     private Float away_odds;
 
+    /**
+     * giornata in cui è stata giocata la partita
+     */
     @Column(length = 11,nullable = false)
-    private Integer week;
+    private String week;
 
+    /**
+     * costruttore per creare un oggetto game partando da uno già esistente
+     * @param g
+     */
     public Game(Game g) {
         this.id_game = g.getId_game();
         this.id_league = g.getId_league();
@@ -51,5 +79,13 @@ public class Game {
         this.home_odds = g.getHome_odds();
         this.away_odds = g.getAway_odds();
         this.week = g.getWeek();
+    }
+
+    /**
+     * costruttore per creare un oggetto game con solo l'id_game
+     * @param id_game
+     */
+    public Game(int id_game) {
+        this.id_game = id_game;
     }
 }

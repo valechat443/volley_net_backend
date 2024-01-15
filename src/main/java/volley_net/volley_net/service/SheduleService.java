@@ -37,6 +37,15 @@ public class SheduleService {
         return null;
     }
 
+
+    /**
+     *aggiorno le classifiche di tutte le leghe della stagione corrente
+     *
+     */
+    private ResponseEntity<?> update_standing_superlega() {
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
     /**
      *aggiorno le classifiche di tutte le leghe della stagione corrente
      *
@@ -45,11 +54,12 @@ public class SheduleService {
         return null;
     }
 
+
     /**
      *aggiorna gli esiti e i punteggi di tutte le partite finite
      * !! Da TESTARE !!
      */
-    //@Scheduled(cron = "0 3 16 * * ?")
+    //@Scheduled(cron = "0 49 14 * * ?")
     public void update_games() {
         try{
             RestTemplate restTemplate = new RestTemplate();
@@ -90,8 +100,9 @@ public class SheduleService {
                             entity,
                             String.class);
                     JSONObject jo = new JSONObject(oddsRp.getBody());
-                    JSONObject bookmaker = jo.getJSONArray("response").getJSONObject(0);
+                    JSONObject bookmaker = jo.getJSONObject("response").getJSONArray("bookmakers").getJSONObject(0);
                     JSONObject bet = bookmaker.getJSONArray("bets").getJSONObject(0);
+                    log.info(bet.getString("name"));
                     Float oddsHome = Float.parseFloat(bet.getJSONArray("values").getJSONObject(0).getString("value"));
                     Float oddsAway = Float.parseFloat(bet.getJSONArray("values").getJSONObject(1).getString("value"));
 

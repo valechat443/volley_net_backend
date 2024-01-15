@@ -22,4 +22,8 @@ public class Season {
         this.id_season = id_season;
         this.year=year;
     }
+
+    public Season(int id_season) {
+        this.id_season = id_season;
+    }
 }

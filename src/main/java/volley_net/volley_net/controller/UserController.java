@@ -38,4 +38,13 @@ public class UserController {
     public ResponseEntity<?> get_rank(){
         return userService.get_rank();
     }
+
+    @PostMapping("/getOfferte")
+    public ResponseEntity<?> get_offerte(@RequestBody @Valid UserRequest request){
+        return userService.getListOfferteUser(request);
+    }
+    @PostMapping("/saveOfferta")
+    public ResponseEntity<?> save_offerte(@RequestBody @Valid SaveOffertaRequest request){
+        return userService.saveOffertaUtente(request);
+    }
 }

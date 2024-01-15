@@ -2,19 +2,20 @@ package volley_net.volley_net.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.Statistic;
 import volley_net.volley_net.entity.Team;
+import volley_net.volley_net.entity.Team_season;
 import volley_net.volley_net.entity.User;
-import volley_net.volley_net.payload.request.GetTeamRequest;
-import volley_net.volley_net.payload.request.SeasonIdLeague;
-import volley_net.volley_net.payload.request.SignupRequest;
-import volley_net.volley_net.payload.request.StatisticRequest;
+import volley_net.volley_net.payload.request.*;
 import volley_net.volley_net.payload.response.GetTeamResponse;
 import volley_net.volley_net.payload.response.GetTeamStatisticResponse;
+import volley_net.volley_net.repository.StatisticRepository;
 import volley_net.volley_net.repository.TeamRepository;
+import volley_net.volley_net.repository.TeamSeasonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +26,14 @@ import java.util.List;
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final TeamSeasonRepository teamSeasonRepository;
+    private final JsonService jsonService;
+    private final StatisticRepository statisticRepository;
+
     /**
-     *statistiche di un singolo team
-     *
+     * metodo per restituire le statistiche di un team in una lega in una determinata stagione
+     * @param request
+     * @return Lista di GetTeamStatisticResponse con le statistiche di un team
      */
     public ResponseEntity<?> getStatistic(StatisticRequest request) {
         try{
@@ -44,16 +50,11 @@ public class TeamService {
         }
     }
 
+
     /**
-     *lista di team di una determinata lega di una determinata stagione
-     *
-     */
-    private ResponseEntity<?> get_team_list() {
-        return null;
-    }
-    /**
-     *get singolo team
-     *
+     * metodo per restituire un team partendo dall'id_team
+     * @param request
+     * @return dati relativi a un determinato team
      */
     public ResponseEntity<?> get_team(GetTeamRequest request) {
 
@@ -68,6 +69,11 @@ public class TeamService {
 
     }
 
+    /**
+     * metodo per restituire una lista di team di una lega di uan determinata stagione
+     * @param request
+     * @return lista di team di una lega in una determinata stagione
+     */
     public  ResponseEntity<?> get_list_of_team(SeasonIdLeague request){
 
         try{
@@ -77,4 +83,39 @@ public class TeamService {
             return new ResponseEntity<>("ricerca senza risultati", HttpStatus.NOT_FOUND);
         }
     }
+
+    /**
+     * metodo per salvare le statistiche di un team, di uan lega in una determinata stagione
+     * @param request
+     * @return messaggio sull'esito del salvataggio delle statistiche
+     */
+    public ResponseEntity<?> salva_statistic(SaveStatisticRequest request){
+        try{
+            Team_season ts=teamSeasonRepository.get_ts_completo(request.getId_league(),  request.getId_season(), request.getId_team());
+            if(ts==null){
+                return new ResponseEntity<>("team inesistente", HttpStatus.NOT_FOUND);
+            }
+            JSONObject jason = jsonService.chiamata("https://v1.volleyball.api-sports.io/teams/statistics?league="+ String.valueOf(request.getId_league()) + "&season="+ String.valueOf(request.getId_season())+"&team="+String.valueOf(request.getId_team()));
+            Statistic ris=statisticRepository.save(new Statistic(ts,
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("played").getInt("home"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("played").getInt("away"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("wins").getJSONObject("home").getInt("total"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("wins").getJSONObject("away").getInt("total"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("loses").getJSONObject("home").getInt("total"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("loses").getJSONObject("away").getInt("total"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("draws").getJSONObject("home").getInt("total"),
+                    jason.getJSONObject("response").getJSONObject("games").getJSONObject("draws").getJSONObject("away").getInt("total"),
+                    jason.getJSONObject("response").getJSONObject("goals").getJSONObject("for").getJSONObject("total").getInt("home"),
+                    jason.getJSONObject("response").getJSONObject("goals").getJSONObject("for").getJSONObject("total").getInt("away"),
+                    jason.getJSONObject("response").getJSONObject("goals").getJSONObject("against").getJSONObject("total").getInt("home"),
+                    jason.getJSONObject("response").getJSONObject("goals").getJSONObject("against").getJSONObject("total").getInt("away")));
+
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("ricerca senza risultati", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 }

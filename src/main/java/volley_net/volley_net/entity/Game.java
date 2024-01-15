@@ -14,7 +14,6 @@ import java.time.LocalTime;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id_game;
 
@@ -51,5 +50,9 @@ public class Game {
         this.home_odds = g.getHome_odds();
         this.away_odds = g.getAway_odds();
         this.week = g.getWeek();
+    }
+
+    public Game(int id_game) {
+        this.id_game = id_game;
     }
 }

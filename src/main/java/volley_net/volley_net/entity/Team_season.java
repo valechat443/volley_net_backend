@@ -43,4 +43,12 @@ public class Team_season {
         this.start_date = ts.getStart_date();
         this.end_date = ts.getEnd_date();
     }
+
+    public Team_season(League id_league, Season id_season, Team id_team, LocalDate start_date, LocalDate end_date) {
+        this.id_league = id_league;
+        this.id_season = id_season;
+        this.id_team = id_team;
+        this.start_date = start_date;
+        this.end_date = end_date;
+    }
 }

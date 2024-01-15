@@ -30,8 +30,9 @@ public class LeagueService {
 
 
     /**
-     *lista di tutte le leghe di una stagione
-     *
+     * metodo per restituire una lista di leghe di una season
+     * @param year
+     * @return lista di GetListOfLeagueResponse o una lista vuota
      */
     public ResponseEntity<?> getLeaguesFromSeason(int year) {
         List<GetListOfLeagueResponse> leagues = new ArrayList<>();
@@ -56,8 +57,9 @@ public class LeagueService {
 
 
     /**
-     *classifica di una lega di una stagione
-     *
+     * metodo per restituire la classifica di una lega di una stagione
+     * @param request
+     * @return lista di GetStandingResponse o una lista vuota
      */
     public ResponseEntity<?> findStandingBySeasonLeagueAndGroup(StandingRequest request) {
         try {
@@ -76,30 +78,11 @@ public class LeagueService {
     }
 
 
-
-
     /**
-     *gruppi di una lega di una stagione
-     *
+     * metodo per restituire i gruppi di una lega di una determinata stagione
+     * @param request
+     * @return lista si stringhe contenente i nomi dei gruppi o una lista vuota
      */
-    public ResponseEntity<?> getGroupsBySeasonAndLeague(GroupRequest request) {
-        try {
-            List<Group> groups = groupRepository.findAllBySeasonAndLeague(request.getSeason(), request.getId_league());
-            // Creiamo una nuova lista per contenere i nomi dei gruppi
-            List<String> groupNames = new ArrayList<>();
-            // Iteriamo attraverso la lista di gruppi
-            for (Group group : groups) {
-                // Aggiungiamo il nome del gruppo alla nuova lista
-                groupNames.add(group.getGroup_name());
-            }
-            // Restituiamo la lista di nomi di gruppi come risposta
-            return ResponseEntity.ok(groupNames);
-        } catch (Exception e) {
-            // Gestiamo eventuali eccezioni
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred: " + e.getMessage());
-        }
-    }
-
     public ResponseEntity<?> getGroup(GroupRequest request){
         try {
             List<Group> groups = groupRepository.findAllBySeasonAndLeague(request.getSeason(), request.getId_league());

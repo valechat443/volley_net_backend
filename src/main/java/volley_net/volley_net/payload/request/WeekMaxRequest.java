@@ -5,11 +5,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
+/**
+ * richiesta dalla giornata massima, contiene il numero della stagione e della lega richiesta
+ */
 public class WeekMaxRequest {
-    /**
-     *numero della giornata massima di uan lega di una stagione
-     *
-     */
+
 
 
     private int season;

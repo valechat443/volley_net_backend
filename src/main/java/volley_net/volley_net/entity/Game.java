@@ -29,6 +29,9 @@ public class Game {
     @JoinColumn(name="id_league", nullable = false)
     private League id_league;
 
+    @ManyToOne
+    @JoinColumn(name="id_season", nullable = false)
+    private Season id_season;
     /**
      * data in cui è stata giocata la partita
      */
@@ -72,6 +75,7 @@ public class Game {
     public Game(Game g) {
         this.id_game = g.getId_game();
         this.id_league = g.getId_league();
+        this.id_season=g.getId_season();
         this.date = g.getDate();
         this.time = g.getTime();
         this.timezone = g.getTimezone();

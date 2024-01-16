@@ -33,7 +33,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
      */
     @Query(value = "SELECT DISTINCT g.week from Game g " +
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
-            "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season")
+            "WHERE ts.id_league.id_league=:id_league and g.id_season.year=:season")
     List<String> ListOfWeek(@Param("season") int season, @Param("id_league") int id_league);
 
     /**
@@ -47,17 +47,6 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
             "WHERE s.id_game.id_game=:id_game")
     List<Score> GetScoreFromIdGame(@Param("id_game") int id_game);
 
-    /**
-     * query per trovare la lista di partite di una lega di una stagione
-     * @param season filtro per stagione
-     * @param id_league filtro per lega
-     * @return Lista di partite di una lega di una stagione
-     */
-    @Query(value = "SELECT DISTINCT new volley_net.volley_net.entity.Game (g) " +
-            "FROM Game g " +
-            "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
-            "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season")
-    List<Game> GetListOfGame(@Param("season") int season, @Param("id_league") int id_league);
 
     /**
      * query per trovare la lista di game di una giornata di uan lega di una stagione
@@ -69,7 +58,7 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
     @Query(value = "SELECT DISTINCT new volley_net.volley_net.entity.Game (g) " +
             "FROM Game g " +
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
-            "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season and g.week=:week")
+            "WHERE ts.id_league.id_league=:id_league and g.id_season.year=:season and g.week=:week")
     List<Game> GetListOfGameByWeek(@Param("week") String week,@Param("season") int season, @Param("id_league") int id_league);
 
     /**

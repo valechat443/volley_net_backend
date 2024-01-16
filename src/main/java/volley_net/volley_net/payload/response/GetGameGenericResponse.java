@@ -49,4 +49,5 @@ public class GetGameGenericResponse {
      */
     private List<TeamsGameGenerics> teams;
 
+
 }

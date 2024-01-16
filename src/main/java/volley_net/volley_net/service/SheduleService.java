@@ -139,7 +139,7 @@ public class SheduleService {
                             log.info("away");
                         }
 
-                        gameRepository.save(new Game(game.getInt("id"), new League(game.getJSONObject("league").getInt("id")), date, time, game.getString("timezone"), game.getJSONObject("status").getString("long"), oddsHome, oddsAway, game.getString("week")));
+                        gameRepository.save(new Game(game.getInt("id"), new League(game.getJSONObject("league").getInt("id")),new Season(game.getJSONObject("league").getInt("season"),game.getJSONObject("league").getInt("season")), date, time, game.getString("timezone"), game.getJSONObject("status").getString("long"), oddsHome, oddsAway, game.getString("week")));
 
                     }
                 }

@@ -52,15 +52,8 @@ public class TeamController {
     public ResponseEntity<?> getStatistics(@RequestBody @Valid StatisticRequest request) {
         return teamService.getStatistic(request);
     }
-    @PostMapping("/saveStat")
-    public ResponseEntity<?> saveStatistics(@RequestBody @Valid SaveStatisticRequest request) {
-        return teamService.salva_statistic(request);
-    }
 
-    @GetMapping("/saveStanding")
-    public ResponseEntity<?> saveStanding() {
-        return sheduleService.update_standings();
-    }
+
 
     /**
      * controller di test per salvare le statistiche di un team

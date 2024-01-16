@@ -15,12 +15,33 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con dati di una partita specifica
+ */
 public class GetGameSpecificResponse {
+    /**
+     * identificativo dalla partita
+     */
     private int id_game;
+    /**
+     * data a cui si è svolto/si svolgerà la partita
+     */
     private LocalDate date;
+    /**
+     * ora a cui si è svolto/si svolgerà la partita
+     */
     private LocalTime time;
+    /**
+     * status della partita (not started, finished, ecc...)
+     */
     private String status;
+    /**
+     * giornata in cui si giocherà la partita
+     */
     private String week;
+    /**
+     * team che hanno giocato/giocheranno nella partita
+     */
     private List<TeamsGameSpecific> teams;
 
 }

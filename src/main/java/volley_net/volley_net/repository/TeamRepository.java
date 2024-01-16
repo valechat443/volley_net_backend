@@ -11,7 +11,11 @@ import java.util.List;
 
 public interface TeamRepository extends JpaRepository<Team,Integer> {
 
-
+    /**
+     * query per trovare un team partendo dal suo id
+     * @param id_team id del team
+     * @return oggetto team
+     */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team(" +
             "t) " +
             "from Team t " +
@@ -20,6 +24,12 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
     )
     Team GetTeamByIdTeam(@Param("id_team") int id_team);
 
+    /**
+     * query per trovare una lista di team di una lega, in una stagione
+     * @param season id di season
+     * @param id_league id di lega
+     * @return lista di team
+     */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team(" +
             "t) " +
             "from Team t " +
@@ -28,6 +38,12 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
     )
     List<Team> GetListOfTeam(@Param("season") int season, @Param("id_league") int id_league );
 
+    /**
+     * query pr trovare una team_season partendo dal suo id
+     * @param id_team id del team
+     * @param id_season id della season
+     * @return oggetto team_season
+     */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team_season(" +
             "ts) " +
             "from Team_season ts " +
@@ -35,6 +51,13 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
     )
     Team_season GetTeamSeasonByIdTeamIdSeason(@Param("id_team") int id_team, @Param("id_season") int id_season);
 
+    /**
+     *  query per trovare le statistic di un team, in una lega in una stagione
+     * @param id_team
+     * @param id_league
+     * @param id_season
+     * @return lista di statistiche
+     */
     @Query(value = "Select new volley_net.volley_net.entity.Statistic(s)" +
             " From Statistic s " +
             "Join Team_season ts ON ts.id_team_season=s.id_team_season.id_team_season " +

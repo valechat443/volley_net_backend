@@ -9,6 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * messaggio con l'esito della creazione di una nuova team_list
+ */
 public class ConfirmTeamListResponse {
+    /**
+     * esito del salvataggio
+     */
     private boolean confirm;
 }

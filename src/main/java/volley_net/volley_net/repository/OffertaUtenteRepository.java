@@ -9,6 +9,11 @@ import java.util.List;
 
 public interface OffertaUtenteRepository  extends JpaRepository<Offerte_utente,Integer> {
 
+    /**
+     * query per trovare la lista di offerte acquistate da un utente
+     * @param id_user id dell'utente
+     * @return la lista di offerte
+     */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Offerte_utente(of) " +
             "from Offerte_utente of " +
             "where of.id_user.id_user=:id_user")

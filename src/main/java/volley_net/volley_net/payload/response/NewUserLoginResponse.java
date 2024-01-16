@@ -9,7 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con il token dell'utente
+ */
 public class NewUserLoginResponse {
-
+    /**
+     * token identificativo dell'utente
+     */
     private String token;
 }

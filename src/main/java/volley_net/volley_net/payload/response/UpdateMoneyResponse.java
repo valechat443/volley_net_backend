@@ -11,6 +11,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * bilancio aggiornato dell'utente
+ */
 public class UpdateMoneyResponse {
+    /**
+     * bilancio aggiornato
+     */
     private int money;
 }

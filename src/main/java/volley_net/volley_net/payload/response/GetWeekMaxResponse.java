@@ -11,6 +11,12 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con la settimana massima che una lega può avere
+ */
 public class GetWeekMaxResponse {
+    /**
+     * settimana massima
+     */
     private String max;
 }

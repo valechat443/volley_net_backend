@@ -12,12 +12,22 @@ import java.util.*;
 
 
 public interface GroupRepository extends JpaRepository<Group,Integer> {
+    /**
+     * query per trovare l'id del group da un team_season
+     * @param id_team_season id della team_season
+     * @return uno standing con l'id del group da un team_season
+     */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Standing(s.id_group) " +
             "from Standing s " +
             "WHERE s.id_team_season.id_team_season=:id_team_season"
     )
     Standing GetIdGroupByIdTeamSeason(@Param("id_team_season") int id_team_season);
 
+    /**
+     * query per trovare un gruppo partendo dal suo id
+     * @param id_group d del gruppo
+     * @return un oggetto gruppo
+     */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Group(" +
             "g) " +
             "from Group g " +
@@ -25,9 +35,20 @@ public interface GroupRepository extends JpaRepository<Group,Integer> {
     )
     Group GetGroupByIdGroup(@Param("id_group") int id_group);
 
+    /**
+     * query per trovare un gruppo partendo dal suo nome
+     * @param groupName nome del gruppo
+     * @return un oggetto gruppo
+     */
     @Query("SELECT g FROM Group g WHERE g.group_name = :groupName")
     Group findByGroupName(@Param("groupName") String groupName);
 
+    /**
+     *  query per trovare i nomi dei gruppi di una lega in una season
+     * @param season id della season
+     * @param id_league id della lega
+     * @return lista di gruppi di una lega di una season
+     */
     @Query(value = "SELECT DISTINCT new volley_net.volley_net.entity.Group(g.group_name) " +
             "FROM Group g " +
             "INNER JOIN Standing s ON s.id_group.id_group=g.id_group " +

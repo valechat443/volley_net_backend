@@ -37,7 +37,7 @@ public class TeamService {
      */
     public ResponseEntity<?> getStatistic(StatisticRequest request) {
         try{
-            List<Statistic>elenco =teamRepository.GetStatistic(request.getId_team());
+            List<Statistic>elenco =teamRepository.GetStatistic(request.getId_team(), request.getId_lega(), request.getId_season());
             List<GetTeamStatisticResponse> response = new ArrayList<>();
             for(Statistic s:elenco){
                 response.add(new GetTeamStatisticResponse(s.getId_team_season().getId_team().getId_team(),

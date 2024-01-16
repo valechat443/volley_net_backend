@@ -6,11 +6,16 @@ import lombok.Getter;
 /**
  * richiesta per chiedere di salvare un game
  */
+
 public class SaveGameRequest {
 
-
+    /**
+     * identificativo della stagione
+     */
     private int season;
 
-
+    /**
+     * identificativo della lega
+     */
     private int id_league;
 }

@@ -346,8 +346,11 @@ public class GameService {
             DateTimeFormatter ora = DateTimeFormatter.ofPattern("HH:mm");
             League l = new League(game.getJSONObject("league").getInt("id"));
             int id =game.getInt("id");
+
+            Season stagione=new Season(game.getJSONObject("league").getInt("season"),game.getJSONObject("league").getInt("season"));
             Game g = new Game(game.getInt("id"),
-                    l, LocalDate.parse(game.getString("date"), giorno),
+                    l,stagione, LocalDate.parse(game.getString("date"), giorno),
+
                     LocalTime.parse(game.getString("time"), ora),
                     game.getString("timezone"),
                     game.getJSONObject("status").getString("long"),

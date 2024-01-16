@@ -4,11 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
+/**
+ *
+ * richiesta per un determinato utente
+ * */
 public class UserRequest {
 
     /**
-     *
-     * richiesta per un determinato utente
-     * */
+     * token identificativo dell'utente
+     */
     private String token;
 }

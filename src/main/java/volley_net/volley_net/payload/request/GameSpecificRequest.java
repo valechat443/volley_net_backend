@@ -7,11 +7,15 @@ import lombok.Getter;
 
 
 @Getter
+/**
+ *richiesta di una partita specifica
+ *
+ *
+ */
 public class GameSpecificRequest {
+
     /**
-     *get partita da id partita
-     *
-     *
+     * codice identificativo della partita
      */
     private int id_game;
 }

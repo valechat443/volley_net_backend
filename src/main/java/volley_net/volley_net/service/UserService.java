@@ -41,7 +41,7 @@ public class UserService {
     }
     /**
      * metodo per salvare il nuovo utente creato da fromRequestToEntity sul db, metodo ereditato da JPA
-     * @param request che passa
+     * @param request
      * @return una NewUserLoginResponse con l'utente salvato
      */
     public ResponseEntity<?> save (SignupRequest request){

@@ -5,13 +5,19 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
+/**
+ *richiesta dei gruppi di una lega di una stagione
+ *
+ */
 public class GroupRequest {
-    /**
-     *gruppi di una lega di una stagione
-     *
-     */
 
+    /**
+     *identificativo della stagione
+     */
     private int season;
+    /**
+     * identificativo della lega
+     */
     private int id_league;
     public GroupRequest(int season, int id_league) {
         this.season = season;

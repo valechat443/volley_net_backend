@@ -7,5 +7,10 @@ import java.util.Optional;
 
 @Repository
 public interface SeasonRepository extends JpaRepository<Season, Integer> {
+    /**
+     * query per trovare un oggetto season partendo dall'anno
+     * @param year anno
+     * @return oggetto anno
+     */
     Optional<Season> findByYear(int year);
 }

@@ -11,6 +11,14 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * lista di punti dei tempi di una aprtita
+ */
 public class PeriodsTeamsGameSpecific {
+
+  /**
+   * lista di punteggi, un tempo= un punteggio
+   */
+
   private List<Integer> points;
 }

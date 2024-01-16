@@ -11,6 +11,12 @@ import volley_net.volley_net.entity.Team_list;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con l'esito della creazione di un nuovo team_list
+ */
 public class NewTeamListResponse {
+    /**
+     * esito della creazione
+     */
     private boolean conferma;
 }

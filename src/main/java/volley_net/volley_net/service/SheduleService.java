@@ -43,8 +43,8 @@ public class SheduleService {
 
 
     /**
-     *aggiorno le classifiche di tutte le leghe della stagione corrente
-     *
+     * aggiorno le classifiche di tutte le leghe della stagione corrente
+     * @return messaggio con l'esito dell'operazione di salvataggio
      */
     public ResponseEntity<?> update_standings() {
 
@@ -140,7 +140,9 @@ public class SheduleService {
                             log.info("away");
                         }
 
-                        gameRepository.save(new Game(game.getInt("id"), new League(game.getJSONObject("league").getInt("id")), date, time, game.getString("timezone"), game.getJSONObject("status").getString("long"), oddsHome, oddsAway, game.getString("week")));
+
+                        gameRepository.save(new Game(game.getInt("id"), new League(game.getJSONObject("league").getInt("id")),new Season(game.getJSONObject("league").getInt("season"),game.getJSONObject("league").getInt("season")), date, time, game.getString("timezone"), game.getJSONObject("status").getString("long"), oddsHome, oddsAway, game.getString("week")));
+
 
                     }
                 }

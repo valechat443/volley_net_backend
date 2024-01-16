@@ -4,21 +4,29 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
+/**
+ * richiesta per creare un nuovo team_list
+ */
 public class NewTeamListRequest {
 
     /**
+     *token identificativo dell'utente
      *
-     * new team list
      * */
-
     private String token;
 
-
+    /**
+     * identificativo del team
+     */
     private int id_team;
 
-
+    /**
+     * identificativo della stagione
+     */
     private int season;
 
-
+    /**
+     * identificativo della lega
+     */
     private int id_league;
 }

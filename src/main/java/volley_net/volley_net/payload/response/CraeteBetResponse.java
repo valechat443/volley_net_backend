@@ -9,6 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con l'esito del salvataggio di una scommessa
+ */
 public class CraeteBetResponse {
+    /**
+     * esito del salvataggio
+     */
     private boolean create;
 }

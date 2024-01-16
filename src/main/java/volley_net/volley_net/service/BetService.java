@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 import volley_net.volley_net.entity.*;
 import volley_net.volley_net.payload.request.BetFutureRequest;
 import volley_net.volley_net.payload.request.CreateBetRequest;
+import volley_net.volley_net.payload.request.UserRequest;
 import volley_net.volley_net.payload.response.BetPageResponse;
+import volley_net.volley_net.payload.response.BetUserResponse;
 import volley_net.volley_net.payload.response.TeamsBetPage;
-import volley_net.volley_net.repository.BetRepository;
-import volley_net.volley_net.repository.GameRepository;
-import volley_net.volley_net.repository.TeamRepository;
-import volley_net.volley_net.repository.UserRepository;
+import volley_net.volley_net.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,10 @@ public class BetService {
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final TeamRepository teamRepository;
+    private final ScoreRepository scoreRepository;
 
     /**
-     * metodo per salvare una nuova scomessa di un utente sul db
+     * metodo per salvare una nuova scommessa di un utente sul db
      * @param request
      * @return ResponseEntity con l'esito dell'operazione di salvataggio
      */
@@ -115,5 +115,48 @@ public class BetService {
         }catch (Exception e){
             return new ResponseEntity<>("errore nella chiamata per le scommesse", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public ResponseEntity<?> get_bets_user(UserRequest request){
+    try{
+        UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
+        if(id_utente==null){
+            return  new ResponseEntity<>("utente non trovato", HttpStatus.NOT_FOUND);
+        }
+        List<Bet> elenco =betRepository.ListOfBetsUser(id_utente.getId_token());
+        if(!elenco.isEmpty()){
+            List<BetUserResponse> response = new ArrayList<>();
+            for(Bet b:elenco){
+                Game g= gameRepository.GetGameByIdGame(b.getId_game().getId_game());
+                if(g!=null) {
+                    List<Score> scores=gameRepository.GetScoreFromIdGame(g.getId_game());
+                    if(!scores.isEmpty() && scores.size()==2) {
+                        String logo_s="";
+                        String logo_a="";
+                        String name_s="";
+                        String name_a="";
+                        for(Score s:scores){
+
+                            if(s.getId_team().getId_team()==b.getId_team().getId_team()){
+                                logo_s=s.getId_team().getLogo();
+                                name_s=s.getId_team().getName();
+                            }else{
+                                logo_a=s.getId_team().getLogo();
+                                name_a=s.getId_team().getName();
+                            }
+                        }
+
+                        response.add(new BetUserResponse(g.getId_game(),logo_s,logo_a,name_s,name_a));
+
+                    }
+                }
+            }
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+
+        return  new ResponseEntity<>("nessuna scommessa trovata", HttpStatus.NOT_FOUND);
+    }catch (Exception e){
+        return new ResponseEntity<>("errore nella chiamata per le scommesse", HttpStatus.BAD_REQUEST);
+    }
     }
 }

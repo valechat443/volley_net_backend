@@ -9,6 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con il bilancio dell'utente
+ */
 public class MoneyResponse {
+    /**
+     * bilancio dell'utente
+     */
     private int money;
 }

@@ -9,6 +9,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con lista di gruppi di una lega di una stagione
+ */
 public class GetGroupResponse {
+    /**
+     * nome del gruppo
+     */
     private String group_name;
 }

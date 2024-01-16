@@ -9,9 +9,24 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con i dati di un singolo team
+ */
 public class GetTeamResponse {
+    /**
+     * identificativo del team
+     */
     private int id_team;
+    /**
+     * nome del team
+     */
     private String name;
+    /**
+     * link al logo del team
+     */
     private String logo;
+    /**
+     * se il team è nazionale
+     */
     private boolean national;
 }

@@ -9,7 +9,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+/**
+ * risposta con l'esitod el login
+ */
 public class LoginResponse {
+    /**
+     * esito del login
+     */
     private boolean conferma;
+    /**
+     * token identificativo dell'user, null in caso di fallimento nel login
+     */
     private String token;
 }

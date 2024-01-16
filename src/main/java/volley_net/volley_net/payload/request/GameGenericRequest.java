@@ -5,21 +5,34 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
+/**
+ *richiesta per una lista di partite di una giornata (week) di una lega di una stagione
+ *
+ */
 public class GameGenericRequest {
-    /**
-     *lista di partite di una giornata (week) di una lega di una stagione
-     *
-     */
 
+    /**
+     * settimana in cui le partite si giocano
+     */
     private String week;
 
 
-
+    /**
+     * stagione in cui le partite si giocano
+     */
     private int season;
 
-
+    /**
+     * lega in cui le partite si giocano
+     */
     private int id_league;
 
+    /**
+     * costruttore
+     * @param week
+     * @param season
+     * @param id_league
+     */
     public GameGenericRequest(String week, int season, int id_league) {
         this.week = week;
         this.season = season;

@@ -41,10 +41,9 @@ public class SheduleService {
     }
 
 
-
     /**
-     *aggiorno le classifiche di tutte le leghe della stagione corrente
-     *
+     * aggiorno le classifiche di tutte le leghe della stagione corrente
+     * @return messaggio con l'esito dell'operazione di salvataggio
      */
     public ResponseEntity<?> update_standings() {
 

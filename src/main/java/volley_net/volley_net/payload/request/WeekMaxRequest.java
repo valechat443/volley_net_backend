@@ -11,10 +11,14 @@ import lombok.Getter;
 public class WeekMaxRequest {
 
 
-
+    /**
+     * identificativo della stagione
+     */
     private int season;
 
-
+    /**
+     * identificativo della lega
+     */
     private int id_league;
 }
 

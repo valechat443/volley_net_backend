@@ -23,4 +23,8 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
             "JOIN Team_season ts on ts.id_league.id_league=g.id_league.id_league " +
             "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season and g.week=:week")
     List<Bet> ListOfBets(@Param("week") String week,@Param("season") int season, @Param("id_league") int id_league);
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
+            "From Bet b " +
+            "where b.id_user.id_user=:id_user" )
+    List<Bet> ListOfBetsUser(@Param("id_user") int id_user);
 }

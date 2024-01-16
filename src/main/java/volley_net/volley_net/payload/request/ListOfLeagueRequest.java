@@ -5,9 +5,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
+/**
+ * richiesta di lista di tutte le leghe di una stagione
+ */
 public class ListOfLeagueRequest {
     /**
-     *lista di tutte le leghe di una stagione
+     *identificativo della stagione
      *
      */
     private int season;

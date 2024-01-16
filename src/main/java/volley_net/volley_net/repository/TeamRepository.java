@@ -39,6 +39,6 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
             " From Statistic s " +
             "Join Team_season ts ON ts.id_team_season=s.id_team_season.id_team_season " +
             "Join Team t On t.id_team=ts.id_team.id_team " +
-            "Where t.id_team=:id_team")
-    List<Statistic> GetStatistic(@Param("id_team") int id_team);
+            "Where t.id_team=:id_team and ts.id_league.id_league=:id_league and ts.id_season.id_season=:id_season")
+    List<Statistic> GetStatistic(@Param("id_team") int id_team,@Param("id_league") int id_league,@Param("id_season") int id_season);
 }

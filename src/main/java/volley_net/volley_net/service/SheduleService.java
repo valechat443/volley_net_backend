@@ -72,7 +72,8 @@ public class SheduleService {
                                 if(g==null){
                                     g=groupRepository.save(new Group((rank.getJSONObject("group").getString("name"))));
                                 }
-                                Standing s = new Standing(lega, g, rank.getInt("position"), rank.getInt("points"),
+                                Team_season ts= teamSeasonRepository.get_ts_completo(lega.getId_league().getId_league(),lega.getId_season().getYear(),rank.getJSONObject("team").getInt("id"));
+                                Standing s = new Standing(ts, g, rank.getInt("position"), rank.getInt("points"),
                                         rank.getString("form"), rank.getString("description"));
                                 standingRepository.save(s);
                             }

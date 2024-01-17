@@ -160,7 +160,7 @@ public class UserService {
                     response.add(new ListUserRankResponse(user.getId_user(),user.getUsername(),user.getCount_bet()));
                 }
             }
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
         }

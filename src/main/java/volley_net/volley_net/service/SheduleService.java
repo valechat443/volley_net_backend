@@ -70,7 +70,7 @@ public class SheduleService {
                                 JSONObject rank=gruppo.getJSONObject(k);
                                 Group g =groupRepository.findByGroupName(rank.getJSONObject("group").getString("name"));
                                 if(g==null){
-                                    groupRepository.save(new Group((rank.getJSONObject("group").getString("name"))));
+                                    g=groupRepository.save(new Group((rank.getJSONObject("group").getString("name"))));
                                 }
                                 Standing s = new Standing(lega, g, rank.getInt("position"), rank.getInt("points"),
                                         rank.getString("form"), rank.getString("description"));

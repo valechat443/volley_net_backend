@@ -391,9 +391,25 @@ public class GameService {
 
             if(teamSeasonRepository.get_ts_completo(game.getJSONObject("league").getInt("id"),s.getId_season(), t.getId_team())==null){
                 Team_season pezzo=  teamSeasonRepository.get_ts_date(game.getJSONObject("league").getInt("id"),s.getId_season());
-                ts= new Team_season(new League(game.getJSONObject("league").getInt("id")),
-                        s,t,pezzo.getStart_date(),pezzo.getEnd_date());
-                teamSeasonRepository.save(ts);
+                if(pezzo!=null) {
+                    ts = new Team_season(new League(game.getJSONObject("league").getInt("id")),
+                            s, t, pezzo.getStart_date(), pezzo.getEnd_date());
+                    teamSeasonRepository.save(ts);
+                }else{
+                    JSONObject jason = jsonService.chiamata("https://v1.volleyball.api-sports.io/leagues?country=italy&season="+String.valueOf(s.getId_season()));
+                    JSONArray leagues = jason.getJSONArray("response");
+                    for(int i=0;i<leagues.length();i++){
+                        JSONObject league=leagues.getJSONObject(i);
+                        if(league.getInt("id")==game.getJSONObject("league").getInt("id")){
+
+                            ts= new Team_season(new League(game.getJSONObject("league").getInt("id")),
+                                    s,t,
+                                    LocalDate.parse(league.getJSONArray("seasons").getJSONObject(0).getString("start")),
+                                    LocalDate.parse(league.getJSONArray("seasons").getJSONObject(0).getString("end")));
+                            teamSeasonRepository.save(ts);
+                        }
+                    }
+                }
             }
 
             return t;

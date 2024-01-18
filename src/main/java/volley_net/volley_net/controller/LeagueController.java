@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class LeagueController {
     /**
-     * operazioni sul db relative a league
+     * servizi relativi a league {@link LeagueService}
      */
     private final LeagueService leagueService;
     @Autowired
@@ -37,8 +37,8 @@ public class LeagueController {
 
     /**
      * controller avere la lista di leghe di una stagione
-     * @param request
-     * @return lista di GetListOfLeagueResponse o una lista vuota
+     * @param request {@link ListOfLeagueRequest}
+     * @return lista di {@link  GetListOfLeagueResponse} o una lista vuota
      */
     @PostMapping("/leagues")
     public ResponseEntity<?> get_list_of_league(@RequestBody @Valid ListOfLeagueRequest request){
@@ -47,9 +47,9 @@ public class LeagueController {
     }
 
     /**
-     * conrroller per avere la classifica di un gruppo, di una lega, di uan stagione
-     * @param request
-     * @return lista di GetStandingResponse o una lista vuota
+     * controller per avere la classifica di un gruppo, di una lega, di uan stagione
+     * @param request {@link  StandingRequest}
+     * @return lista di {@link GetStandingResponse} o una lista vuota
      */
     @PostMapping ("/standings")
     public ResponseEntity<?> getTeamsOfLeagueAndSeason(@RequestBody @Valid StandingRequest request) {
@@ -58,14 +58,14 @@ public class LeagueController {
     }
 
     /**
-     * operazioni sul db relative a group
+     * operazioni sul db relative a group {@link GroupRepository}
      */
     @Autowired
     private GroupRepository groupRepository;
 
     /**
      * controller per avere uan lista di tutti i gruppi di ua lega di una stagione
-     * @param request
+     * @param request {@link GroupRequest}
      * @return lista si stringhe contenente i nomi dei gruppi o una lista vuota
      */
     @PostMapping ("/groups")

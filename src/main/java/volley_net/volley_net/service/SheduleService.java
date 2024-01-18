@@ -119,7 +119,7 @@ public class SheduleService {
                         LocalTime time = LocalTime.parse(timeStr);
 
 
-                        //faccio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
+                        //facio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
                         JSONObject jo = jsonService.chiamata("https://v1.volleyball.api-sports.io/odds?game=" + game.getInt("id"));
                         JSONArray responseJo = jo.getJSONArray("response");
                         log.info("chiamata odds");

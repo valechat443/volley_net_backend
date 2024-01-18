@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Gen 17, 2024 alle 12:05
+-- Creato il: Gen 18, 2024 alle 10:50
 -- Versione del server: 10.4.28-MariaDB
 -- Versione PHP: 8.2.4
 
@@ -1351,7 +1351,7 @@ INSERT INTO `game` (`id_game`, `id_league`, `date`, `time`, `timezone`, `status`
 (148643, 88, '2024-01-14', '17:00:00', 'UTC', 'Finished', NULL, NULL, '16', 2023),
 (148644, 88, '2024-01-17', '18:00:00', 'UTC', 'Not Started', NULL, NULL, '16', 2023),
 (148645, 88, '2024-01-14', '17:00:00', 'UTC', 'Finished', NULL, NULL, '16', 2023),
-(148646, 88, '2024-01-16', '18:00:00', 'UTC', 'Finished', NULL, NULL, '16', 2023),
+(148646, 88, '2024-01-16', '18:00:00', 'UTC', 'Finished', 2.2, 1.57, '16', 2023),
 (148647, 88, '2024-01-20', '19:30:00', 'UTC', 'Not Started', NULL, NULL, '17', 2023),
 (148648, 88, '2024-01-21', '17:00:00', 'UTC', 'Not Started', NULL, NULL, '17', 2023),
 (148649, 88, '2024-01-21', '15:00:00', 'UTC', 'Not Started', NULL, NULL, '17', 2023),
@@ -1820,7 +1820,9 @@ CREATE TABLE `group` (
 INSERT INTO `group` (`id_group`, `group_name`) VALUES
 (1, 'Group 1'),
 (2, 'Group 2'),
-(3, 'Regular Season');
+(3, 'Regular Season'),
+(6, 'Group A'),
+(7, 'Group B');
 
 -- --------------------------------------------------------
 
@@ -17125,11 +17127,50 @@ CREATE TABLE `standing` (
 --
 
 INSERT INTO `standing` (`id_standing`, `id_team_season`, `id_group`, `position`, `points`, `form`, `zona`) VALUES
-(51, 186, 3, 5, 8, 'WWW', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
-(52, 186, 3, 6, 8, 'WWLW', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
-(53, 186, 3, 7, 4, 'LLW', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
-(54, 186, 3, 8, 2, 'LWL', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
-(55, 186, 3, 9, 2, 'LLL', 'null');
+(114, 297, 3, 1, 60, 'WWWLW', 'Promotion - Serie A2 (Play Offs: )'),
+(115, 300, 3, 2, 48, 'LWWWW', 'Promotion - Serie A2 (Play Offs: )'),
+(116, 289, 3, 3, 46, 'WWLWW', 'Promotion - Serie A2 (Play Offs: )'),
+(117, 299, 3, 4, 45, 'WLWLL', 'Promotion - Serie A2 (Play Offs: )'),
+(118, 288, 3, 5, 45, 'WWWWW', 'Promotion - Serie A2 (Play Offs: )'),
+(119, 301, 3, 6, 44, 'LWWWW', 'Promotion - Serie A2 (Play Offs: )'),
+(120, 293, 3, 7, 43, 'LLLWL', 'Promotion - Serie A2 (Play Offs: )'),
+(121, 298, 3, 8, 39, 'LWLWL', 'Promotion - Serie A2 (Play Offs: )'),
+(122, 291, 3, 9, 37, 'WLWLL', 'null'),
+(123, 292, 3, 10, 34, 'WLLLW', 'null'),
+(124, 290, 3, 11, 30, 'LLLLL', 'null'),
+(125, 295, 3, 12, 28, 'LWWLL', 'null'),
+(126, 296, 3, 13, 24, 'LLLLW', 'Relegation'),
+(127, 294, 3, 14, 23, 'WLLWL', 'Relegation'),
+(128, 306, 6, 1, 5, 'WW', 'Promotion - Serie A1 Women (Placement Play Offs: )'),
+(129, 304, 6, 2, 2, 'WL', 'null'),
+(130, 307, 6, 3, 2, 'LL', 'null'),
+(131, 305, 7, 1, 6, 'WW', 'Promotion - Serie A1 Women (Placement Play Offs: )'),
+(132, 315, 7, 2, 3, 'LW', 'null'),
+(133, 303, 7, 3, 0, 'LL', 'null'),
+(134, 316, 3, 1, 45, 'WWWLW', 'null'),
+(135, 332, 3, 2, 43, 'WLLLL', 'null'),
+(136, 333, 3, 3, 41, 'LWWWL', 'null'),
+(137, 337, 3, 4, 41, 'WWWWW', 'null'),
+(138, 317, 3, 5, 37, 'LLWLL', 'null'),
+(139, 320, 3, 6, 36, 'LWWLW', 'Relegation'),
+(140, 323, 3, 7, 33, 'LWLLL', 'Relegation'),
+(141, 326, 3, 8, 32, 'WLWLW', 'Relegation'),
+(142, 335, 3, 9, 24, 'WWLWW', 'Relegation'),
+(143, 325, 3, 10, 22, 'LWLLW', 'Relegation'),
+(144, 338, 3, 11, 22, 'LLLLW', 'Relegation'),
+(145, 349, 3, 1, 0, 'null', 'null'),
+(146, 347, 3, 2, 0, 'null', 'null'),
+(147, 343, 3, 3, 0, 'null', 'null'),
+(148, 350, 3, 4, 0, 'null', 'null'),
+(149, 344, 3, 5, 0, 'null', 'null'),
+(150, 346, 3, 6, 0, 'null', 'null'),
+(151, 348, 3, 7, 0, 'null', 'null'),
+(152, 345, 3, 8, 0, 'null', 'null'),
+(153, 190, 3, 5, 8, 'WWW', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
+(154, 191, 3, 6, 8, 'WWLW', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
+(155, 197, 3, 7, 4, 'LLW', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
+(156, 188, 3, 8, 2, 'LWL', 'Promotion - SuperLega (5th-8th places - Play Offs: )'),
+(157, 189, 3, 9, 2, 'LLL', 'null');
 
 -- --------------------------------------------------------
 
@@ -17153,6 +17194,64 @@ CREATE TABLE `statistic` (
   `against_goals_home` int(3) NOT NULL DEFAULT 0,
   `against_goals_away` int(3) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `statistic`
+--
+
+INSERT INTO `statistic` (`id_statistic`, `id_team_season`, `played_home`, `played_away`, `wins_home`, `wins_away`, `losses_home`, `losses_away`, `draws_home`, `draws_away`, `for_goals_home`, `for_goals_away`, `against_goals_home`, `against_goals_away`) VALUES
+(15, 198, 7, 7, 3, 5, 4, 2, 0, 0, 9, 16, 16, 15),
+(16, 199, 7, 7, 5, 3, 2, 4, 0, 0, 16, 15, 8, 15),
+(17, 200, 7, 7, 1, 1, 6, 6, 0, 0, 10, 12, 19, 20),
+(18, 201, 7, 7, 3, 4, 4, 3, 0, 0, 12, 14, 15, 13),
+(19, 202, 7, 7, 4, 0, 3, 7, 0, 0, 16, 5, 13, 21),
+(20, 203, 7, 7, 7, 6, 0, 1, 0, 0, 21, 19, 6, 6),
+(21, 204, 6, 8, 5, 5, 1, 3, 0, 0, 17, 20, 6, 12),
+(22, 205, 7, 7, 3, 1, 4, 6, 0, 0, 12, 4, 16, 20),
+(23, 206, 7, 7, 4, 5, 3, 2, 0, 0, 14, 15, 13, 10),
+(24, 207, 7, 7, 3, 4, 4, 3, 0, 0, 12, 14, 14, 11),
+(25, 208, 8, 6, 7, 4, 1, 2, 0, 0, 23, 15, 7, 7),
+(26, 209, 7, 7, 1, 0, 6, 7, 0, 0, 9, 3, 19, 21),
+(27, 224, 7, 8, 1, 2, 6, 6, 0, 0, 9, 11, 18, 20),
+(28, 225, 9, 7, 2, 1, 7, 6, 0, 0, 14, 7, 22, 20),
+(29, 226, 8, 8, 8, 8, 0, 0, 0, 0, 24, 24, 2, 6),
+(30, 227, 9, 7, 1, 0, 8, 7, 0, 0, 9, 1, 26, 21),
+(31, 228, 8, 8, 3, 4, 5, 4, 0, 0, 15, 15, 18, 16),
+(32, 229, 7, 9, 1, 4, 6, 5, 0, 0, 7, 17, 20, 21),
+(33, 230, 9, 7, 7, 6, 2, 1, 0, 0, 22, 20, 11, 7),
+(34, 231, 8, 8, 4, 4, 4, 4, 0, 0, 14, 14, 16, 18),
+(35, 232, 8, 8, 4, 4, 4, 4, 0, 0, 15, 12, 15, 16),
+(36, 233, 7, 9, 3, 3, 4, 6, 0, 0, 13, 11, 15, 22),
+(37, 234, 8, 8, 7, 8, 1, 0, 0, 0, 22, 24, 7, 4),
+(38, 235, 8, 8, 4, 1, 4, 7, 0, 0, 16, 7, 13, 22),
+(39, 236, 7, 9, 5, 4, 2, 5, 0, 0, 16, 19, 8, 19),
+(40, 237, 8, 7, 6, 6, 2, 1, 0, 0, 20, 19, 10, 4),
+(41, 186, 13, 13, 4, 2, 9, 11, 0, 0, 19, 12, 29, 36),
+(42, 187, 19, 18, 13, 8, 6, 10, 0, 0, 44, 31, 26, 38),
+(43, 188, 15, 16, 8, 4, 7, 12, 0, 0, 30, 17, 29, 42),
+(44, 189, 16, 16, 9, 6, 7, 10, 0, 0, 37, 25, 28, 36),
+(45, 190, 18, 15, 16, 12, 2, 3, 0, 0, 51, 41, 12, 17),
+(46, 191, 16, 16, 8, 9, 8, 7, 0, 0, 30, 31, 29, 31),
+(47, 192, 16, 19, 7, 8, 9, 11, 0, 0, 29, 28, 35, 41),
+(48, 193, 13, 13, 7, 3, 6, 10, 0, 0, 27, 18, 22, 33),
+(49, 194, 19, 17, 14, 9, 5, 8, 0, 0, 48, 37, 23, 30),
+(50, 195, 11, 11, 3, 2, 8, 9, 0, 0, 12, 11, 28, 29),
+(51, 196, 17, 18, 9, 10, 8, 8, 0, 0, 37, 38, 29, 31),
+(52, 197, 15, 16, 10, 7, 5, 9, 0, 0, 34, 26, 25, 34),
+(53, 302, 18, 19, 13, 13, 5, 6, 0, 0, 45, 48, 22, 30),
+(54, 303, 14, 17, 5, 3, 9, 14, 0, 0, 23, 20, 33, 45),
+(55, 304, 16, 14, 10, 9, 6, 5, 0, 0, 36, 28, 24, 21),
+(56, 305, 17, 15, 11, 5, 6, 10, 0, 0, 41, 25, 27, 36),
+(57, 306, 14, 17, 6, 7, 8, 10, 0, 0, 29, 27, 29, 36),
+(58, 307, 15, 15, 8, 4, 7, 11, 0, 0, 29, 22, 23, 40),
+(59, 308, 15, 15, 11, 10, 4, 5, 0, 0, 35, 35, 18, 30),
+(60, 309, 13, 13, 3, 0, 10, 13, 0, 0, 13, 6, 34, 39),
+(61, 310, 13, 13, 5, 0, 8, 13, 0, 0, 22, 6, 29, 39),
+(62, 311, 16, 15, 11, 13, 5, 2, 0, 0, 42, 40, 19, 17),
+(63, 312, 15, 14, 7, 5, 8, 9, 0, 0, 27, 18, 29, 34),
+(64, 313, 14, 14, 4, 5, 10, 9, 0, 0, 23, 23, 35, 33),
+(65, 314, 18, 17, 16, 16, 2, 1, 0, 0, 50, 48, 17, 10),
+(66, 315, 15, 15, 10, 3, 5, 12, 0, 0, 34, 15, 22, 39);
 
 -- --------------------------------------------------------
 
@@ -17641,7 +17740,7 @@ ALTER TABLE `game`
 -- AUTO_INCREMENT per la tabella `group`
 --
 ALTER TABLE `group`
-  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_group` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT per la tabella `league`
@@ -17689,13 +17788,13 @@ ALTER TABLE `season`
 -- AUTO_INCREMENT per la tabella `standing`
 --
 ALTER TABLE `standing`
-  MODIFY `id_standing` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id_standing` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
 
 --
 -- AUTO_INCREMENT per la tabella `statistic`
 --
 ALTER TABLE `statistic`
-  MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_statistic` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT per la tabella `team`

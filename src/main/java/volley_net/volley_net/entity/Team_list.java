@@ -21,20 +21,20 @@ public class Team_list {
     private int id_team_list;
 
     /**
-     * utente che fa la scomessa
+     * {@link  User} che fa la scommessa
      */
     @ManyToOne
     @JoinColumn(name="id_user", nullable = false)
     private User id_user;
 
     /**
-     * mix di team, season e league
+     * {@link Team_season} mix di {@link Season}, {@link  League} e {@link  Team}, da usare come chiave
      */
     @ManyToOne
     @JoinColumn(name="id_team_season", nullable = false)
     private Team_season id_team_season;
     /**
-     * gruppo a cui il team appartiene in questa lega
+     * {@link  Group} a cui il team appartiene in questa lega
      */
     @ManyToOne
     @JoinColumn(name="id_group", nullable = false)
@@ -42,9 +42,9 @@ public class Team_list {
 
     /**
      * costruttore per creare oggetti team_list senza un id per creato
-     * @param id_user
-     * @param id_team_season
-     * @param id_group
+     * @param id_user identificativo di {@link User}
+     * @param id_team_season identificativo di {@link Team_season}
+     * @param id_group identificatore di {@link Group}
      */
     public Team_list(User id_user, Team_season id_team_season, Group id_group) {
         this.id_user = id_user;

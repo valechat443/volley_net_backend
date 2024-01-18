@@ -24,7 +24,7 @@ public class Group {
 
     /**
      * costruttore per creare un oggetto group con solo il name
-     * @param group_name
+     * @param group_name nome del gruppo
      */
     public Group(String group_name) {
         this.group_name = group_name;
@@ -32,7 +32,7 @@ public class Group {
 
     /**
      * costruttore per creare un oggetto group partendo da uno già esistente
-     * @param g
+     * @param g oggetto group
      */
     public Group(Group g) {
         this.id_group = g.getId_group();

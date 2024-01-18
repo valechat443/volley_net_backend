@@ -40,7 +40,7 @@ public class User {
     @Column(nullable = false)
     private boolean verified=false;
     /**
-     * se l'utente ha i permesi di admin
+     * se l'utente ha i permessi di admin
      */
     @Column(nullable = false)
     private boolean admin=false;
@@ -54,10 +54,10 @@ public class User {
 
     /**
      * costruttore per creare oggetti user senza un id per creato
-     * @param mail
-     * @param username
-     * @param encryptedPassword
-     * @param admin
+     * @param mail mail dell'utente
+     * @param username username dell'utente
+     * @param encryptedPassword password criptata
+     * @param admin se l'uytente è admin
      */
     public User(String mail, String username, String encryptedPassword, boolean admin) {
         this.mail=mail;
@@ -70,7 +70,7 @@ public class User {
 
     /**
      * costruttore per creare oggetti user partendo da uno già esistente
-     * @param u
+     * @param u oggetto user
      */
     public User(User u) {
         this.id_user = u.getId_user();

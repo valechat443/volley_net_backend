@@ -22,14 +22,14 @@ public class Score {
     private int id_score;
 
     /**
-     * partita a cui lo score fa riferimento
+     * {@link Game} a cui lo score fa riferimento
      */
     @ManyToOne
     @JoinColumn(name="id_game", nullable = false)
     private Game id_game;
 
     /**
-     * team che ha giocato nella partita
+     * {@link Team} che ha giocato nella partita
      */
     @ManyToOne
     @JoinColumn(name="id_team", nullable = false)
@@ -49,7 +49,7 @@ public class Score {
 
     /**
      * costruttore che crea un oggetto game partendo da uno esistente
-     * @param s
+     * @param s oggetto score
      */
     public Score(Score s) {
         this.id_score = s.getId_score();

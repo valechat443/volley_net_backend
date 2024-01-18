@@ -36,7 +36,7 @@ public class Team {
 
     /**
      * costruttore
-     * @param t
+     * @param t oggetto team
      */
     public Team(Team t) {
         this.id_team = t.getId_team();

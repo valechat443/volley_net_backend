@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 /**
- * singola lega di palavolo
+ * singola lega di pallavolo
  */
 public class League {
 
@@ -40,7 +40,7 @@ public class League {
     private String logo;
 
     /**
-     * paese in cui la lega si svolge
+     * {@link League} in cui la lega si svolge
      */
     @ManyToOne
     @JoinColumn(name="id_country", nullable = false)
@@ -48,7 +48,7 @@ public class League {
 
     /**
      * costruttore per creare un oggetto group con solo l'id_league
-     * @param id
+     * @param id identificativo di lega
      */
     public League(int id) {
         this.id_league=id;
@@ -56,7 +56,7 @@ public class League {
 
     /**
      * costruttore per creare oggetti League partendo dda un oggetto esistente
-     * @param l
+     * @param l oggetto lega
      */
     public League(League l) {
         this.id_league = l.getId_league();

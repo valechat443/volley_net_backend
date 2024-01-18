@@ -28,7 +28,7 @@ public class Season {
     private int year;
 
     /**
-     *   costruttore completo di ogetti season
+     *   costruttore completo di oggetti season
      */
     public Season(int id_season, int year){
         this.id_season = id_season;
@@ -37,7 +37,7 @@ public class Season {
 
     /**
      * costruttore che crea un oggetto season con solo l'id_season
-     * @param id_season
+     * @param id_season identificatore di season
      */
     public Season(int id_season) {
         this.id_season = id_season;

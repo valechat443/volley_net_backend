@@ -22,7 +22,7 @@ public class Statistic {
     private int id_statistic;
 
     /**
-     * mix di team, stagione e lega
+     * {@link Team_season} mix di {@link Season}, {@link  League} e {@link  Team}, da usare come chiave
      */
     @OneToOne
     @JoinColumn(name="id_team_season",nullable=false)
@@ -99,7 +99,7 @@ public class Statistic {
 
     /**
      * costruttore che crea un oggetto statistic partendo da uno già esistente
-     * @param s
+     * @param s oggetto statistic
      */
     public Statistic(Statistic s){
         this.id_statistic = s.id_statistic;
@@ -119,20 +119,20 @@ public class Statistic {
     }
 
     /**
-     * costrutore per creare un oggetto statistic senza un id_statistic per creato
-     * @param id_team_season
-     * @param played_home
-     * @param played_away
-     * @param wins_home
-     * @param wins_away
-     * @param losses_home
-     * @param losses_away
-     * @param draws_home
-     * @param draws_away
-     * @param for_goals_home
-     * @param for_goals_away
-     * @param against_goals_home
-     * @param against_goals_away
+     * costruttore per creare un oggetto statistic senza un id_statistic per creato
+     * @param id_team_season identificatore di {@link  Team_season}
+     * @param played_home partite giocate in casa
+     * @param played_away partite giocate fuori casa
+     * @param wins_home partite vinte in casa
+     * @param wins_away partite vinte fuori casa
+     * @param losses_home partite perse in casa
+     * @param losses_away partite perse fuori casa
+     * @param draws_home partite pareggiate in casa
+     * @param draws_away partite pareggiate fuori casa
+     * @param for_goals_home goals fatti in casa
+     * @param for_goals_away goals fatti fuori casa
+     * @param against_goals_home goals subito in casa
+     * @param against_goals_away goals subiti fuori casa
      */
     public Statistic(Team_season id_team_season, int played_home, int played_away, int wins_home, int wins_away, int losses_home, int losses_away, int draws_home, int draws_away, int for_goals_home, int for_goals_away, int against_goals_home, int against_goals_away) {
         this.id_team_season = id_team_season;

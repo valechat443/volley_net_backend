@@ -13,6 +13,7 @@ import volley_net.volley_net.entity.User;
 import volley_net.volley_net.payload.request.*;
 import volley_net.volley_net.payload.response.GetTeamResponse;
 import volley_net.volley_net.payload.response.GetTeamStatisticResponse;
+import volley_net.volley_net.repository.GameRepository;
 import volley_net.volley_net.repository.StatisticRepository;
 import volley_net.volley_net.repository.TeamRepository;
 import volley_net.volley_net.repository.TeamSeasonRepository;
@@ -24,10 +25,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class TeamService {
-
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * servizi legati a i file json restituiti da APi sport {@link JsonService}
+     */
     private final JsonService jsonService;
+    /**
+     * operazioni del database di statistic {@link volley_net.volley_net.repository.StandingRepository}
+     */
     private final StatisticRepository statisticRepository;
 
     /**

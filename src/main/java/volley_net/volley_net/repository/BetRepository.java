@@ -35,4 +35,13 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
             "where b.id_user.id_user=:id_user" )
     List<Bet> ListOfBetsUser(@Param("id_user") int id_user);
 
+    /**
+     * query per ottenere tutte le scommesse non ancora controllate
+     * @return lista di scommesse {@link List<Bet>}
+     */
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
+            "From Bet b " +
+            "where b.check=false")
+    List<Bet> ListOfBetNotCheck();
+
 }

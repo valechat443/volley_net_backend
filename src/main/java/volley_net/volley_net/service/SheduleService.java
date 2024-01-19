@@ -24,20 +24,80 @@ import java.util.List;
 @Slf4j
 public class SheduleService {
 
+    /**
+     * operazioni del database di game {@link GameRepository}
+     */
     private final GameRepository gameRepository;
-
+    /**
+     * servizi legati a i file json restituiti da APi sport {@link JsonService}
+     */
     private final JsonService jsonService;
+    /**
+     * operazioni del database di team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * operazioni del database di standing {@link StandingRepository}
+     */
     private  final StandingRepository standingRepository;
+    /**
+     * operazioni del database di group {@link GroupRepository}
+     */
     private final GroupRepository groupRepository;
+    /**
+     * operazioni del database di bet {@link BetRepository}
+     */
+    private final BetRepository betRepository;
+    /**
+     * operazioni del database di user {@link UserRepository}
+     */
+    private final UserRepository userRepository;
+
 
 
     /**
-     *controllo se un utente ha vinto una sua bet di un determinato game
+     *aggiorno il numero di bet vinte dall'utente
      *
      */
-    private ResponseEntity<?> check_bet() {
-        return null;
+    private void check_bet() {
+       try{
+            List<Bet> bets= betRepository.ListOfBetNotCheck();
+            if(!bets.isEmpty()){
+                for(Bet b:bets){
+                    Game game= gameRepository.GetGameByIdGame(b.getId_game().getId_game());
+                    if(game!=null){
+                        if(game.getStatus().equals("Finished")){
+                            List<Score> scores = gameRepository.GetScoreFromIdGame(game.getId_game());
+                            if(!scores.isEmpty()){
+                                int punti_scom=0;
+                                int punti_altri=0;
+                                for(Score s:scores){
+                                    if(s.getId_team().getId_team()==b.getId_team().getId_team()){
+                                        punti_scom=s.getSets();
+                                    }else{
+                                        punti_altri=s.getSets();
+                                    }
+                                }
+                                if(punti_scom>punti_altri){
+                                    User u =userRepository.getUserById(b.getId_user().getId_user());
+                                    int nuovo_count=u.getCount_bet()+1;
+                                    u.setCount_bet(nuovo_count);
+                                    int nuovi_money=u.getMoney()+125;
+                                    u.setMoney(nuovi_money);
+                                    userRepository.save(u);
+                                }
+
+
+                            }
+                            b.setCheck(true);
+                            betRepository.save(b);
+                        }
+                    }
+                }
+            }
+       }catch (Exception e){
+           log.info(e.getMessage());
+       }
     }
 
 
@@ -87,12 +147,21 @@ public class SheduleService {
         }
     }
 
+    /**
+     * servizio schedulato che richiama tutti i servizi per aggiornare il db ogni giorno a mezzanotte
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void aggiornamento() {
+        update_games();
+        update_standings();
+        check_bet();
+    }
 
     /**
      *aggiorna gli esiti e i punteggi di tutte i {@link Game} finiti
      *
      */
-    @Scheduled(cron = "0 40 15 * * ?")
+
     public void update_games() {
         try{
 
@@ -119,7 +188,7 @@ public class SheduleService {
                         LocalTime time = LocalTime.parse(timeStr);
 
 
-                        //facio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
+                        //faccio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
                         JSONObject jo = jsonService.chiamata("https://v1.volleyball.api-sports.io/odds?game=" + game.getInt("id"));
                         JSONArray responseJo = jo.getJSONArray("response");
                         log.info("chiamata odds");

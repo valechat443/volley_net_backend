@@ -42,16 +42,20 @@ public class Bet {
     @JoinColumn(name="id_team", nullable = false)
     private Team id_team;
 
+    @Column()
+    private Boolean check;
+
     /**
      * costruttore per creare una bet senza un id pre impostato
      * @param id_game oggetto {@link Game}
      * @param id_user oggetto {@link User}
      * @param id_team oggetto {@link Team}
      */
-    public Bet(Game id_game, User id_user, Team id_team) {
+    public Bet(Game id_game, User id_user, Team id_team,Boolean check) {
         this.id_game = id_game;
         this.id_user = id_user;
         this.id_team = id_team;
+        this.check=check;
     }
 
     /**
@@ -63,5 +67,6 @@ public class Bet {
         this.id_game = b.getId_game();
         this.id_user = b.getId_user();
         this.id_team = b.getId_team();
+        this.check=b.getCheck();
     }
 }

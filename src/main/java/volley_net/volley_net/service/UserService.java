@@ -21,11 +21,29 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
+    /**
+     * operazioni del database di user {@link UserRepository}
+     */
     private final UserRepository userRepository;
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di group {@link GroupRepository}
+     */
     private final GroupRepository groupRepository;
+    /**
+     * {@link TokenService} token identificativo di user
+     */
     private final TokenService tokenService;
+    /**
+     * operazioni del database di team_list {@link TeamListRepository}
+     */
     private final TeamListRepository teamListRepository;
+    /**
+     * operazioni del database di offerta_utente {@link Offerte_utente}
+     */
     private final OffertaUtenteRepository offertaUtenteRepository;
 
     /**

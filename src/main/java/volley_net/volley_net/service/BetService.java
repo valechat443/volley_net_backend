@@ -31,7 +31,7 @@ public class BetService {
 
     /**
      * metodo per salvare una nuova scommessa di un utente sul db
-     * @param request
+     * @param request {@link CreateBetRequest}
      * @return ResponseEntity con l'esito dell'operazione di salvataggio
      */
     public ResponseEntity<?> salva_bet(CreateBetRequest request) {
@@ -49,8 +49,8 @@ public class BetService {
 
     /**
      * metodo per creare la scommessa da salvare
-     * @param request
-     * @return scommessa salvata nel db o null
+     * @param request {@link CreateBetRequest}
+     * @return {@link Bet} salvata nel db o null
      */
     private Bet crea_bet(CreateBetRequest request){
         try {
@@ -67,8 +67,8 @@ public class BetService {
 
     /**
      * metodo per avere le scommesse di una giornata di una lega di una stagione
-     * @param request
-     * @return lista di BetPageResponse contenente le scommesse
+     * @param request {@link BetFutureRequest}
+     * @return lista di {@link BetPageResponse} contenente le scommesse
      */
     public ResponseEntity<?> get_future_bets(BetFutureRequest request) {
         try {
@@ -117,6 +117,11 @@ public class BetService {
         }
     }
 
+    /**
+     * metodo per avere una lista di scommesse fatte da un utente
+     * @param request {@link UserRequest}
+     * @return lista di bet {@link List<BetUserResponse>} fatto dall'utente
+     */
     public ResponseEntity<?> get_bets_user(UserRequest request){
     try{
         UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());

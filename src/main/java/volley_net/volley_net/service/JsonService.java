@@ -18,7 +18,7 @@ public class JsonService {
 
     /**
      * metodo per effettuare richieste ad API sport
-     * @param url
+     * @param url endpoint di API sport
      * @return oggetto jason con dentro una lista di game
      */
     public JSONObject chiamata(String url) {

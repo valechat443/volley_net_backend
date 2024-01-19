@@ -18,8 +18,8 @@ public class TokenService {
     public static  final int EXPIRE_AFTER=3600; //tempo di scadenza in secondi
 
     /**
-     * metodo per creare un token uetnet
-     * @param id_user
+     * metodo per creare un token utente
+     * @param id_user identificativo di {@link volley_net.volley_net.entity.User}
      * @return il token utente
      */
     public String createToken(int id_user){
@@ -39,9 +39,9 @@ public class TokenService {
     }
 
     /**
-     * metodo per estrare l'id_user dal token
-     * @param token
-     * @return un int che rappresenta l'id_user
+     * metodo per estrarre l'id_user dal token
+     * @param token identificativo salvato lato client
+     * @return l'identificatici di {@link volley_net.volley_net.entity.User}
      */
     public UserToken getUserIdFromToken(String token){
         try{

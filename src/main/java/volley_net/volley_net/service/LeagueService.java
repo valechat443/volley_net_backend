@@ -31,8 +31,8 @@ public class LeagueService {
 
     /**
      * metodo per restituire una lista di leghe di una season
-     * @param year
-     * @return lista di GetListOfLeagueResponse o una lista vuota
+     * @param year anno della stagione
+     * @return lista di {@link GetListOfLeagueResponse} o una lista vuota
      */
     public ResponseEntity<?> getLeaguesFromSeason(int year) {
         List<GetListOfLeagueResponse> leagues = new ArrayList<>();
@@ -58,8 +58,8 @@ public class LeagueService {
 
     /**
      * metodo per restituire la classifica di una lega di una stagione
-     * @param request
-     * @return lista di GetStandingResponse o una lista vuota
+     * @param request {@link StandingRequest}
+     * @return lista di {@link GetStandingResponse} o una lista vuota
      */
     public ResponseEntity<?> findStandingBySeasonLeagueAndGroup(StandingRequest request) {
         try {
@@ -80,7 +80,7 @@ public class LeagueService {
 
     /**
      * metodo per restituire i gruppi di una lega di una determinata stagione
-     * @param request
+     * @param request {@link GroupRequest}
      * @return lista si stringhe contenente i nomi dei gruppi o una lista vuota
      */
     public ResponseEntity<?> getGroup(GroupRequest request){

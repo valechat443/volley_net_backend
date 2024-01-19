@@ -32,8 +32,8 @@ public class TeamService {
 
     /**
      * metodo per restituire le statistiche di un team in una lega in una determinata stagione
-     * @param request
-     * @return Lista di GetTeamStatisticResponse con le statistiche di un team
+     * @param request {@link StatisticRequest}
+     * @return Lista di {@link GetTeamStatisticResponse} con le statistiche di un team
      */
     public ResponseEntity<?> getStatistic(StatisticRequest request) {
         try{
@@ -53,8 +53,8 @@ public class TeamService {
 
     /**
      * metodo per restituire un team partendo dall'id_team
-     * @param request
-     * @return dati relativi a un determinato team
+     * @param request {@link GetTeamRequest}
+     * @return dati relativi a un determinato {@link Team}
      */
     public ResponseEntity<?> get_team(GetTeamRequest request) {
 
@@ -71,8 +71,8 @@ public class TeamService {
 
     /**
      * metodo per restituire una lista di team di una lega di uan determinata stagione
-     * @param request
-     * @return lista di team di una lega in una determinata stagione
+     * @param request {@link SeasonIdLeague}
+     * @return lista di team {@link  List<Team>} di una lega in una determinata stagione
      */
     public  ResponseEntity<?> get_list_of_team(SeasonIdLeague request){
 
@@ -86,7 +86,7 @@ public class TeamService {
 
     /**
      * metodo per salvare le statistiche di un team, di uan lega in una determinata stagione
-     * @param request
+     * @param request {@link SaveStatisticRequest}
      * @return messaggio sull'esito del salvataggio delle statistiche
      */
     public ResponseEntity<?> salva_statistic(SaveStatisticRequest request){

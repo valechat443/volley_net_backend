@@ -89,8 +89,8 @@ public class SheduleService {
 
 
     /**
-     *aggiorna gli esiti e i punteggi di tutte le partite finite
-     * !! Da TESTARE !!
+     *aggiorna gli esiti e i punteggi di tutte i {@link Game} finiti
+     *
      */
     @Scheduled(cron = "0 40 15 * * ?")
     public void update_games() {

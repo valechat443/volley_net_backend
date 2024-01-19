@@ -14,7 +14,7 @@ import lombok.Setter;
  */
 public class ListUserRankResponse {
     /**
-     * identificaativo dell'utente
+     * identificativo di {@link volley_net.volley_net.entity.User}
      */
     private int id_user;
     /**

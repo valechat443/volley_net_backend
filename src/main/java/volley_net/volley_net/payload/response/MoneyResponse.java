@@ -14,7 +14,7 @@ import lombok.Setter;
  */
 public class MoneyResponse {
     /**
-     * bilancio dell'utente
+     * bilancio di {@link volley_net.volley_net.entity.User}
      */
     private int money;
 }

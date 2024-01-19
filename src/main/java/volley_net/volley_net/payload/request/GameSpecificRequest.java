@@ -15,7 +15,7 @@ import lombok.Getter;
 public class GameSpecificRequest {
 
     /**
-     * codice identificativo della partita
+     * codice identificativo dell {@link  volley_net.volley_net.entity.Game}
      */
     private int id_game;
 }

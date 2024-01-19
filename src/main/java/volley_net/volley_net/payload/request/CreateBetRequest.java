@@ -12,17 +12,17 @@ import lombok.Getter;
 public class CreateBetRequest {
 
     /**
-     * token che identifica l'utente
+     * {@link  volley_net.volley_net.service.TokenService} che identifica l'utente
      */
     private String token;
 
     /**
-     * team su cui l'utente scommette
+     * {@link volley_net.volley_net.entity.Team} su cui l'utente scommette
      */
     private int id_team;
 
     /**
-     * partita su cui l'utente scomm ette
+     * {@link volley_net.volley_net.entity.Game} su cui l'utente scommette
      */
     private int id_game;
 }

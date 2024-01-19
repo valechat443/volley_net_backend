@@ -17,13 +17,13 @@ public class BetFutureRequest {
 
 
     /**
-     * stagione in cui le partite si giocheranno
+     * {@link  volley_net.volley_net.entity.Season} in cui le partite si giocheranno
      */
 
     private int season;
 
     /**
-     * legha in cui le partite si giocheranno
+     * {@link volley_net.volley_net.entity.League} in cui le partite si giocheranno
      */
     private int id_league;
 }

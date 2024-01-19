@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 public class ListOfLeagueRequest {
     /**
-     *identificativo della stagione
+     *identificativo della {@link volley_net.volley_net.entity.Season}
      *
      */
     private int season;

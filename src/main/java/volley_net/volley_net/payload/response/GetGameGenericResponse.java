@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GetGameGenericResponse {
     /**
-     * identificativo della partita
+     * identificativo della {@link  volley_net.volley_net.entity.Game}
      */
     private int id_game;
     /**
@@ -49,7 +49,7 @@ public class GetGameGenericResponse {
 
     private String league_name;
     /**
-     * team che hanno giocato/giocheranno nella partita
+     * lista di teams {@link TeamsGameGenerics} che hanno giocato/giocheranno nella partita
      */
     private List<TeamsGameGenerics> teams;
 

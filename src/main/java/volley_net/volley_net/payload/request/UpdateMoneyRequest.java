@@ -12,7 +12,7 @@ public class UpdateMoneyRequest {
 
 
     /**
-     * identificativo dell'utente
+     * {@link volley_net.volley_net.service.TokenService} identificativo dell'utente
      */
     private String token;
 

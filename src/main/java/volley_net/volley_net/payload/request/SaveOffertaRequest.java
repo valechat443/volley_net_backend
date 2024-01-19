@@ -10,7 +10,7 @@ import lombok.Getter;
 public class SaveOffertaRequest {
 
     /**
-     * token identificativo dell'utente
+     * {@link volley_net.volley_net.service.TokenService} identificativo dell'utente
      */
     private String token;
     /**

@@ -9,16 +9,15 @@ import lombok.Getter;
 public class SaveStatisticRequest {
 
     /**
-     * identificativo di una lega
+     * identificativo di una {@link  volley_net.volley_net.entity.League}
      */
     private int id_league;
     /**
-     * identificativo di una stagione
+     * identificativo di una {@link volley_net.volley_net.entity.Season}
      */
     private int id_season;
     /**
-     * identificatore di un team
+     * identificatore di un {@link volley_net.volley_net.entity.Team}
      */
-
     private int id_team;
 }

@@ -14,7 +14,7 @@ import lombok.Setter;
  */
 public class GetStandingResponse {
     /**
-     * nome del team
+     * nome del {@link volley_net.volley_net.entity.Team}
      */
     private String team;
     /**

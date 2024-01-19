@@ -14,7 +14,7 @@ import lombok.Setter;
  */
 public class GetGroupResponse {
     /**
-     * nome del gruppo
+     * nome del {@link volley_net.volley_net.entity.Group}
      */
     private String group_name;
 }

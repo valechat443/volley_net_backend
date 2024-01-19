@@ -15,7 +15,7 @@ import lombok.Setter;
 public class BetUserResponse {
 
     /**
-     * identificativo della partita
+     * identificativo della {@link volley_net.volley_net.entity.Game}
      */
     private int id_game;
     /**

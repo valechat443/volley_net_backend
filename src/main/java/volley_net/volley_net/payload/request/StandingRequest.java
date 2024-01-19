@@ -12,15 +12,15 @@ import lombok.Getter;
 public class StandingRequest {
 
     /**
-     * identificativo della stagione
+     * identificativo della {@link volley_net.volley_net.entity.Season}
      */
     private int id_season;
     /**
-     * identificativo della lega
+     * identificativo della {@link  volley_net.volley_net.entity.League}
      */
     private int id_league;
     /**
-     * identificativo del gruppo
+     * identificativo del {@link volley_net.volley_net.entity.Group}
      */
     private int id_group;
 }

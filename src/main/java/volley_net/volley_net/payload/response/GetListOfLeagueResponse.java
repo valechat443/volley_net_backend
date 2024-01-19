@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class GetListOfLeagueResponse {
     /**
-     * identificativo leghe
+     * identificativo di {@link volley_net.volley_net.entity.League}
      */
     private int id_league;
     /**

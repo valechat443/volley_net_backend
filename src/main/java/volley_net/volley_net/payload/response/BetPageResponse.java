@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class BetPageResponse {
     /**
-     * identificativo della partita
+     * identificativo della {@link volley_net.volley_net.entity.Game}
      */
     private int id_game;
     /**
@@ -39,9 +39,8 @@ public class BetPageResponse {
      */
     private String week;
     /**
-     * lista dei team che si scontrano nella partita
+     * lista dei team {@link TeamsBetPage} che si scontrano nella partita
      */
-
     private List<TeamsBetPage> teams;
 
 }

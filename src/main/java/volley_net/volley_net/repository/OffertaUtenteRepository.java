@@ -12,8 +12,8 @@ public interface OffertaUtenteRepository  extends JpaRepository<Offerte_utente,I
 
     /**
      * query per trovare la lista di offerte acquistate da un utente
-     * @param id_user id dell'utente
-     * @return la lista di offerte
+     * @param id_user identificatore di {@link volley_net.volley_net.entity.User}
+     * @return la lista di offerte {@link List<Offerte_utente>}
      */
 
     @Query(value = "SELECT  new volley_net.volley_net.entity.Offerte_utente(of) " +

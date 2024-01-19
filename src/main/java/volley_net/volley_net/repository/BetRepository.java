@@ -13,9 +13,9 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
     /**
      * query per trovare la lista di scommesse di una giornata di una lega di una stagione
      * @param week filtro per giornata
-     * @param season filtro per stagione
-     * @param id_league filtro per lega
-     * @return lista di scommesse di una giornata di una lega di una stagione
+     * @param season  identificativo di {@link  volley_net.volley_net.entity.Season}
+     * @param id_league identificatore di {@link  volley_net.volley_net.entity.League}
+     * @return lista di scommesse {@link List<Bet>} di una giornata di una lega di una stagione
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
             "From Bet b " +
@@ -27,8 +27,8 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
 
     /**
      * query per ottenere la lista delle scommesse di un utente
-     * @param id_user
-     * @return lista delle scommesse di un utente
+     * @param id_user identificativo di {@link volley_net.volley_net.entity.User}
+     * @return lista delle scommesse {@link List<Bet>} di un utente
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
             "From Bet b " +

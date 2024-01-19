@@ -10,7 +10,7 @@ public interface SeasonRepository extends JpaRepository<Season, Integer> {
     /**
      * query per trovare un oggetto season partendo dall'anno
      * @param year anno
-     * @return oggetto anno
+     * @return oggetto {@link Season}
      */
     Optional<Season> findByYear(int year);
 }

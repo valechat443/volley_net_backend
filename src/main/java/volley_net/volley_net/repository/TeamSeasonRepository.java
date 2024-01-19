@@ -16,8 +16,8 @@ import java.util.*;
 public interface TeamSeasonRepository extends JpaRepository<Team_season, Integer> {
     /**
      *  query per trovare una lista di team_season partendo dall'id della stagione
-     * @param season id della season
-     * @return lista di team_season
+     * @param season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @return lista di team_season {@link List<Team_season>}
      */
     @Query("SELECT  ts FROM Team_season ts WHERE ts.id_season = :season")
     List<Team_season> findBySeason(Season season);
@@ -25,9 +25,9 @@ public interface TeamSeasonRepository extends JpaRepository<Team_season, Integer
 
     /**
      * query per trovare un team_season di una lega, di uan season, con la data più recente
-     * @param id_league id della lega
-     * @param season id della stagione
-     * @return oggetto team_season
+     * @param season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @param id_league identificativo di {@link volley_net.volley_net.entity.League}
+     * @return oggetto {@link Team_season}
      */
 
     @Query(value="SELECT    new volley_net.volley_net.entity.Team_season(ts) " +
@@ -40,10 +40,10 @@ public interface TeamSeasonRepository extends JpaRepository<Team_season, Integer
 
     /**
      * query per trovare il team_season di un team, in una aga, in una stagione
-     * @param id_league id della lega
-     * @param season id della stagione
-     * @param id_team id del team
-     * @return oggetto team_season
+     * @param id_team identificativo di {@link volley_net.volley_net.entity.Team}
+     * @param season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @param id_league identificativo di {@link volley_net.volley_net.entity.League}
+     * @return oggetto {@link Team_season}
      */
 
     @Query(value="SELECT    new volley_net.volley_net.entity.Team_season(ts) " +
@@ -56,7 +56,7 @@ public interface TeamSeasonRepository extends JpaRepository<Team_season, Integer
     /**
      * query per trovare una lista di team_season finiti
      * @param oggi data odierna
-     * @return lista di team_season
+     * @return lista di team_season {@link List<Team_season>}
      */
 
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team_season(ts) " +

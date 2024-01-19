@@ -69,4 +69,10 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     void updateMoney(@Param("num") int num, @Param("id_user") int id_user);
 
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE user u " +
+            "SET u.count_bet=u.count_bet+1 " +
+            "WHERE u.id_user=:id_user", nativeQuery = true)
+    void updateCountBet(@Param("id_user") int id_user);
 }

@@ -1,5 +1,6 @@
 package volley_net.volley_net.service;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
@@ -10,12 +11,14 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import volley_net.volley_net.entity.*;
+import volley_net.volley_net.payload.response.CheckBetResponse;
 import volley_net.volley_net.repository.*;
 
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,19 +28,61 @@ import java.util.List;
 public class SheduleService {
 
     private final GameRepository gameRepository;
-
+    private final BetRepository betRepository;
     private final JsonService jsonService;
     private final TeamSeasonRepository teamSeasonRepository;
     private  final StandingRepository standingRepository;
     private final GroupRepository groupRepository;
 
+    private final TokenService tokenService;
+    private final UserRepository userRepository;
+
 
     /**
-     *controllo se un utente ha vinto una sua bet di un determinato game
-     *
+     *controllo segli utenti hanno vinto le partite dei game di ieri
+     * @Return Lista bet vincenti e perdenti (id_bet, token, true/false(vittoria));
      */
-    private ResponseEntity<?> check_bet() {
-        return null;
+    @Scheduled(cron = "0 0 24 * * ?")
+    public ResponseEntity<?> check_bet() {
+        List<String> odds = gameRepository.getOddsWinnerGame(LocalDate.of(2022,10,9));
+        List<CheckBetResponse> response =new ArrayList<>();
+
+        if(!odds.isEmpty()) {
+            String[] s;
+            List<Bet> bets;
+            Float n;
+
+            for (String odd : odds) {
+                s = odd.split(","); //"id_game,id_team,home(bool),home_odds,away_odds"
+                bets = betRepository.ListOfBetsGame(Integer.parseInt(s[0]));
+
+                if(!bets.isEmpty()){
+                    for (Bet bet : bets) {
+                        if (bet.getId_team().getId_team() == Integer.parseInt(s[1])) {
+                            n = 0f;
+
+                            if(s[3]!="null" && s[4]!="null"){
+                                if (s[2] == "true") { //if "home" == true multiplie for home_odds(s[3])
+                                    n = 50 * Float.parseFloat(s[3]);
+                                } else { //multiplie for away_odds(s[4])
+                                    n = 50 * Float.parseFloat(s[4]);
+                                }
+                            }
+
+                            userRepository.updateMoney(n.intValue()-50, bet.getId_user().getId_user());
+                            userRepository.updateCountBet(bet.getId_user().getId_user());
+                            response.add(new CheckBetResponse(bet.getId_bet(),tokenService.createToken(bet.getId_user().getId_user()),true)); //
+                        } else {
+                            response.add(new CheckBetResponse(bet.getId_bet(),tokenService.createToken(bet.getId_user().getId_user()),false));
+                        }
+                    }
+                }
+            }
+        } else {
+            return new ResponseEntity<>("Nessun game trovato", HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

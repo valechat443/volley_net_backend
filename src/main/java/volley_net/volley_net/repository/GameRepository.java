@@ -108,5 +108,12 @@ public interface GameRepository extends JpaRepository<Game, Integer> {
             "WHERE p.id_score.id_score=:id_score")
     List<Period> GetPeriodFromScore(@Param("id_score") int id_score);
 
-
+    /**
+     * query per trovare gli odd dei vincitori di ieri
+     * @return
+     */
+    @Query(value = "SELECT g.id_game, s.id_team, s.home, g.home_odds, g.away_odds " +
+            "From game g Inner Join score s on g.id_game=s.id_game " +
+            "WHERE g.date=:oggi AND s.sets=3;", nativeQuery = true)
+    List<String> getOddsWinnerGame(@Param("oggi") LocalDate oggi);
 }

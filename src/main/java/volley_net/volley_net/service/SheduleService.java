@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -110,6 +111,7 @@ public class SheduleService {
 
         try{
             List<Team_season> leghe=teamSeasonRepository.getTeamSeasonFiniti(LocalDate.now());
+
             if(leghe.isEmpty()){
                 return new ResponseEntity<>("nessuna lega trovata",HttpStatus.OK);
             }

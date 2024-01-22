@@ -29,10 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -159,7 +156,7 @@ public class GameService {
     }
 
     /**
-     * metodo per avere una lista di future partite (tra almeno due giorni) su cui scommettere
+     * metodo per avere una lista di future dieci partite (tra almeno due giorni) su cui scommettere
      * @return get scommesse {@link List<BetPageResponse>} per i due giorni successivi a oggi
      */
     public ResponseEntity<?> bets_page() {
@@ -169,6 +166,16 @@ public class GameService {
             if (partite.isEmpty()) {
                 return new ResponseEntity<>("nessuna partita futura trovata", HttpStatus.NOT_FOUND);
             }
+            Collections.shuffle(partite);
+            partite = partite.subList(0, 10);
+            Collections.sort(partite, new Comparator<Game>() {
+                @Override
+                public int compare(Game g1, Game g2) {
+                    return g2.getDate().compareTo(g1.getDate());
+                }
+            });
+
+
 
             List<BetPageResponse> response = new ArrayList<>();
             for (Game partita : partite) {

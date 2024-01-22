@@ -1,13 +1,10 @@
 package volley_net.volley_net.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter @Setter @NoArgsConstructor @EqualsAndHashCode
+@Getter @Setter @NoArgsConstructor @EqualsAndHashCode @ToString
 /**
  * hanno delle stagioni competitive
  */

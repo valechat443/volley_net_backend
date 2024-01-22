@@ -79,5 +79,4 @@ public class TeamController {
     public ResponseEntity<?> saveStanding() {
         return sheduleService.update_standings();
     }
-
 }

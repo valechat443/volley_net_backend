@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import volley_net.volley_net.entity.*;
+import volley_net.volley_net.payload.request.SaveStatisticRequest;
 import volley_net.volley_net.payload.response.CheckBetResponse;
 import volley_net.volley_net.repository.*;
 
@@ -55,10 +56,10 @@ public class SheduleService {
      * operazioni del database di user {@link UserRepository}
      */
     private final UserRepository userRepository;
-
-
-    private final TokenService tokenService;
-    private final UserRepository userRepository;
+    /**
+     * operazioni salvataggio statistic{@link TeamService}
+     */
+    private final TeamService teamService;
 
 
     /**
@@ -88,7 +89,7 @@ public class SheduleService {
                                     User u =userRepository.getUserById(b.getId_user().getId_user());
                                     int nuovo_count=u.getCount_bet()+1;
                                     u.setCount_bet(nuovo_count);
-                                    int nuovi_money=u.getMoney()+125;
+                                    int nuovi_money=u.getMoney()+100;
                                     u.setMoney(nuovi_money);
                                     userRepository.save(u);
                                 }
@@ -156,8 +157,9 @@ public class SheduleService {
     /**
      * servizio schedulato che richiama tutti i servizi per aggiornare il db ogni giorno a mezzanotte
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0 ? * TUE-SUN")
     public void aggiornamento() {
+        log.info("aggiornamento");
         update_games();
         update_standings();
         check_bet();
@@ -231,11 +233,21 @@ public class SheduleService {
     }
 
     /**
-     *aggiorno le statistiche di un team di una lega di una stagione
+     *aggiorno le statistiche di un team {@link Team} di una lega di una stagione
      *
      */
-    private ResponseEntity<?> get_team_statistic() {
-        return null;
+    @Scheduled(cron = "0 0 12 ? * MON")
+    public void get_team_statistic() throws InterruptedException {
+        List<Team_season> teams = teamSeasonRepository.getTeamSeasonInCorso(LocalDate.now());
+        for (Team_season team: teams){
+            try{
+                log.info(team.toString());
+                teamService.salva_statistic(new SaveStatisticRequest(team.getId_league().getId_league(), team.getId_season().getId_season(), team.getId_team().getId_team()));
+                Thread.sleep(10000);
+            } catch (RuntimeException e){
+                log.info(e.getMessage());
+            }
+        }
     }
 
 

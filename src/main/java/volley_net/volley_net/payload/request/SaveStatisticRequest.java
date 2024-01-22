@@ -1,8 +1,10 @@
 package volley_net.volley_net.payload.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 /**
  * richiesta epr salvare nuove statistiche di un team
  */

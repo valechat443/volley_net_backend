@@ -39,11 +39,29 @@ import java.util.Optional;
 @Slf4j
 public class GameService {
 
+    /**
+     * operazioni del database di game {@link GameRepository}
+     */
     private final GameRepository gameRepository;
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di score {@link ScoreRepository}
+     */
     private final ScoreRepository scoreRepository;
+    /**
+     * operazioni del database di period {@link PeriodRepository}
+     */
     private final PeriodRepository periodRepository;
+    /**
+     * operazioni del database di team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * servizi legati a i file json restituiti da APi sport {@link JsonService}
+     */
     private final JsonService jsonService;
 
 

@@ -27,62 +27,83 @@ import java.util.List;
 @Slf4j
 public class SheduleService {
 
+    /**
+     * operazioni del database di game {@link GameRepository}
+     */
     private final GameRepository gameRepository;
-    private final BetRepository betRepository;
+    /**
+     * servizi legati a i file json restituiti da APi sport {@link JsonService}
+     */
     private final JsonService jsonService;
+    /**
+     * operazioni del database di team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * operazioni del database di standing {@link StandingRepository}
+     */
     private  final StandingRepository standingRepository;
+    /**
+     * operazioni del database di group {@link GroupRepository}
+     */
     private final GroupRepository groupRepository;
+    /**
+     * operazioni del database di bet {@link BetRepository}
+     */
+    private final BetRepository betRepository;
+    /**
+     * operazioni del database di user {@link UserRepository}
+     */
+    private final UserRepository userRepository;
+
 
     private final TokenService tokenService;
     private final UserRepository userRepository;
 
 
     /**
-     *controllo segli utenti hanno vinto le partite dei game di ieri
-     * @Return Lista bet vincenti e perdenti (id_bet, token, true/false(vittoria));
+     *aggiorno il numero di bet vinte dall'utente
+     *
      */
-    @Scheduled(cron = "0 0 24 * * ?")
-    public ResponseEntity<?> check_bet() {
-        List<String> odds = gameRepository.getOddsWinnerGame(LocalDate.of(2022,10,9));
-        List<CheckBetResponse> response =new ArrayList<>();
-
-        if(!odds.isEmpty()) {
-            String[] s;
-            List<Bet> bets;
-            Float n;
-
-            for (String odd : odds) {
-                s = odd.split(","); //"id_game,id_team,home(bool),home_odds,away_odds"
-                bets = betRepository.ListOfBetsGame(Integer.parseInt(s[0]));
-
-                if(!bets.isEmpty()){
-                    for (Bet bet : bets) {
-                        if (bet.getId_team().getId_team() == Integer.parseInt(s[1])) {
-                            n = 0f;
-
-                            if(s[3]!="null" && s[4]!="null"){
-                                if (s[2] == "true") { //if "home" == true multiplie for home_odds(s[3])
-                                    n = 50 * Float.parseFloat(s[3]);
-                                } else { //multiplie for away_odds(s[4])
-                                    n = 50 * Float.parseFloat(s[4]);
+    private void check_bet() {
+       try{
+            List<Bet> bets= betRepository.ListOfBetNotCheck();
+            if(!bets.isEmpty()){
+                for(Bet b:bets){
+                    Game game= gameRepository.GetGameByIdGame(b.getId_game().getId_game());
+                    if(game!=null){
+                        if(game.getStatus().equals("Finished")){
+                            List<Score> scores = gameRepository.GetScoreFromIdGame(game.getId_game());
+                            if(!scores.isEmpty()){
+                                int punti_scom=0;
+                                int punti_altri=0;
+                                for(Score s:scores){
+                                    if(s.getId_team().getId_team()==b.getId_team().getId_team()){
+                                        punti_scom=s.getSets();
+                                    }else{
+                                        punti_altri=s.getSets();
+                                    }
                                 }
-                            }
+                                if(punti_scom>punti_altri){
+                                    User u =userRepository.getUserById(b.getId_user().getId_user());
+                                    int nuovo_count=u.getCount_bet()+1;
+                                    u.setCount_bet(nuovo_count);
+                                    int nuovi_money=u.getMoney()+125;
+                                    u.setMoney(nuovi_money);
+                                    userRepository.save(u);
+                                }
 
-                            userRepository.updateMoney(n.intValue()-50, bet.getId_user().getId_user());
-                            userRepository.updateCountBet(bet.getId_user().getId_user());
-                            response.add(new CheckBetResponse(bet.getId_bet(),tokenService.createToken(bet.getId_user().getId_user()),true)); //
-                        } else {
-                            response.add(new CheckBetResponse(bet.getId_bet(),tokenService.createToken(bet.getId_user().getId_user()),false));
+
+                            }
+                            b.setCheck(true);
+                            betRepository.save(b);
                         }
                     }
                 }
             }
-        } else {
-            return new ResponseEntity<>("Nessun game trovato", HttpStatus.NOT_FOUND);
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+       }catch (Exception e){
+           log.info(e.getMessage());
+       }
     }
 
 
@@ -132,12 +153,21 @@ public class SheduleService {
         }
     }
 
+    /**
+     * servizio schedulato che richiama tutti i servizi per aggiornare il db ogni giorno a mezzanotte
+     */
+    @Scheduled(cron = "0 0 0 * * ?")
+    public void aggiornamento() {
+        update_games();
+        update_standings();
+        check_bet();
+    }
 
     /**
      *aggiorna gli esiti e i punteggi di tutte i {@link Game} finiti
      *
      */
-    @Scheduled(cron = "0 40 15 * * ?")
+
     public void update_games() {
         try{
 
@@ -145,45 +175,47 @@ public class SheduleService {
             JSONArray response = j.getJSONArray("response");
 
             if(response.length()<1) {
-                log.info("Lunghezza response minore 1");
+                //log.info("Lunghezza response minore 1");
             } else {
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject game = response.getJSONObject(i);
                     if (game.getJSONObject("country").getString("code").equals("IT")) {
                         Thread.sleep(10000);
-                        log.info(game.toString());
+                        //log.info(game.toString());
 
                         //es. input: "2024-01-08T16:00:00+00:00"
                         //Inizializzo la data senza il time
-                        log.info("date");
+                        //log.info("date");
                         String dateStr = game.getString("date").split("T")[0]; // Removes the time part
                         LocalDate date = LocalDate.parse(dateStr);
                         //Inizializzo il time
-                        log.info("time");
+                        //log.info("time");
                         String timeStr = game.getString("date").split("T")[1].split("\\+")[0];
                         LocalTime time = LocalTime.parse(timeStr);
 
 
-                        //facio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
+                        //faccio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
                         JSONObject jo = jsonService.chiamata("https://v1.volleyball.api-sports.io/odds?game=" + game.getInt("id"));
                         JSONArray responseJo = jo.getJSONArray("response");
-                        log.info("chiamata odds");
+                        //log.info("chiamata odds");
                         Float oddsHome = 1.0f;
                         Float oddsAway = 1.0f;
 
+                        
                         log.info("Game: "+ game.toString());
                         log.info("Odds: "+ jo.toString());
+                        
 
                         if(responseJo.length()>0){
-                            log.info("entro if odds");
+                            //log.info("entro if odds");
                             JSONObject bookmaker = responseJo.getJSONObject(0).getJSONArray("bookmakers").getJSONObject(0);
-                            log.info("bookmaker");
+                            //log.info("bookmaker");
                             JSONObject bet = bookmaker.getJSONArray("bets").getJSONObject(0);
-                            log.info("bet");
+                            //log.info("bet");
                             oddsHome = Float.parseFloat(bet.getJSONArray("values").getJSONObject(0).getString("odd"));
-                            log.info("home");
+                            //log.info("home");
                             oddsAway = Float.parseFloat(bet.getJSONArray("values").getJSONObject(1).getString("odd"));
-                            log.info("away");
+                            //log.info("away");
                         }
 
 

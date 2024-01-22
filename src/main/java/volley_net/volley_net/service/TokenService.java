@@ -14,8 +14,14 @@ import java.time.temporal.ChronoUnit;
 @Slf4j //genera il logger
 public class TokenService {
 
+    /**
+     * chiave di criptazione
+     */
     public static  final String TOKEN_SECRET="Flows_tech";
-    public static  final int EXPIRE_AFTER=3600; //tempo di scadenza in secondi
+    /**
+     * tempo di scadenza in secondi
+     */
+    public static  final int EXPIRE_AFTER=3600;
 
     /**
      * metodo per creare un token utente

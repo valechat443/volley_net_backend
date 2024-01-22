@@ -22,10 +22,21 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 public class LeagueService {
+    /**
+     * operazioni del database di season {@link SeasonRepository}
+     */
     private final SeasonRepository seasonRepository;
+    /**
+     * operazioni del database di Team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * operazioni del database di standing {@link StandingRepository}
+     */
     private final StandingRepository standingRepository;
-    private final LeagueRepository leagueRepository;
+    /**
+     * operazioni del database di group {@link GroupRepository}
+     */
     private final GroupRepository groupRepository;
 
 

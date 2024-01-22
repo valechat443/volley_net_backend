@@ -22,11 +22,29 @@ import java.util.List;
 @Slf4j
 public class BetService {
 
+    /**
+     * operazioni del database di bet {@link BetRepository}
+     */
     private final BetRepository betRepository;
+    /**
+     * {@link  TokenService} legato all'utente
+     */
     private final TokenService tokenService;
+    /**
+     * operazioni del database di user {@link UserRepository}
+     */
     private final UserRepository userRepository;
+    /**
+     * operazioni del database di game {@link GameRepository}
+     */
     private final GameRepository gameRepository;
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di score {@link ScoreRepository}
+     */
     private final ScoreRepository scoreRepository;
 
     /**
@@ -58,7 +76,7 @@ public class BetService {
             User u = userRepository.getUserById(token.getId_token());
             Game g = gameRepository.GetGameByIdGame(request.getId_game());
             Team t = teamRepository.GetTeamByIdTeam(request.getId_team());
-            Bet b = new Bet(g, u, t);
+            Bet b = new Bet(g, u, t,false);
             return b;
         }catch (Exception e){
             return null;

@@ -1,5 +1,6 @@
 package volley_net.volley_net.service;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
@@ -10,6 +11,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import volley_net.volley_net.entity.*;
+import volley_net.volley_net.payload.request.SaveStatisticRequest;
+import volley_net.volley_net.payload.response.CheckBetResponse;
 import volley_net.volley_net.repository.*;
 
 import java.time.Duration;
@@ -53,7 +56,10 @@ public class SheduleService {
      * operazioni del database di user {@link UserRepository}
      */
     private final UserRepository userRepository;
-
+    /**
+     * operazioni salvataggio statistic{@link TeamService}
+     */
+    private final TeamService teamService;
 
 
     /**
@@ -83,7 +89,7 @@ public class SheduleService {
                                     User u =userRepository.getUserById(b.getId_user().getId_user());
                                     int nuovo_count=u.getCount_bet()+1;
                                     u.setCount_bet(nuovo_count);
-                                    int nuovi_money=u.getMoney()+125;
+                                    int nuovi_money=u.getMoney()+100;
                                     u.setMoney(nuovi_money);
                                     userRepository.save(u);
                                 }
@@ -152,8 +158,9 @@ public class SheduleService {
     /**
      * servizio schedulato che richiama tutti i servizi per aggiornare il db ogni giorno a mezzanotte
      */
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 0 ? * TUE-SUN")
     public void aggiornamento() {
+        log.info("aggiornamento");
         update_games();
         update_standings();
         check_bet();
@@ -171,21 +178,21 @@ public class SheduleService {
             JSONArray response = j.getJSONArray("response");
 
             if(response.length()<1) {
-                log.info("Lunghezza response minore 1");
+                //log.info("Lunghezza response minore 1");
             } else {
                 for (int i = 0; i < response.length(); i++) {
                     JSONObject game = response.getJSONObject(i);
                     if (game.getJSONObject("country").getString("code").equals("IT")) {
                         Thread.sleep(10000);
-                        log.info(game.toString());
+                        //log.info(game.toString());
 
                         //es. input: "2024-01-08T16:00:00+00:00"
                         //Inizializzo la data senza il time
-                        log.info("date");
+                        //log.info("date");
                         String dateStr = game.getString("date").split("T")[0]; // Removes the time part
                         LocalDate date = LocalDate.parse(dateStr);
                         //Inizializzo il time
-                        log.info("time");
+                        //log.info("time");
                         String timeStr = game.getString("date").split("T")[1].split("\\+")[0];
                         LocalTime time = LocalTime.parse(timeStr);
 
@@ -193,23 +200,25 @@ public class SheduleService {
                         //faccio un'altra chiamata (a odds)... finché non c'è un service che cerca oddsByIdGame... se ci sara
                         JSONObject jo = jsonService.chiamata("https://v1.volleyball.api-sports.io/odds?game=" + game.getInt("id"));
                         JSONArray responseJo = jo.getJSONArray("response");
-                        log.info("chiamata odds");
+                        //log.info("chiamata odds");
                         Float oddsHome = 1.0f;
                         Float oddsAway = 1.0f;
 
+                        
                         log.info("Game: "+ game.toString());
                         log.info("Odds: "+ jo.toString());
+                        
 
                         if(responseJo.length()>0){
-                            log.info("entro if odds");
+                            //log.info("entro if odds");
                             JSONObject bookmaker = responseJo.getJSONObject(0).getJSONArray("bookmakers").getJSONObject(0);
-                            log.info("bookmaker");
+                            //log.info("bookmaker");
                             JSONObject bet = bookmaker.getJSONArray("bets").getJSONObject(0);
-                            log.info("bet");
+                            //log.info("bet");
                             oddsHome = Float.parseFloat(bet.getJSONArray("values").getJSONObject(0).getString("odd"));
-                            log.info("home");
+                            //log.info("home");
                             oddsAway = Float.parseFloat(bet.getJSONArray("values").getJSONObject(1).getString("odd"));
-                            log.info("away");
+                            //log.info("away");
                         }
 
 
@@ -225,11 +234,21 @@ public class SheduleService {
     }
 
     /**
-     *aggiorno le statistiche di un team di una lega di una stagione
+     *aggiorno le statistiche di un team {@link Team} di una lega di una stagione
      *
      */
-    private ResponseEntity<?> get_team_statistic() {
-        return null;
+    @Scheduled(cron = "0 0 12 ? * MON")
+    public void get_team_statistic() throws InterruptedException {
+        List<Team_season> teams = teamSeasonRepository.getTeamSeasonInCorso(LocalDate.now());
+        for (Team_season team: teams){
+            try{
+                log.info(team.toString());
+                teamService.salva_statistic(new SaveStatisticRequest(team.getId_league().getId_league(), team.getId_season().getId_season(), team.getId_team().getId_team()));
+                Thread.sleep(10000);
+            } catch (RuntimeException e){
+                log.info(e.getMessage());
+            }
+        }
     }
 
 

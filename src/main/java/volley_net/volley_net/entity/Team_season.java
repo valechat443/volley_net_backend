@@ -11,6 +11,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 /**
  * tabella di intermezzo per unire team, season e league in un unico posto
  */

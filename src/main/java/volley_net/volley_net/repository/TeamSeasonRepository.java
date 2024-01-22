@@ -64,4 +64,14 @@ public interface TeamSeasonRepository extends JpaRepository<Team_season, Integer
             "where ts.end_date<:oggi " +
             "group by ts.id_league.id_league")
     List<Team_season> getTeamSeasonFiniti(@Param("oggi") LocalDate oggi);
+
+    /**
+     *  query per trovare la lista delle team_season in leghe in corso
+     * @param oggi data odierna
+     * @return lista di team_season {@link List<Team_season>} in leghe attualmente in corso
+     */
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Team_season(ts) " +
+            "From Team_season ts " +
+            "where ts.end_date>:oggi AND :oggi>ts.start_date ")
+    List<Team_season> getTeamSeasonInCorso(@Param("oggi")LocalDate oggi);
 }

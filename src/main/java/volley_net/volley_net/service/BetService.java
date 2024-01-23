@@ -125,7 +125,7 @@ public class BetService {
                     teams.add(new TeamsBetPage(t.getId_team(), t.getName(), t.getLogo(), t.isNational(), punto.isHome(), punto.getSets(), odd));
 
                 }
-                response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(), teams));
+                response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(),partita.getId_league().getName(), teams));
 
 
             }
@@ -169,7 +169,7 @@ public class BetService {
                             }
                         }
 
-                        response.add(new BetUserResponse(g.getId_game(),logo_s,logo_a,name_s,name_a));
+                        response.add(new BetUserResponse(g.getId_game(),g.getId_league().getName(),logo_s,logo_a,name_s,name_a));
 
                     }
                 }

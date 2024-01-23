@@ -38,6 +38,11 @@ public class BetPageResponse {
      * giornata in cui si giocherà la partita
      */
     private String week;
+
+    /**
+     * nome della lega in cui si giocherà la partita
+     */
+    private String league_name;
     /**
      * lista dei team {@link TeamsBetPage} che si scontrano nella partita
      */

@@ -205,7 +205,7 @@ public class GameService {
 
                     }
 
-                    response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(), teams));
+                    response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(),partita.getId_league().getName(), teams));
                 }
             }
             return new ResponseEntity<>(response, HttpStatus.OK);

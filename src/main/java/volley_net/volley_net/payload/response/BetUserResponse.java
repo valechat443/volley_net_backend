@@ -19,8 +19,13 @@ public class BetUserResponse {
      */
     private int id_game;
     /**
+     * nome della lega in cui la partita si giocherà
+     */
+    private String league_name;
+    /**
      * logo della squadra su cui il giocatore ha scommesso
      */
+
     private String logo_scommesso;
     /**
      * logo della squadra su cui il giocatore NON ha scommesso

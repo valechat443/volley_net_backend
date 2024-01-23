@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class TeamsGameSpecific {
     /**
-     * identificativo del team
+     * identificativo del {@link volley_net.volley_net.entity.Team}
      */
     private int id_team;
     /**
@@ -36,6 +36,7 @@ public class TeamsGameSpecific {
      * se il team giocava in casa
      */
     private boolean home;
+
     /**
      * numero di set vinti da team
      */
@@ -43,5 +44,6 @@ public class TeamsGameSpecific {
     /**
      * lista dei punteggi fatti dal team nella partita
      */
+
     private List<Integer> periods;
 }

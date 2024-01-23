@@ -15,15 +15,17 @@ public interface LeagueRepository extends JpaRepository<League, Integer> {
     /**
      * query per trovare una lega dal suo nome
      * @param name nome della lega
-     * @return un oggetto lega
+     * @return un oggetto {@link League}
      */
     Optional<League> findByName(String name);
+
 
     /**
      *  query per trovare la lista delle leghe finite
      * @param oggi data odierna
-     * @return lista di leghe attualmente finite
+     * @return lista di leghe {@link List<League>} attualmente finite
      */
+
     @Query(value = "SELECT  new volley_net.volley_net.entity.League(l)" +
             "From League l " +
             "join Team_season ts on ts.id_league.id_league=l.id_league " +

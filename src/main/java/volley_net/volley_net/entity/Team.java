@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Entity @Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Entity @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
 /**
  * team che gioca a pallavolo
  */
@@ -36,7 +36,7 @@ public class Team {
 
     /**
      * costruttore
-     * @param t
+     * @param t oggetto team
      */
     public Team(Team t) {
         this.id_team = t.getId_team();

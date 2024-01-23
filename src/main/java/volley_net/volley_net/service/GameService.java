@@ -29,28 +29,43 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class GameService {
 
+    /**
+     * operazioni del database di game {@link GameRepository}
+     */
     private final GameRepository gameRepository;
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di score {@link ScoreRepository}
+     */
     private final ScoreRepository scoreRepository;
+    /**
+     * operazioni del database di period {@link PeriodRepository}
+     */
     private final PeriodRepository periodRepository;
+    /**
+     * operazioni del database di team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * servizi legati a i file json restituiti da APi sport {@link JsonService}
+     */
     private final JsonService jsonService;
 
 
     /**
      * metodo per avere i dati dettagliati di una partita specifica
-     * @param request
-     * @return GetGameSpecificResponse con i dati della partita
+     * @param request {@link GameSpecificRequest}
+     * @return {@link GetGameSpecificResponse} con i dati della partita
      */
     public ResponseEntity<?> get_game_specific(GameSpecificRequest request) {
         try {
@@ -91,9 +106,9 @@ public class GameService {
     }
 
     /**
-     * metodo epr avere una lista di partite di una giornata (week) di una lega di una stagione
-     * @param request
-     * @return lista di GetGameGenericResponse contenete una serie di partite
+     * metodo per avere una lista di partite di una giornata (week) di una lega di una stagione
+     * @param request {@link  GameGenericRequest}
+     * @return lista di {@link GetGameGenericResponse} contenete una serie di partite
      */
     public ResponseEntity<?> get_game_generic(GameGenericRequest request) {
 
@@ -141,8 +156,8 @@ public class GameService {
     }
 
     /**
-     * metodo per avere una lista di future partite (tra almeno 2 giorni) su cui scommettere
-     * @return get scommesse per i due giorni successivi a oggi
+     * metodo per avere una lista di future dieci partite (tra almeno due giorni) su cui scommettere
+     * @return get scommesse {@link List<BetPageResponse>} per i due giorni successivi a oggi
      */
     public ResponseEntity<?> bets_page() {
         try {
@@ -151,6 +166,16 @@ public class GameService {
             if (partite.isEmpty()) {
                 return new ResponseEntity<>("nessuna partita futura trovata", HttpStatus.NOT_FOUND);
             }
+            Collections.shuffle(partite);
+            partite = partite.subList(0, 10);
+            Collections.sort(partite, new Comparator<Game>() {
+                @Override
+                public int compare(Game g1, Game g2) {
+                    return g2.getDate().compareTo(g1.getDate());
+                }
+            });
+
+
 
             List<BetPageResponse> response = new ArrayList<>();
             for (Game partita : partite) {
@@ -180,7 +205,7 @@ public class GameService {
 
                     }
 
-                    response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(), teams));
+                    response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(),partita.getId_league().getName(), teams));
                 }
             }
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -192,7 +217,7 @@ public class GameService {
 
     /**
      * metodo per restituire l'ultimo game disponibile della super lega
-     * @return ultimo game giocato di superlega
+     * @return ultimo {@link Game} giocato di superlega
      */
     public ResponseEntity<?> get_default_game() {
         try {
@@ -230,8 +255,8 @@ public class GameService {
 
     /**
      * metodo per restituire l'ultima giornata disponibile di una lega in una determinata stagione
-     * @param request
-     * @return GetWeekMaxResponse contenente l'ultima giornata disponibile
+     * @param request {@link WeekMaxRequest}
+     * @return {@link GetWeekMaxResponse} contenente l'ultima giornata disponibile
      */
     public ResponseEntity<?> get_week_max(WeekMaxRequest request) {
 
@@ -270,8 +295,8 @@ public class GameService {
 
     /**
      * metodo per restituire una partita dall'id_game
-     * @param request
-     * @return un oggetto game
+     * @param request {@link GameSpecificRequest}
+     * @return un oggetto {@link Game}
      */
     public ResponseEntity<?> getGameById(GameSpecificRequest request) {
         try {
@@ -287,7 +312,7 @@ public class GameService {
 
     /**
      * metodo salvare una partita, con i suoi score e i suoi periods
-     * @param request
+     * @param request {@link SaveGameRequest}
      * @return messaggio per indicare se il salvataggio è andato a buon fine
      */
     public ResponseEntity<?> salva_partita_completa(SaveGameRequest request) {
@@ -317,12 +342,7 @@ public class GameService {
                if(!scores.isEmpty() && scores.size()==2 && scores.get(0).getSets()!=null){
                     periods=salva_periods(scores,g);
                }
-/*
-               else{
-                   return new ResponseEntity<>("errore salvataggio score", HttpStatus.NOT_MODIFIED);
-               }
 
- */
 
 
 
@@ -337,8 +357,8 @@ public class GameService {
 
     /**
      * metodo per salvare uan partita nel db
-     * @param game
-     * @return oggetto game salvato nel db o null
+     * @param game oggetto json preso dalal risposta data da API sport
+     * @return oggetto {@link Game} salvato nel db o null
      */
     private Game salva_game(JSONObject game) {
         try {
@@ -346,8 +366,11 @@ public class GameService {
             DateTimeFormatter ora = DateTimeFormatter.ofPattern("HH:mm");
             League l = new League(game.getJSONObject("league").getInt("id"));
             int id =game.getInt("id");
+
+            Season stagione=new Season(game.getJSONObject("league").getInt("season"),game.getJSONObject("league").getInt("season"));
             Game g = new Game(game.getInt("id"),
-                    l, LocalDate.parse(game.getString("date"), giorno),
+                    l,stagione, LocalDate.parse(game.getString("date"), giorno),
+
                     LocalTime.parse(game.getString("time"), ora),
                     game.getString("timezone"),
                     game.getJSONObject("status").getString("long"),
@@ -361,9 +384,9 @@ public class GameService {
 
     /**
      * metodo per salvare un team se non esiste nel db
-     * @param game
-     * @param home
-     * @return team salvato nel db o null
+     * @param game oggetto json preso dalal risposta data da API sport
+     * @param home se il team gioca in casa
+     * @return {@link Team} salvato nel db o null
      */
     public Team salva_team(JSONObject game,int home){
         try{
@@ -388,9 +411,25 @@ public class GameService {
 
             if(teamSeasonRepository.get_ts_completo(game.getJSONObject("league").getInt("id"),s.getId_season(), t.getId_team())==null){
                 Team_season pezzo=  teamSeasonRepository.get_ts_date(game.getJSONObject("league").getInt("id"),s.getId_season());
-                ts= new Team_season(new League(game.getJSONObject("league").getInt("id")),
-                        s,t,pezzo.getStart_date(),pezzo.getEnd_date());
-                teamSeasonRepository.save(ts);
+                if(pezzo!=null) {
+                    ts = new Team_season(new League(game.getJSONObject("league").getInt("id")),
+                            s, t, pezzo.getStart_date(), pezzo.getEnd_date());
+                    teamSeasonRepository.save(ts);
+                }else{
+                    JSONObject jason = jsonService.chiamata("https://v1.volleyball.api-sports.io/leagues?country=italy&season="+String.valueOf(s.getId_season()));
+                    JSONArray leagues = jason.getJSONArray("response");
+                    for(int i=0;i<leagues.length();i++){
+                        JSONObject league=leagues.getJSONObject(i);
+                        if(league.getInt("id")==game.getJSONObject("league").getInt("id")){
+
+                            ts= new Team_season(new League(game.getJSONObject("league").getInt("id")),
+                                    s,t,
+                                    LocalDate.parse(league.getJSONArray("seasons").getJSONObject(0).getString("start")),
+                                    LocalDate.parse(league.getJSONArray("seasons").getJSONObject(0).getString("end")));
+                            teamSeasonRepository.save(ts);
+                        }
+                    }
+                }
             }
 
             return t;
@@ -401,8 +440,8 @@ public class GameService {
 
     /**
      * metodo per salvare gli score di un game che esiste già nel db
-     * @param game
-     * @return score salvato nel db o null
+     * @param game oggetto json preso dalal risposta data da API sport
+     * @return {@link Score} salvato nel db o null
      */
     private List<Score> salva_score(JSONObject game) {
         try {
@@ -448,9 +487,9 @@ public class GameService {
 
     /**
      * metodo per salvare i periods degli scores che esistono già sul db, di un determinato game
-     * @param scores
-     * @param game
-     * @return lista di peridods salvati nel db o un array vuoto
+     * @param scores {@link List<Score>} del game
+     * @param game oggetto json preso dalal risposta data da API sport
+     * @return lista di periods salvati nel db o un array vuoto
      */
     public List<Period> salva_periods(List<Score> scores, JSONObject game) {
         try {

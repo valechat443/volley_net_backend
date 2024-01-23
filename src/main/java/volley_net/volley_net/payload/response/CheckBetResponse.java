@@ -9,12 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-/**
- * risposta con lista di gruppi di una lega di una stagione
- */
-public class GetGroupResponse {
-    /**
-     * nome del {@link volley_net.volley_net.entity.Group}
-     */
-    private String group_name;
+public class CheckBetResponse {
+    private int id_bet;
+    private String token;
+    private boolean vittoria;
 }

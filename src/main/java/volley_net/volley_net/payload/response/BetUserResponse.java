@@ -15,12 +15,17 @@ import lombok.Setter;
 public class BetUserResponse {
 
     /**
-     * identificativo della partita
+     * identificativo della {@link volley_net.volley_net.entity.Game}
      */
     private int id_game;
     /**
+     * nome della lega in cui la partita si giocherà
+     */
+    private String league_name;
+    /**
      * logo della squadra su cui il giocatore ha scommesso
      */
+
     private String logo_scommesso;
     /**
      * logo della squadra su cui il giocatore NON ha scommesso

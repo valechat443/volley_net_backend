@@ -20,13 +20,19 @@ import java.util.*;
  * controller di team
  */
 public class TeamController {
+    /**
+     *servizi relativi a team {@link TeamService}
+     */
     private  final TeamService teamService;
+    /**
+     * servizi relativi a scheduling {@link SheduleService}
+     */
     private final SheduleService sheduleService;
 
     /**
      * controller per avere i dati di un team specifico
-     * @param request
-     * @return dati relativi a un determinato team
+     * @param request {@link GetTeamRequest}
+     * @return dati relativi a un determinato {@link volley_net.volley_net.entity.Team}
      */
     @PostMapping("/getTeam")
     public ResponseEntity<?> get_team(@RequestBody @Valid GetTeamRequest request){
@@ -35,8 +41,8 @@ public class TeamController {
 
     /**
      * controller per avere una lista di team di una lega in una determinata stagione
-     * @param request
-     * @return lista di team di una lega in una determinata stagione
+     * @param request {@link SeasonIdLeague}
+     * @return lista di team {@link List<volley_net.volley_net.entity.Team>} di una lega in una determinata stagione
      */
     @PostMapping("/getList")
     public ResponseEntity<?> get_list_of_team(@RequestBody @Valid SeasonIdLeague request){
@@ -45,13 +51,15 @@ public class TeamController {
 
     /**
      * controller per avere le statistiche di uno specifico team
-     * @param request
-     * @return Lista di GetTeamStatisticResponse con le statistiche di un team
+     * @param request {@link  StatisticRequest}
+     * @return Lista di {@link  volley_net.volley_net.payload.response.GetTeamStatisticResponse} con le statistiche di un team
      */
     @PostMapping("/statistics")
     public ResponseEntity<?> getStatistics(@RequestBody @Valid StatisticRequest request) {
         return teamService.getStatistic(request);
     }
+
+
 
     /**
      * controller di test per salvare le statistiche di un team
@@ -71,5 +79,4 @@ public class TeamController {
     public ResponseEntity<?> saveStanding() {
         return sheduleService.update_standings();
     }
-
 }

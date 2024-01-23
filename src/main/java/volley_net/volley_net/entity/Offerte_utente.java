@@ -22,21 +22,21 @@ public class Offerte_utente {
     private int id_offerta;
 
     /**
-     * utente che ha fatto l'acquisto
+     * {@link  User} che ha fatto l'acquisto
      */
     @ManyToOne
     @JoinColumn(name="id_user", nullable = false)
     private User id_user;
 
     /**
-     * nome dell'offerta
+     * descrizione dell'offerta utente
      */
     @Column(nullable = false)
     private String name_offerta;
 
     /**
-     * costruttore che crea un nuovo oggetto offerta_utente partendo da un'altro esistente
-     * @param of
+     * costruttore che crea un nuovo oggetto offerta_utente partendo da un altro esistente
+     * @param of oggetto
      */
     public Offerte_utente(Offerte_utente of) {
         this.id_offerta = of.id_offerta;
@@ -46,8 +46,8 @@ public class Offerte_utente {
 
     /**
      * costruttore per creare un offerta senza id già impostato
-     * @param id_user
-     * @param name_offerta
+     * @param id_user identificativo di {@link  User}
+     * @param name_offerta descrizione dell'offerta
      */
     public Offerte_utente(User id_user, String name_offerta) {
         this.id_user = id_user;

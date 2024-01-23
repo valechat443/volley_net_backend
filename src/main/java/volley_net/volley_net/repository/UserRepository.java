@@ -16,13 +16,13 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     /**
      * query per trovare l'utente partendo dal''username
      * @param username nome dell'utente
-     * @return oggetto user
+     * @return oggetto {@link User}
      */
     User findByUsername(String username);
 
     /**
      * query per trovare la classifica degli utenti in ordine di scommesse vinte
-     * @return lista di user
+     * @return lista di user {@link List<User>}
      */
     @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
             "FROM User u " +
@@ -31,8 +31,8 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     /**
      * query per trovare l'utente partendo dal suo id
-     * @param id_user id dell'utente
-     * @return oggetto utente
+     * @param id_user identificativo di {@link User}
+     * @return oggetto {@link User}
      */
     @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
             " FROM User u WHERE u.id_user=:id_user")
@@ -41,7 +41,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     /**
      * query per trovare l'utente partendo dalla sua mail
      * @param mail mail dell'utente
-     * @return oggetto user
+     * @return oggetto {@link User}
      */
     @Query(value = "SELECT new volley_net.volley_net.entity.User(u) " +
             " FROM User u WHERE u.mail=:mail")
@@ -49,7 +49,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
     /**
      * query per trovare il bilancio dell'utente
-     * @param id_user
+     * @param id_user identificativo di {@link User}
      * @return soldi rimasti all'utente
      */
     @Query(value = "SELECT u.money " +
@@ -59,7 +59,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     /**
      * query per modificare i soldi dell'utente
      * @param num valuta da sommare se positiva, da sottrarre se negativa
-     * @param id_user id dell'utente
+     * @param id_user identificativo di {@link User}
      */
     @Modifying
     @Transactional
@@ -69,4 +69,10 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     void updateMoney(@Param("num") int num, @Param("id_user") int id_user);
 
 
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE user u " +
+            "SET u.count_bet=u.count_bet+1 " +
+            "WHERE u.id_user=:id_user", nativeQuery = true)
+    void updateCountBet(@Param("id_user") int id_user);
 }

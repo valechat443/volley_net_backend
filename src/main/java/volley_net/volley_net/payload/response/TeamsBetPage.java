@@ -15,7 +15,7 @@ import lombok.Setter;
  */
 public class TeamsBetPage {
     /**
-     * identificativo del team
+     * identificativo del {@link volley_net.volley_net.entity.Team}
      */
     private int id_team;
     /**

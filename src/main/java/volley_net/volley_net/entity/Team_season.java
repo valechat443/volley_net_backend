@@ -11,6 +11,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 /**
  * tabella di intermezzo per unire team, season e league in un unico posto
  */
@@ -23,27 +24,27 @@ public class Team_season {
     @EqualsAndHashCode.Include
     private int id_team_season;
     /**
-     * lega per periodo
+     * identificativo della {@link  League}
      */
     @ManyToOne
     @JoinColumn(name="id_league", nullable = false)
     private League id_league;
 
     /**
-     * stagione del periodo
+     * identificativo della {@link  Season}
      */
     @ManyToOne
     @JoinColumn(name="id_season", nullable = false)
     private Season id_season;
     /**
-     * team di questo periodo
+     * identificatore di {@link  Team}
      */
     @ManyToOne
     @JoinColumn(name="id_team", nullable = false)
     private Team id_team;
 
     /**
-     *     data di inizio della lega
+     *     data d'inizio della lega
       */
 
     @Column(nullable = false)
@@ -56,7 +57,7 @@ public class Team_season {
 
     /**
      * costruttore che crea un oggetto team_season  partendo da uno già esistente
-     * @param ts
+     * @param ts oggetto team_season
      */
     public Team_season(Team_season ts) {
         this.id_team_season = ts.id_team_season;
@@ -69,9 +70,9 @@ public class Team_season {
 
     /**
      * costruttore per creare un oggetto team_season senza un id per creato
-     * @param id_league
-     * @param id_season
-     * @param id_team
+     * @param id_league identificatore di {@link League}
+     * @param id_season identificatore di {@link Season}
+     * @param id_team identificatore di {@link Team}
      * @param start_date
      * @param end_date
      */

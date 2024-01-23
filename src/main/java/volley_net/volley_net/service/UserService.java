@@ -21,17 +21,35 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
+    /**
+     * operazioni del database di user {@link UserRepository}
+     */
     private final UserRepository userRepository;
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di group {@link GroupRepository}
+     */
     private final GroupRepository groupRepository;
+    /**
+     * {@link TokenService} token identificativo di user
+     */
     private final TokenService tokenService;
+    /**
+     * operazioni del database di team_list {@link TeamListRepository}
+     */
     private final TeamListRepository teamListRepository;
+    /**
+     * operazioni del database di offerta_utente {@link Offerte_utente}
+     */
     private final OffertaUtenteRepository offertaUtenteRepository;
 
     /**
      * metodo per la conversione di una SignupRequest in un entità User
-     * @param request
-     * @return un oggetto user
+     * @param request {@link SignupRequest}
+     * @return un oggetto {@link User}
      */
     private User fromRequestToEntity(SignupRequest request) {
         User u = new User();
@@ -41,8 +59,8 @@ public class UserService {
     }
     /**
      * metodo per salvare il nuovo utente creato da fromRequestToEntity sul db, metodo ereditato da JPA
-     * @param request
-     * @return una NewUserLoginResponse con l'utente salvato
+     * @param request {@link SignupRequest}
+     * @return una {@link NewUserLoginResponse} con l'utente salvato
      */
     public ResponseEntity<?> save (SignupRequest request){
         User newuser=fromRequestToEntity(request);
@@ -57,8 +75,8 @@ public class UserService {
 
     /**
      * metodo per avere un user partendo da un token
-     * @param request
-     * @return GetUserResponse con l'user richiesto
+     * @param request {@link UserRequest}
+     * @return {@link GetUserResponse} con l'user richiesto
      */
     public ResponseEntity<?> getUser(UserRequest request){
         try{
@@ -77,8 +95,8 @@ public class UserService {
 
     /**
      * metodo per effettuare il login nell'applicativo
-     * @param request
-     * @return LoginResponse con l'esito del login
+     * @param request {@link LoginRequest}
+     * @return {@link LoginResponse} con l'esito del login
      */
     public ResponseEntity<?> login(LoginRequest request){
         try{
@@ -100,8 +118,8 @@ public class UserService {
 
     /**
      * metodo per aggiungere o togliere un determinato num di money d un determinato user
-     * @param request che passa
-     * @return UpdateMoneyResponse contenente il nuovo bilancio dell'utente
+     * @param request  {@link UpdateMoneyRequest}
+     * @return {@link UpdateMoneyResponse} contenente il nuovo bilancio dell'utente
      */
     public ResponseEntity<?> update_money(UpdateMoneyRequest request){
         try{
@@ -119,9 +137,9 @@ public class UserService {
     }
 
     /**
-     * medodo per salvare una nuova associazione tra un user e un team su cui ha scommesso
-     * @param request
-     * @return  NewTeamListResponse con l'esito dell'operazione di salvataggio
+     * metodo per salvare una nuova associazione tra un user e un team su cui ha scommesso
+     * @param request {@link NewTeamListRequest}
+     * @return  {@link NewTeamListResponse} con l'esito dell'operazione di salvataggio
      */
     public ResponseEntity<?> new_team_list(NewTeamListRequest request){
         try{
@@ -149,7 +167,7 @@ public class UserService {
 
     /**
      * metodo per avere la lista degli utenti ordinati per quante scommesse hanno vinto
-     * @return lista di ListUserRankResponse contenente gli user in ordine di count_bet
+     * @return lista di {@link ListUserRankResponse} contenente gli user in ordine di count_bet
      */
     public ResponseEntity<?> get_rank(){
         try{
@@ -160,7 +178,7 @@ public class UserService {
                     response.add(new ListUserRankResponse(user.getId_user(),user.getUsername(),user.getCount_bet()));
                 }
             }
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Errore nel Server", HttpStatus.BAD_REQUEST);
         }
@@ -168,8 +186,8 @@ public class UserService {
 
     /**
      * metodo per avere le offerte acquistate da un determinato user
-     * @param request
-     * @return Lista di Offerte_utente
+     * @param request {@link UserRequest}
+     * @return Lista di Offerte_utente {@link List<Offerte_utente>}
      */
     public ResponseEntity<?> getListOfferteUser(UserRequest request){
         try{
@@ -193,7 +211,7 @@ public class UserService {
 
     /**
      * metodo per salvare una nuova offerta acquistata da un utente
-     * @param request
+     * @param request {@link  SaveOffertaRequest}
      * @return ResponseEntity con l'esito del'operazione di salvataggio
      */
     public ResponseEntity<?> saveOffertaUtente(SaveOffertaRequest request){

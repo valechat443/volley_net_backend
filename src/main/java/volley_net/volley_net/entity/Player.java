@@ -21,7 +21,7 @@ public class Player {
     private int id_player;
 
     /**
-     * team di cui il player fa parte
+     * {@link  Team} di cui il player fa parte
      */
     @ManyToOne
     @JoinColumn(name="id_team", nullable = false)

@@ -22,7 +22,7 @@ public class Period {
     private int id_period;
 
     /**
-     * score a cui period fa riferimento
+     * {@link  Score} a cui period fa riferimento
      */
     @ManyToOne
     @JoinColumn(name="id_score", nullable = false)
@@ -40,7 +40,7 @@ public class Period {
 
     /**
      * costruttore per creare un oggetto period partendo da uno già esistente
-     * @param p
+     * @param p oggetto period
      */
     public Period(Period p) {
         this.id_period = p.getId_period();
@@ -51,9 +51,9 @@ public class Period {
 
     /**
      * costruttore per creare un period senza un id pre creato
-     * @param id_score
-     * @param points
-     * @param period_number
+     * @param id_score identificativo di {@link  Score}
+     * @param points punti del period
+     * @param period_number numero del periodo
      */
     public Period(Score id_score, int points, String period_number) {
         this.id_score = id_score;

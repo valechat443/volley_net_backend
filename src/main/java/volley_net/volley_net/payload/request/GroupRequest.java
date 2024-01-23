@@ -12,11 +12,11 @@ import lombok.Getter;
 public class GroupRequest {
 
     /**
-     *identificativo della stagione
+     *identificativo della {@link  volley_net.volley_net.entity.Season}
      */
     private int season;
     /**
-     * identificativo della lega
+     * identificativo della {@link volley_net.volley_net.entity.League}
      */
     private int id_league;
     public GroupRequest(int season, int id_league) {

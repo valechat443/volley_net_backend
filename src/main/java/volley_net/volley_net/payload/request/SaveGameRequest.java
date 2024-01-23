@@ -4,17 +4,18 @@ import lombok.Getter;
 
 @Getter
 /**
- * richiesta per salvare un game
+ * richiesta per chiedere di salvare un game
  */
+
 public class SaveGameRequest {
 
     /**
-     * identificativo della stagione
+     * identificativo della {@link volley_net.volley_net.entity.Season}
      */
     private int season;
 
     /**
-     * identificativo della lega
+     * identificativo della {@link volley_net.volley_net.entity.League}
      */
     private int id_league;
 }

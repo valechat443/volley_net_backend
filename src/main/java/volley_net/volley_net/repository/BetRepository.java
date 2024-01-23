@@ -13,9 +13,9 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
     /**
      * query per trovare la lista di scommesse di una giornata di una lega di una stagione
      * @param week filtro per giornata
-     * @param season filtro per stagione
-     * @param id_league filtro per lega
-     * @return lista di scommesse di una giornata di una lega di una stagione
+     * @param season  identificativo di {@link  volley_net.volley_net.entity.Season}
+     * @param id_league identificatore di {@link  volley_net.volley_net.entity.League}
+     * @return lista di scommesse {@link List<Bet>} di una giornata di una lega di una stagione
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
             "From Bet b " +
@@ -24,13 +24,24 @@ public interface BetRepository extends JpaRepository<Bet, Integer> {
             "WHERE ts.id_league.id_league=:id_league and ts.id_season.year=:season and g.week=:week")
     List<Bet> ListOfBets(@Param("week") String week,@Param("season") int season, @Param("id_league") int id_league);
 
+
     /**
      * query per ottenere la lista delle scommesse di un utente
-     * @param id_user
-     * @return lista delle scommesse di un utente
+     * @param id_user identificativo di {@link volley_net.volley_net.entity.User}
+     * @return lista delle scommesse {@link List<Bet>} di un utente
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
             "From Bet b " +
             "where b.id_user.id_user=:id_user" )
     List<Bet> ListOfBetsUser(@Param("id_user") int id_user);
+
+    /**
+     * query per ottenere tutte le scommesse non ancora controllate
+     * @return lista di scommesse {@link List<Bet>}
+     */
+    @Query(value = "SELECT  new volley_net.volley_net.entity.Bet(b) " +
+            "From Bet b " +
+            "where b.check=false")
+    List<Bet> ListOfBetNotCheck();
+
 }

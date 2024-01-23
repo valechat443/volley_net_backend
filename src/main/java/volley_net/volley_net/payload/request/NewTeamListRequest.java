@@ -10,23 +10,23 @@ import lombok.Getter;
 public class NewTeamListRequest {
 
     /**
-     *token identificativo dell'utente
+     *{@link  volley_net.volley_net.service.TokenService} identificativo dell'utente
      *
      * */
     private String token;
 
     /**
-     * identificativo del team
+     * identificativo del {@link volley_net.volley_net.entity.Team}
      */
     private int id_team;
 
     /**
-     * identificativo della stagione
+     * identificativo della {@link volley_net.volley_net.entity.Season}
      */
     private int season;
 
     /**
-     * identificativo della lega
+     * identificativo della {@link volley_net.volley_net.entity.League}
      */
     private int id_league;
 }

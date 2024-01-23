@@ -12,9 +12,9 @@ import java.util.List;
 public interface StandingRepository extends JpaRepository<Standing, Integer> {
     /**
      *  query oer trovare la classifica di un gruppi, di una lega, in una stagione
-     * @param id_season id dela season
-     * @param id_league id della lega
-     * @param id_group id del gruppo
+     * @param id_season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @param id_league identificativo di {@link volley_net.volley_net.entity.League}
+     * @param id_group identificatore di {@link volley_net.volley_net.entity.Group}
      * @return lista di standing
      */
     @Query(value = "SELECT s.* From standing s \n" +
@@ -28,13 +28,14 @@ public interface StandingRepository extends JpaRepository<Standing, Integer> {
 
     /**
      * query per trovare uan classifica partendo dal team_season
-     * @param id_ts id del team_season
-     * @return lista di standing
+     * @param id_ts identificatore di {@link volley_net.volley_net.entity.Team_season}
+     * @return lista di standing {@link List<Standing>}
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Standing(s)" +
             "from Standing s " +
             "where s.id_team_season.id_team_season=:id_ts")
     List<Standing> getStandingFromTeamSeason(@Param("id_ts") int id_ts);
+
 
 
 }

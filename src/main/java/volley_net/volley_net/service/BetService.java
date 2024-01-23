@@ -22,16 +22,34 @@ import java.util.List;
 @Slf4j
 public class BetService {
 
+    /**
+     * operazioni del database di bet {@link BetRepository}
+     */
     private final BetRepository betRepository;
+    /**
+     * {@link  TokenService} legato all'utente
+     */
     private final TokenService tokenService;
+    /**
+     * operazioni del database di user {@link UserRepository}
+     */
     private final UserRepository userRepository;
+    /**
+     * operazioni del database di game {@link GameRepository}
+     */
     private final GameRepository gameRepository;
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di score {@link ScoreRepository}
+     */
     private final ScoreRepository scoreRepository;
 
     /**
      * metodo per salvare una nuova scommessa di un utente sul db
-     * @param request
+     * @param request {@link CreateBetRequest}
      * @return ResponseEntity con l'esito dell'operazione di salvataggio
      */
     public ResponseEntity<?> salva_bet(CreateBetRequest request) {
@@ -49,8 +67,8 @@ public class BetService {
 
     /**
      * metodo per creare la scommessa da salvare
-     * @param request
-     * @return scommessa salvata nel db o null
+     * @param request {@link CreateBetRequest}
+     * @return {@link Bet} salvata nel db o null
      */
     private Bet crea_bet(CreateBetRequest request){
         try {
@@ -58,7 +76,7 @@ public class BetService {
             User u = userRepository.getUserById(token.getId_token());
             Game g = gameRepository.GetGameByIdGame(request.getId_game());
             Team t = teamRepository.GetTeamByIdTeam(request.getId_team());
-            Bet b = new Bet(g, u, t);
+            Bet b = new Bet(g, u, t,false);
             return b;
         }catch (Exception e){
             return null;
@@ -67,8 +85,8 @@ public class BetService {
 
     /**
      * metodo per avere le scommesse di una giornata di una lega di una stagione
-     * @param request
-     * @return lista di BetPageResponse contenente le scommesse
+     * @param request {@link BetFutureRequest}
+     * @return lista di {@link BetPageResponse} contenente le scommesse
      */
     public ResponseEntity<?> get_future_bets(BetFutureRequest request) {
         try {
@@ -107,7 +125,7 @@ public class BetService {
                     teams.add(new TeamsBetPage(t.getId_team(), t.getName(), t.getLogo(), t.isNational(), punto.isHome(), punto.getSets(), odd));
 
                 }
-                response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(), teams));
+                response.add(new BetPageResponse(partita.getId_game(), partita.getDate(), partita.getTime(), partita.getStatus(), partita.getWeek(),partita.getId_league().getName(), teams));
 
 
             }
@@ -117,6 +135,11 @@ public class BetService {
         }
     }
 
+    /**
+     * metodo per avere una lista di scommesse fatte da un utente
+     * @param request {@link UserRequest}
+     * @return lista di bet {@link List<BetUserResponse>} fatto dall'utente
+     */
     public ResponseEntity<?> get_bets_user(UserRequest request){
     try{
         UserToken id_utente = tokenService.getUserIdFromToken(request.getToken());
@@ -146,7 +169,7 @@ public class BetService {
                             }
                         }
 
-                        response.add(new BetUserResponse(g.getId_game(),logo_s,logo_a,name_s,name_a));
+                        response.add(new BetUserResponse(g.getId_game(),g.getId_league().getName(),logo_s,logo_a,name_s,name_a));
 
                     }
                 }

@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GetGameSpecificResponse {
     /**
-     * identificativo dalla partita
+     * identificativo dalla {@link volley_net.volley_net.entity.Game}
      */
     private int id_game;
     /**
@@ -35,13 +35,15 @@ public class GetGameSpecificResponse {
      * status della partita (not started, finished, ecc...)
      */
     private String status;
+
     /**
      * giornata in cui si giocherà la partita
      */
     private String week;
     /**
-     * team che hanno giocato/giocheranno nella partita
+     * lista di teams {@link TeamsGameSpecific} che hanno giocato/giocheranno nella partita
      */
+
     private List<TeamsGameSpecific> teams;
 
 }

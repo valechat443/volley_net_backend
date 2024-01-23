@@ -13,8 +13,8 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
 
     /**
      * query per trovare un team partendo dal suo id
-     * @param id_team id del team
-     * @return oggetto team
+     * @param id_team identificatore di {@link Team}
+     * @return oggetto {@link Team}
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team(" +
             "t) " +
@@ -26,9 +26,9 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
 
     /**
      * query per trovare una lista di team di una lega, in una stagione
-     * @param season id di season
-     * @param id_league id di lega
-     * @return lista di team
+     * @param season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @param id_league identificativo di {@link volley_net.volley_net.entity.League}
+     * @return lista di team {@link List<Team>}
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team(" +
             "t) " +
@@ -40,9 +40,9 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
 
     /**
      * query pr trovare una team_season partendo dal suo id
-     * @param id_team id del team
-     * @param id_season id della season
-     * @return oggetto team_season
+     * @param id_season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @param id_team identificativo di {@link volley_net.volley_net.entity.Team}
+     * @return oggetto {@link Team_season}
      */
     @Query(value = "SELECT  new volley_net.volley_net.entity.Team_season(" +
             "ts) " +
@@ -53,10 +53,10 @@ public interface TeamRepository extends JpaRepository<Team,Integer> {
 
     /**
      *  query per trovare le statistic di un team, in una lega in una stagione
-     * @param id_team
-     * @param id_league
-     * @param id_season
-     * @return lista di statistiche
+     * @param id_team identificativo di {@link volley_net.volley_net.entity.Team}
+     * @param id_season identificativo di {@link volley_net.volley_net.entity.Season}
+     * @param id_league identificativo di {@link volley_net.volley_net.entity.League}
+     * @return lista di statistiche {@link  List<Statistic>}
      */
     @Query(value = "Select new volley_net.volley_net.entity.Statistic(s)" +
             " From Statistic s " +

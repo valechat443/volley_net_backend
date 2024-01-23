@@ -13,6 +13,7 @@ import volley_net.volley_net.entity.User;
 import volley_net.volley_net.payload.request.*;
 import volley_net.volley_net.payload.response.GetTeamResponse;
 import volley_net.volley_net.payload.response.GetTeamStatisticResponse;
+import volley_net.volley_net.repository.GameRepository;
 import volley_net.volley_net.repository.StatisticRepository;
 import volley_net.volley_net.repository.TeamRepository;
 import volley_net.volley_net.repository.TeamSeasonRepository;
@@ -24,16 +25,27 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class TeamService {
-
+    /**
+     * operazioni del database di team {@link TeamRepository}
+     */
     private final TeamRepository teamRepository;
+    /**
+     * operazioni del database di team_season {@link TeamSeasonRepository}
+     */
     private final TeamSeasonRepository teamSeasonRepository;
+    /**
+     * servizi legati a i file json restituiti da APi sport {@link JsonService}
+     */
     private final JsonService jsonService;
+    /**
+     * operazioni del database di statistic {@link volley_net.volley_net.repository.StandingRepository}
+     */
     private final StatisticRepository statisticRepository;
 
     /**
      * metodo per restituire le statistiche di un team in una lega in una determinata stagione
-     * @param request
-     * @return Lista di GetTeamStatisticResponse con le statistiche di un team
+     * @param request {@link StatisticRequest}
+     * @return Lista di {@link GetTeamStatisticResponse} con le statistiche di un team
      */
     public ResponseEntity<?> getStatistic(StatisticRequest request) {
         try{
@@ -53,8 +65,8 @@ public class TeamService {
 
     /**
      * metodo per restituire un team partendo dall'id_team
-     * @param request
-     * @return dati relativi a un determinato team
+     * @param request {@link GetTeamRequest}
+     * @return dati relativi a un determinato {@link Team}
      */
     public ResponseEntity<?> get_team(GetTeamRequest request) {
 
@@ -71,8 +83,8 @@ public class TeamService {
 
     /**
      * metodo per restituire una lista di team di una lega di uan determinata stagione
-     * @param request
-     * @return lista di team di una lega in una determinata stagione
+     * @param request {@link SeasonIdLeague}
+     * @return lista di team {@link  List<Team>} di una lega in una determinata stagione
      */
     public  ResponseEntity<?> get_list_of_team(SeasonIdLeague request){
 
@@ -86,7 +98,7 @@ public class TeamService {
 
     /**
      * metodo per salvare le statistiche di un team, di uan lega in una determinata stagione
-     * @param request
+     * @param request {@link SaveStatisticRequest}
      * @return messaggio sull'esito del salvataggio delle statistiche
      */
     public ResponseEntity<?> salva_statistic(SaveStatisticRequest request){

@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 /**
- * calssifica dei team in un gruppo, in una lega, in una stagione
+ * classifica dei team in un gruppo, in una lega, in una stagione
  */
 public class Standing {
 
@@ -22,14 +22,14 @@ public class Standing {
     private int id_standing;
 
     /**
-     * mix di stagione, lega e team, per identificare un periodo
+     * {@link Team_season} mix di {@link Season}, {@link  League} e {@link  Team}, da usare come chiave
      */
     @ManyToOne
     @JoinColumn(name="id_team_season", nullable = false)
     private Team_season id_team_season;
 
     /**
-     * gruppo della classifica
+     * {@link  Group} della classifica
      */
     @ManyToOne
     @JoinColumn(name="id_group", nullable = false)
@@ -46,7 +46,7 @@ public class Standing {
     @Column(nullable = false)
     private int points;
     /**
-     * stringa che rapresenta i game vinti e persi nella lega
+     * stringa che rappresenta i game vinti e persi nella lega
      */
     @Column(length = 5,nullable = true)
     private String form;
@@ -59,7 +59,7 @@ public class Standing {
 
     /**
      * costruttore che crea un oggetto standing partendo da uno esistente
-     * @param s
+     * @param s oggetto standing
      */
     public Standing(Standing s) {
         this.id_standing = s.getId_standing();
@@ -73,7 +73,7 @@ public class Standing {
 
     /**
      * costruttore che crea un oggetto group con solo l'id_group
-     * @param id_group
+     * @param id_group identificativo di {@link Group}
      */
     public Standing(Group id_group) {
         this.id_group = id_group;
@@ -81,12 +81,12 @@ public class Standing {
 
     /**
      * costruttore per creare oggetti standing senza un id pre creato
-     * @param id_team_season
-     * @param id_group
-     * @param position
-     * @param points
-     * @param form
-     * @param zona
+     * @param id_team_season identificativo di {@link  Team_season}
+     * @param id_group identificativo di {@link Group}
+     * @param position posizione del team
+     * @param points punti del team
+     * @param form ultime vittorie/sconfitte
+     * @param zona zona di eliminazione del torneo
      */
     public Standing(Team_season id_team_season, Group id_group, int position, int points, String form, String zona) {
         this.id_team_season = id_team_season;

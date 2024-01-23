@@ -8,15 +8,15 @@ import lombok.Getter;
  */
 public class StatisticRequest {
     /**
-     * identificativo di team
+     * identificativo di {@link volley_net.volley_net.entity.Team}
      */
     private int id_team;
     /**
-     * identificativo di stagione
+     * identificativo di {@link volley_net.volley_net.entity.Season}
      */
     private int id_season;
     /**
-     * identificativo di lega
+     * identificativo di {@link volley_net.volley_net.entity.League}
      */
     private int id_lega;
 }

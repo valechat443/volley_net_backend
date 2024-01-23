@@ -17,22 +17,26 @@ public class GameGenericRequest {
     private String week;
 
 
+
+
     /**
-     * stagione in cui le partite si giocano
+     * {@link volley_net.volley_net.entity.Season} in cui le partite si giocano
      */
     private int season;
 
     /**
-     * lega in cui le partite si giocano
+     * {@link volley_net.volley_net.entity.League} in cui le partite si giocano
      */
     private int id_league;
 
+
     /**
      * costruttore
-     * @param week
-     * @param season
-     * @param id_league
+     * @param week giornata in cui le partite si svolgono
+     * @param season {@link volley_net.volley_net.entity.Season} in cui le partite si svolgono
+     * @param id_league {@link volley_net.volley_net.entity.League} in cui le partite si svolgono
      */
+
     public GameGenericRequest(String week, int season, int id_league) {
         this.week = week;
         this.season = season;
